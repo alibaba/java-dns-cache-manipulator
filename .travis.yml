@@ -1,6 +1,8 @@
 language: java
 jdk:
-  - openjdk6
+  # java.lang.NoSuchMethodException: java.net.InetAddress$CacheEntry.<init>([Ljava.net.InetAddress;, long)
+  # at com.oldratlee.vdns.internal.InetAddressCacheUtil.createCacheEntry(InetAddressCacheUtil.java:37)
+  # - openjdk6
   - oraclejdk7
   - openjdk7
   - oraclejdk8
