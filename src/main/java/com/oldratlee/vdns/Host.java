@@ -3,6 +3,9 @@ package com.oldratlee.vdns;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public class Host implements Serializable {
     private static final long serialVersionUID = -7476648934387757732L;
 

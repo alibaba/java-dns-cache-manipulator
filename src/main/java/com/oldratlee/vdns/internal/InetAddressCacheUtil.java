@@ -39,7 +39,6 @@ public class InetAddressCacheUtil {
         return constructor.newInstance(toInetAddressArray(host, ips), expiration);
     }
 
-
     @SuppressWarnings("unchecked")
     static Map<String, Object> getCacheFiledOfInetAddress$CacheEntry()
             throws NoSuchFieldException, IllegalAccessException {
