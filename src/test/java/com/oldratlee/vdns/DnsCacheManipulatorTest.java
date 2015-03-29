@@ -60,11 +60,11 @@ public class DnsCacheManipulatorTest {
     public void test_DnsCache_canExpire() throws Exception {
         final String notExistedHost = "www.not-existed-host-test_DnsCache_canExpire.com";
 
-        DnsCacheManipulator.setDnsCache(500, notExistedHost, "42.42.43.43");
+        DnsCacheManipulator.setDnsCache(30, notExistedHost, "42.42.43.43");
         final String ip = InetAddress.getByName(notExistedHost).getHostAddress();
         assertEquals("42.42.43.43", ip);
 
-        Thread.sleep(1000);
+        Thread.sleep(32);
 
         try {
             InetAddress.getByName(notExistedHost).getHostAddress();
