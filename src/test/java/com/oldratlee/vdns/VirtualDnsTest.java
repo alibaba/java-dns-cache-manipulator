@@ -22,7 +22,7 @@ public class VirtualDnsTest {
 
         VirtualDns.setVirtualDns("www.test_getAllVirtualDns.com", "42.42.42.42");
 
-        final List<DnsCacheEntry> allVirtualDns = VirtualDns.getAllDnsCacheEntry();
+        final List<DnsCacheEntry> allVirtualDns = VirtualDns.getAllDnsCacheEntries();
         final List<DnsCacheEntry> expected = Arrays.asList(
                 new DnsCacheEntry("www.test_getAllVirtualDns.com".toLowerCase(),
                         "42.42.42.42",

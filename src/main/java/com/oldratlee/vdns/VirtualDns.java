@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * A simple lib for setting dns (in fact dns cache) programmatically.
+ *
  * @author ding.lid
  * @see DnsCacheEntry
  * @see VirtualDnsException
@@ -15,6 +17,13 @@ import java.util.Properties;
 public class VirtualDns {
     private static final long NEVER_EXPIRATION = Long.MAX_VALUE;
 
+    /**
+     * Set a <b>never expired</b> dns cache entry
+     *
+     * @param host host
+     * @param ips  ips
+     * @see VirtualDns#setVirtualDns(long, java.lang.String, java.lang.String...)
+     */
     public static void setVirtualDns(String host, String... ips) {
         try {
             InetAddressCacheUtil.setInetAddressCache(host, ips, NEVER_EXPIRATION);
@@ -23,6 +32,13 @@ public class VirtualDns {
         }
     }
 
+    /**
+     * Set a dns cache entry.
+     *
+     * @param expireMillis expire time in milliseconds.
+     * @param host         host
+     * @param ips          ips
+     */
     public static void setVirtualDns(long expireMillis, String host, String... ips) {
         try {
             InetAddressCacheUtil.setInetAddressCache(host, ips, System.currentTimeMillis() + expireMillis);
@@ -31,6 +47,11 @@ public class VirtualDns {
         }
     }
 
+    /**
+     * Set dns cache entries by properties
+     *
+     * @param properties input properties. eg. {@code www.example.com=42.42.42.42}
+     */
     public static void setVirtualDns(Properties properties) {
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
             final String host = (String) entry.getKey();
@@ -41,16 +62,20 @@ public class VirtualDns {
     }
 
     /**
-     * Load virtual dns config from properties file {@code vdns.properties} on classpath, then set virtual dns.
+     * Load virtual dns config from properties file {@code vdns.properties} on classpath, then set to dns cache.
+     *
+     * @see VirtualDns#setVirtualDns(java.util.Properties)
+     * @see VirtualDns#configVirtualDnsByClassPathProperties(java.lang.String)
      */
     public static void configVirtualDnsByClassPathProperties() {
         configVirtualDnsByClassPathProperties("vdns.properties");
     }
 
     /**
-     * Load virtual dns config from the specified properties file on classpath, then set virtual dns.
+     * Load virtual dns config from the specified properties file on classpath, then set dns cache.
      *
      * @param propertiesFileName specified properties file name on classpath.
+     * @see com.oldratlee.vdns.VirtualDns#setVirtualDns(java.util.Properties)
      */
     public static void configVirtualDnsByClassPathProperties(String propertiesFileName) {
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertiesFileName);
@@ -71,7 +96,12 @@ public class VirtualDns {
         }
     }
 
-    public static List<DnsCacheEntry> getAllDnsCacheEntry() {
+    /**
+     * Get all dns cache entries.
+     *
+     * @return dns cache entries
+     */
+    public static List<DnsCacheEntry> getAllDnsCacheEntries() {
         try {
             return InetAddressCacheUtil.listAllVirtualDns();
         } catch (Exception e) {
@@ -79,6 +109,12 @@ public class VirtualDns {
         }
     }
 
+    /**
+     * Remove dns cache entry, cause lookup dns server for host after.
+     *
+     * @param host host
+     * @see VirtualDns#clearDnsCacheEntry
+     */
     public static void removeVirtualDns(String host) {
         try {
             InetAddressCacheUtil.removeInetAddressCache(host);
@@ -87,6 +123,9 @@ public class VirtualDns {
         }
     }
 
+    /**
+     * Clear all dns cache entries, cause lookup dns server for all host after.
+     */
     public static void clearDnsCacheEntry() {
         try {
             InetAddressCacheUtil.clearInetAddressCache();

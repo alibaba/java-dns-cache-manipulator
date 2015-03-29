@@ -52,7 +52,6 @@ public class DnsCacheEntry implements Serializable {
         if (ip != null ? !ip.equals(dnsCacheEntry1.ip) : dnsCacheEntry1.ip != null)
             return false;
         return !(expiration != null ? !expiration.equals(dnsCacheEntry1.expiration) : dnsCacheEntry1.expiration != null);
-
     }
 
     @Override
