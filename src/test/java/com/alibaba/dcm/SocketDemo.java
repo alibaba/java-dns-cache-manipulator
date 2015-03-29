@@ -1,4 +1,4 @@
-package com.oldratlee.dcm;
+package com.alibaba.dcm;
 
 import org.apache.commons.io.IOUtils;
 

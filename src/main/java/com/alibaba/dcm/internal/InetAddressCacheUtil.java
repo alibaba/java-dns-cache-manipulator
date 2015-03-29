@@ -1,6 +1,6 @@
-package com.oldratlee.dcm.internal;
+package com.alibaba.dcm.internal;
 
-import com.oldratlee.dcm.DnsCacheEntry;
+import com.alibaba.dcm.DnsCacheEntry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

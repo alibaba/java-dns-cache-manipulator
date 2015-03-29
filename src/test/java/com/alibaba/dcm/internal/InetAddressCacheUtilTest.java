@@ -1,4 +1,4 @@
-package com.oldratlee.dcm.internal;
+package com.alibaba.dcm.internal;
 
 /**
  * @author ding.lid

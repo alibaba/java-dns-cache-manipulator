@@ -1,8 +1,8 @@
 Java Dns Cache Manipulator(DCM)
 =========================
 
-[![Build Status](https://travis-ci.org/oldratlee/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/oldratlee/java-dns-cache-manipulator) [![Coverage Status](https://coveralls.io/repos/oldratlee/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/r/oldratlee/java-dns-cache-manipulator?branch=master) 
-[![GitHub issues](https://img.shields.io/github/issues/oldratlee/java-dns-cache-manipulator.svg)](https://github.com/oldratlee/java-dns-cache-manipulator/issues)  [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/alibaba/java-dns-cache-manipulator) [![Coverage Status](https://coveralls.io/repos/alibaba/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/r/alibaba/java-dns-cache-manipulator?branch=master) 
+[![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)  [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 :point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 7+`。
 
@@ -28,7 +28,7 @@ Java Dns Cache Manipulator(DCM)
 :busts_in_silhouette: User Guide
 =====================================
 
-通过类[`DnsCacheManipulator`](src/main/java/com/oldratlee/dcm/DnsCacheManipulator.java)设置`DNS`。
+通过类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)设置`DNS`。
 
 ### 直接设置
 
@@ -70,7 +70,7 @@ public void beforeClass() throws Exception {
 }
 ```
 
-更多详细功能参见类[`DnsCacheManipulator`](src/main/java/com/oldratlee/dcm/DnsCacheManipulator.java)的文档说明。
+更多详细功能参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
 
 :mortar_board: Developer Guide
 =====================================
@@ -78,7 +78,7 @@ public void beforeClass() throws Exception {
 ### 如何修改`JVM`的`DNS Cache`
 
 `JVM`的`DNS Cache`维护在类`InetAddress`的`addressCache`私有字段中，通过反射来修改，
-具体参见[`InetAddressCacheUtil`](src/main/java/com/oldratlee/dcm/internal/InetAddressCacheUtil.java)。
+具体参见[`InetAddressCacheUtil`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtil.java)。
 
 ### 注意修改`JVM`的`DNS Cache`的线程安全问题
 
@@ -105,7 +105,7 @@ private static void cacheAddresses(String hostname,
 }
 ```
 
-[`InetAddressCacheUtil`](src/main/java/com/oldratlee/dcm/internal/InetAddressCacheUtil.java)类中对`DNS Cache`的读写也一致地加了以`addressCache`为锁的`synchronized`块，以保证线程安全。
+[`InetAddressCacheUtil`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtil.java)类中对`DNS Cache`的读写也一致地加了以`addressCache`为锁的`synchronized`块，以保证线程安全。
 
 ### 相关资料
 

@@ -1,6 +1,6 @@
-package com.oldratlee.dcm;
+package com.alibaba.dcm;
 
-import com.oldratlee.dcm.internal.InetAddressCacheUtil;
+import com.alibaba.dcm.internal.InetAddressCacheUtil;
 
 import java.io.InputStream;
 import java.util.List;
