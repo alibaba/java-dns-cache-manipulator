@@ -47,6 +47,15 @@ public class InetAddressCacheUtil {
         }
     }
 
+    public static void removeInetAddressCache(String host)
+            throws NoSuchFieldException, IllegalAccessException {
+        host = host.toLowerCase();
+
+        synchronized (getAddressCacheFieldOfInetAddress()) {
+            getCacheFiledOfInetAddress$CacheEntry().remove(host);
+        }
+    }
+
     static Object createCacheEntry(String host, String[] ips, long expiration)
             throws UnknownHostException, ClassNotFoundException, NoSuchMethodException,
             IllegalAccessException, InvocationTargetException, InstantiationException {

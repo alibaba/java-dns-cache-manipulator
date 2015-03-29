@@ -79,6 +79,14 @@ public class VirtualDns {
         }
     }
 
+    public static void removeVirtualDns(String host) {
+        try {
+            InetAddressCacheUtil.removeInetAddressCache(host);
+        } catch (Exception e) {
+            throw new VirtualDnsException("Fail to removeVirtualDns, cause: " + e.toString(), e);
+        }
+    }
+
     public static void clearDnsCacheEntry() {
         try {
             InetAddressCacheUtil.clearInetAddressCache();

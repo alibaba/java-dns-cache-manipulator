@@ -57,7 +57,7 @@ public class VirtualDnsTest {
 
     @Test
     public void test_virtualDnsExpirationEffective() throws Exception {
-        final String notExistedHost = "www.not-existed-host-4754jd-kr8m07d5-76jn54.com";
+        final String notExistedHost = "www.not-existed-host-test_virtualDnsExpirationEffective.com";
 
         VirtualDns.setVirtualDns(500, notExistedHost, "42.42.43.43");
         final String ip = InetAddress.getByName(notExistedHost).getHostAddress();
@@ -65,6 +65,24 @@ public class VirtualDnsTest {
 
         Thread.sleep(1000);
 
+        try {
+            InetAddress.getByName(notExistedHost).getHostAddress();
+            fail();
+        } catch (UnknownHostException expected) {
+            System.out.println(expected.toString());
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void test_removeVirtualDns() throws Exception {
+        final String notExistedHost = "www.not-existed-host-test_removeVirtualDns.com";
+
+        VirtualDns.setVirtualDns(notExistedHost, "42.42.43.43");
+        final String ip = InetAddress.getByName(notExistedHost).getHostAddress();
+        assertEquals("42.42.43.43", ip);
+
+        VirtualDns.removeVirtualDns(notExistedHost);
         try {
             InetAddress.getByName(notExistedHost).getHostAddress();
             fail();
