@@ -14,12 +14,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.annotation.concurrent.GuardedBy;
+
 /**
+ * Util class to manipulate dns cache {@link InetAddress.Cache#cache} at {@link InetAddress#addressCache}.
+ * <p/>
+ * <b>Caution</b>: <br>
+ * Manipulation on {@link InetAddress#addressCache} <strong>MUST</strong>
+ * be guarded by {@link InetAddress#addressCache} to avoid multithreaded problem,
+ * you can see the implementation of {@link InetAddress} to confirm this
+ * (<b><i>See Also</i></b> lists key code of {@link InetAddress} related to this point).
+ *
  * @author ding.lid
  * @see InetAddress
+ * @see InetAddress#addressCache
+ * @see InetAddress#cacheInitIfNeeded()
+ * @see InetAddress#cacheAddresses(String, InetAddress[], boolean)
  */
 public class InetAddressCacheUtil {
-
     public static void setInetAddressCache(String host, String[] ips, long expiration)
             throws NoSuchMethodException, UnknownHostException,
             IllegalAccessException, InstantiationException, InvocationTargetException,
@@ -41,6 +53,7 @@ public class InetAddressCacheUtil {
     }
 
     @SuppressWarnings("unchecked")
+    @GuardedBy("getAddressCacheFieldOfInetAddress()")
     static Map<String, Object> getCacheFiledOfInetAddress$CacheEntry()
             throws NoSuchFieldException, IllegalAccessException {
         final Object inetAddressCache = getAddressCacheFieldOfInetAddress();
@@ -53,7 +66,6 @@ public class InetAddressCacheUtil {
 
     static volatile Object ADDRESS_CACHE = null;
 
-    @SuppressWarnings("unchecked")
     static Object getAddressCacheFieldOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE == null) {
@@ -104,13 +116,13 @@ public class InetAddressCacheUtil {
 
     static List<DnsCacheEntry> inetAddress$CacheEntry2DnsCacheEntry(Object entry)
             throws NoSuchFieldException, IllegalAccessException {
-        Class<?> cacheEntryClazz = entry.getClass();
+        Class<?> cacheEntryClass = entry.getClass();
 
-        Field expirationField = cacheEntryClazz.getDeclaredField("expiration");
+        Field expirationField = cacheEntryClass.getDeclaredField("expiration");
         expirationField.setAccessible(true);
         long expiration = (Long) expirationField.get(entry);
 
-        Field addressesField = cacheEntryClazz.getDeclaredField("addresses");
+        Field addressesField = cacheEntryClass.getDeclaredField("addresses");
         addressesField.setAccessible(true);
         InetAddress[] addresses = (InetAddress[]) addressesField.get(entry);
 
