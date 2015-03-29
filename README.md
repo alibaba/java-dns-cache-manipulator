@@ -1,5 +1,114 @@
-Virtual DNS
+Java Dns Cache Manipulator(DCM)
 =========================
 
-[![Build Status](https://travis-ci.org/oldratlee/virtual-dns.svg?branch=master)](https://travis-ci.org/oldratlee/virtual-dns) [![Coverage Status](https://coveralls.io/repos/oldratlee/virtual-dns/badge.svg?branch=master)](https://coveralls.io/r/oldratlee/virtual-dns?branch=master) 
-[![GitHub issues](https://img.shields.io/github/issues/oldratlee/virtual-dns.svg)](https://github.com/oldratlee/virtual-dns/issues)  [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Build Status](https://travis-ci.org/oldratlee/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/oldratlee/java-dns-cache-manipulator) [![Coverage Status](https://coveralls.io/repos/oldratlee/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/r/oldratlee/java-dns-cache-manipulator?branch=master) 
+[![GitHub issues](https://img.shields.io/github/issues/oldratlee/java-dns-cache-manipulator.svg)](https://github.com/oldratlee/java-dns-cache-manipulator/issues)  [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+
+:point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 7+`。
+
+:wrench: 功能
+----------------------------
+
+- 设置/重置`DNS`（不会再去查找`DNS Server`）
+    - 可以设置单条
+    - 或是通过`Properties`文件方便的批量设置
+- 查看`DNS Cache`内容
+- 删除一条`DNS Cache`（即会重新从`DNS Server`查找）
+- 清空`DNS Cache`
+
+:art: 需求场景
+----------------------
+
+1. 一些库中写死了连接域名，需要通过修改`host`文件绑定才能做测试。结果是：
+    - 自动持续集成的机器上一般同学是没有权限去修改`host`文件的，导致项目不能持续集成。（实际上是因为点，催生这个库的需求 :persevere::gun:）
+    - 单元测试需要每个开发都在开发机上做绑定，增加了依赖的配置操作且繁琐重复。
+2. `Java`的`DNS`缺省是不会失效的。如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
+    当然往往进行要先有能执行入口，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。
+
+:busts_in_silhouette: User Guide
+=====================================
+
+通过类[`DnsCacheManipulator`](src/main/java/com/oldratlee/dcm/DnsCacheManipulator.java)设置`DNS`。
+
+### 直接设置
+
+```java
+DnsCacheManipulator.setDnsCache("www.hello-world.com", "192.168.10.113");
+
+// 之后Java代码中使用到域名都会解析成上面指定的IP。
+// 下面是一个简单获取域名对应的IP，演示一下：
+
+String ip = InetAddress.getByName("www.hello-world.com").getHostAddress();
+// ip = "192.168.10.113"
+```
+
+### 通过`dns-cache.properties`文件批量配置
+
+在代码测试中，会期望把域名绑定写在配置文件。使用方式如下：
+
+在`ClassPath`上，提供文件`dns-cache.properties`：
+
+```bash
+# 配置格式：
+# <host> = <ip>
+www.hello-world.com=192.168.10.113
+www.foo.com=192.168.10.2
+```
+
+然后通过一行完成批量设置：
+
+```java
+DnsCacheManipulator.loadDnsCacheConfig();
+```
+
+在单元测试中，往往会写在测试类的`setUp`方法中，如：
+
+```java
+@BeforeClass
+public void beforeClass() throws Exception {
+    DnsCacheManipulator.loadDnsCacheConfig();
+}
+```
+
+更多详细功能参见类[`DnsCacheManipulator`](src/main/java/com/oldratlee/dcm/DnsCacheManipulator.java)的文档说明。
+
+:mortar_board: Developer Guide
+=====================================
+
+### 如何修改`JVM`的`DNS Cache`
+
+`JVM`的`DNS Cache`维护在类`InetAddress`的`addressCache`私有字段中，通过反射来修改，
+具体参见[`InetAddressCacheUtil`](src/main/java/com/oldratlee/dcm/internal/InetAddressCacheUtil.java)。
+
+### 注意修改`JVM`的`DNS Cache`的线程安全问题
+
+`JVM`显然是全局共用的，修改肯定需要同步以保证没有并发问题。
+
+通过查看类`InetAddress`的实现可以确定通过以`addressCache`字段为锁的`synchronized`块来保证线程安全，关键代码如下：
+
+```java
+/*
+ * Cache the given hostname and addresses.
+ */
+private static void cacheAddresses(String hostname,
+                                   InetAddress[] addresses,
+                                   boolean success) {
+    hostname = hostname.toLowerCase();
+    synchronized (addressCache) {
+        cacheInitIfNeeded();
+        if (success) {
+            addressCache.put(hostname, addresses);
+        } else {
+            negativeCache.put(hostname, addresses);
+        }
+    }
+}
+```
+
+[`InetAddressCacheUtil`](src/main/java/com/oldratlee/dcm/internal/InetAddressCacheUtil.java)类中对`DNS Cache`的读写也一致地加了以`addressCache`为锁的`synchronized`块，以保证线程安全。
+
+### 相关资料
+
+- [tanhaichao](https://github.com/tanhaichao/javahost)的项目[javahost](https://github.com/tanhaichao/javahost)，
+    [使用文档](http://leopard.io/modules/javahost)  
+    本项目如何设置`Java DNS Cache`的解法来自此项目。刚开始在持续集成项目中碰到`host`绑定的问题时，也是使用这个项目来解决的 :+1:
