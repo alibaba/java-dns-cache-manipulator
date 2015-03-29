@@ -17,6 +17,21 @@ import static org.junit.Assert.fail;
  */
 public class VirtualDnsTest {
     @Test
+    public void test_getAllVirtualDns() throws Exception {
+        VirtualDns.clearDnsCacheEntry();
+
+        VirtualDns.setVirtualDns("www.test_getAllVirtualDns.com", "42.42.42.42");
+
+        final List<DnsCacheEntry> allVirtualDns = VirtualDns.getAllDnsCacheEntry();
+        final List<DnsCacheEntry> expected = Arrays.asList(
+                new DnsCacheEntry("www.test_getAllVirtualDns.com".toLowerCase(),
+                        "42.42.42.42",
+                        new Date(Long.MAX_VALUE)));
+
+        assertEquals(expected, allVirtualDns);
+    }
+
+    @Test
     public void test_configVirtualDnsByClassPathProperties() throws Exception {
         VirtualDns.configVirtualDnsByClassPathProperties();
         final String ip = InetAddress.getByName("www.hello1.com").getHostAddress();
@@ -24,15 +39,24 @@ public class VirtualDnsTest {
     }
 
     @Test
-    public void test_getAllVirtualDns() throws Exception {
-        VirtualDns.configVirtualDnsByClassPathProperties();
-        final List<DnsCacheEntry> allVirtualDns = VirtualDns.getAllDnsCacheEntry();
-        final List<DnsCacheEntry> expected = Arrays.asList(new DnsCacheEntry("www.hello1.com", "42.42.41.41", new Date(Long.MAX_VALUE)));
-        assertEquals(expected, allVirtualDns);
+    public void test_configVirtualDnsByMyProperties() throws Exception {
+        VirtualDns.configVirtualDnsByClassPathProperties("my-vdns.properties");
+        final String ip = InetAddress.getByName("www.hello1.com").getHostAddress();
+        assertEquals("42.42.43.43", ip);
     }
 
     @Test
-    public void test_VirtualDnsExpire() throws Exception {
+    public void test_configNotFound() throws Exception {
+        try {
+            VirtualDns.configVirtualDnsByClassPathProperties("not-existed.properties");
+            fail();
+        } catch (VirtualDnsException expected) {
+            assertEquals("Fail to find not-existed.properties on classpath!", expected.getMessage());
+        }
+    }
+
+    @Test
+    public void test_virtualDnsExpirationEffective() throws Exception {
         final String notExistedHost = "www.not-existed-host-4754jd-kr8m07d5-76jn54.com";
 
         VirtualDns.setVirtualDns(500, notExistedHost, "42.42.43.43");
@@ -45,12 +69,8 @@ public class VirtualDnsTest {
             InetAddress.getByName(notExistedHost).getHostAddress();
             fail();
         } catch (UnknownHostException expected) {
+            System.out.println(expected.toString());
             assertTrue(true);
         }
-    }
-
-    @Test(expected = VirtualDnsException.class)
-    public void test_configNotFound() throws Exception {
-        VirtualDns.configVirtualDnsByClassPathProperties("not-existed.properties");
     }
 }

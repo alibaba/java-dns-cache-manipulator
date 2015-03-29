@@ -33,7 +33,7 @@ public class DnsCacheEntry implements Serializable {
 
     @Override
     public String toString() {
-        return "Host{" +
+        return "DnsCacheEntry{" +
                 "host='" + host + '\'' +
                 ", ip='" + ip + '\'' +
                 ", expiration=" + expiration +

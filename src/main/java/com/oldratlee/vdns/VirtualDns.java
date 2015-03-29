@@ -40,17 +40,25 @@ public class VirtualDns {
         }
     }
 
+    /**
+     * Load virtual dns config from properties file {@code vdns.properties} on classpath, then set virtual dns.
+     */
     public static void configVirtualDnsByClassPathProperties() {
         configVirtualDnsByClassPathProperties("vdns.properties");
     }
 
-    public static void configVirtualDnsByClassPathProperties(String propertiesFileOnClassPath) {
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertiesFileOnClassPath);
+    /**
+     * Load virtual dns config from the specified properties file on classpath, then set virtual dns.
+     *
+     * @param propertiesFileName specified properties file name on classpath.
+     */
+    public static void configVirtualDnsByClassPathProperties(String propertiesFileName) {
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertiesFileName);
         if (inputStream == null) {
-            inputStream = VirtualDns.class.getClassLoader().getResourceAsStream(propertiesFileOnClassPath);
+            inputStream = VirtualDns.class.getClassLoader().getResourceAsStream(propertiesFileName);
         }
         if (inputStream == null) {
-            throw new VirtualDnsException("Fail to find " + propertiesFileOnClassPath + " on classpath!");
+            throw new VirtualDnsException("Fail to find " + propertiesFileName + " on classpath!");
         }
 
         try {
@@ -68,6 +76,14 @@ public class VirtualDns {
             return InetAddressCacheUtil.listAllVirtualDns();
         } catch (Exception e) {
             throw new VirtualDnsException("Fail to getAllVirtualDns, cause: " + e.toString(), e);
+        }
+    }
+
+    public static void clearDnsCacheEntry() {
+        try {
+            InetAddressCacheUtil.clearInetAddressCache();
+        } catch (Exception e) {
+            throw new VirtualDnsException("Fail to clearDnsCacheEntry, cause: " + e.toString(), e);
         }
     }
 }

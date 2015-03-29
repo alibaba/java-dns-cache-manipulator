@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import javax.annotation.concurrent.GuardedBy;
 
 /**
- * Util class to manipulate dns cache {@link InetAddress.Cache#cache} at {@link InetAddress#addressCache}.
+ * Util class to manipulate dns cache {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}.
  * <p/>
  * <b>Caution</b>: <br>
  * Manipulation on {@link InetAddress#addressCache} <strong>MUST</strong>
@@ -57,6 +57,9 @@ public class InetAddressCacheUtil {
         return constructor.newInstance(toInetAddressArray(host, ips), expiration);
     }
 
+    /**
+     * @return {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}
+     */
     @SuppressWarnings("unchecked")
     @GuardedBy("getAddressCacheFieldOfInetAddress()")
     static Map<String, Object> getCacheFiledOfInetAddress$CacheEntry()
@@ -71,6 +74,9 @@ public class InetAddressCacheUtil {
 
     static volatile Object ADDRESS_CACHE = null;
 
+    /**
+     * @return {@link InetAddress#addressCache}
+     */
     static Object getAddressCacheFieldOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE == null) {
@@ -138,5 +144,11 @@ public class InetAddressCacheUtil {
             dnsCacheEntries.add(dnsCacheEntry);
         }
         return dnsCacheEntries;
+    }
+
+    public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {
+        synchronized (getAddressCacheFieldOfInetAddress()) {
+            getCacheFiledOfInetAddress$CacheEntry().clear();
+        }
     }
 }
