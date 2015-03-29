@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public class Host implements Serializable {
+public class DnsCacheEntry implements Serializable {
     private static final long serialVersionUID = -7476648934387757732L;
 
     private final String host;
@@ -25,7 +25,7 @@ public class Host implements Serializable {
         return expiration;
     }
 
-    public Host(String host, String ip, Date expiration) {
+    public DnsCacheEntry(String host, String ip, Date expiration) {
         this.host = host;
         this.ip = ip;
         this.expiration = expiration;
@@ -45,12 +45,13 @@ public class Host implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Host host1 = (Host) o;
+        DnsCacheEntry dnsCacheEntry1 = (DnsCacheEntry) o;
 
-        if (host != null ? !host.equals(host1.host) : host1.host != null)
+        if (host != null ? !host.equals(dnsCacheEntry1.host) : dnsCacheEntry1.host != null)
             return false;
-        if (ip != null ? !ip.equals(host1.ip) : host1.ip != null) return false;
-        return !(expiration != null ? !expiration.equals(host1.expiration) : host1.expiration != null);
+        if (ip != null ? !ip.equals(dnsCacheEntry1.ip) : dnsCacheEntry1.ip != null)
+            return false;
+        return !(expiration != null ? !expiration.equals(dnsCacheEntry1.expiration) : dnsCacheEntry1.expiration != null);
 
     }
 

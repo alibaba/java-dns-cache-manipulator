@@ -1,6 +1,6 @@
 package com.oldratlee.vdns.internal;
 
-import com.oldratlee.vdns.Host;
+import com.oldratlee.vdns.DnsCacheEntry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author ding.lid
+ * @see InetAddress
  */
 public class InetAddressCacheUtil {
 
@@ -86,8 +87,9 @@ public class InetAddressCacheUtil {
         return address;
     }
 
-    public static List<Host> listAllVirtualDns() throws NoSuchFieldException, IllegalAccessException {
-        List<Host> list = new ArrayList<Host>();
+    public static List<DnsCacheEntry> listAllVirtualDns()
+            throws NoSuchFieldException, IllegalAccessException {
+        List<DnsCacheEntry> list = new ArrayList<DnsCacheEntry>();
 
         final Map<String, Object> cache;
         synchronized (getAddressCacheFieldOfInetAddress()) {
@@ -95,12 +97,13 @@ public class InetAddressCacheUtil {
         }
 
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
-            list.addAll(cacheEntry2Host(entry.getValue()));
+            list.addAll(inetAddress$CacheEntry2DnsCacheEntry(entry.getValue()));
         }
         return list;
     }
 
-    static List<Host> cacheEntry2Host(Object entry) throws NoSuchFieldException, IllegalAccessException {
+    static List<DnsCacheEntry> inetAddress$CacheEntry2DnsCacheEntry(Object entry)
+            throws NoSuchFieldException, IllegalAccessException {
         Class<?> cacheEntryClazz = entry.getClass();
 
         Field expirationField = cacheEntryClazz.getDeclaredField("expiration");
@@ -111,12 +114,12 @@ public class InetAddressCacheUtil {
         addressesField.setAccessible(true);
         InetAddress[] addresses = (InetAddress[]) addressesField.get(entry);
 
-        List<Host> hosts = new ArrayList<Host>();
+        List<DnsCacheEntry> dnsCacheEntries = new ArrayList<DnsCacheEntry>();
         for (InetAddress address : addresses) {
-            Host host = new Host(address.getHostName(),
+            DnsCacheEntry dnsCacheEntry = new DnsCacheEntry(address.getHostName(),
                     address.getHostAddress(), new Date(expiration));
-            hosts.add(host);
+            dnsCacheEntries.add(dnsCacheEntry);
         }
-        return hosts;
+        return dnsCacheEntries;
     }
 }

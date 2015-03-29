@@ -9,7 +9,7 @@ import java.util.Properties;
 
 /**
  * @author ding.lid
- * @see Host
+ * @see DnsCacheEntry
  * @see VirtualDnsException
  */
 public class VirtualDns {
@@ -63,7 +63,7 @@ public class VirtualDns {
         }
     }
 
-    public static List<Host> getAllVirtualDns() {
+    public static List<DnsCacheEntry> getAllDnsCacheEntry() {
         try {
             return InetAddressCacheUtil.listAllVirtualDns();
         } catch (Exception e) {

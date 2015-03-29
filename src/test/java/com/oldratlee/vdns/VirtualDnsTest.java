@@ -26,8 +26,8 @@ public class VirtualDnsTest {
     @Test
     public void test_getAllVirtualDns() throws Exception {
         VirtualDns.configVirtualDnsByClassPathProperties();
-        final List<Host> allVirtualDns = VirtualDns.getAllVirtualDns();
-        final List<Host> expected = Arrays.asList(new Host("www.hello1.com", "42.42.41.41", new Date(Long.MAX_VALUE)));
+        final List<DnsCacheEntry> allVirtualDns = VirtualDns.getAllDnsCacheEntry();
+        final List<DnsCacheEntry> expected = Arrays.asList(new DnsCacheEntry("www.hello1.com", "42.42.41.41", new Date(Long.MAX_VALUE)));
         assertEquals(expected, allVirtualDns);
     }
 
