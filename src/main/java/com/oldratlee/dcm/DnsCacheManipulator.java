@@ -1,6 +1,6 @@
-package com.oldratlee.vdns;
+package com.oldratlee.dcm;
 
-import com.oldratlee.vdns.internal.InetAddressCacheUtil;
+import com.oldratlee.dcm.internal.InetAddressCacheUtil;
 
 import java.io.InputStream;
 import java.util.List;
@@ -62,13 +62,13 @@ public class DnsCacheManipulator {
     }
 
     /**
-     * Load dns config from properties file {@code vdns.properties} on classpath, then set to dns cache.
+     * Load dns config from properties file {@code dns-cache.properties} on classpath, then set to dns cache.
      *
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
-     * @see DnsCacheManipulator#configDnsCacheByClassPathProperties(java.lang.String)
+     * @see DnsCacheManipulator#loadDnsCacheConfig(java.lang.String)
      */
-    public static void configDnsCacheByClassPathProperties() {
-        configDnsCacheByClassPathProperties("vdns.properties");
+    public static void loadDnsCacheConfig() {
+        loadDnsCacheConfig("dns-cache.properties");
     }
 
     /**
@@ -77,7 +77,7 @@ public class DnsCacheManipulator {
      * @param propertiesFileName specified properties file name on classpath.
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      */
-    public static void configDnsCacheByClassPathProperties(String propertiesFileName) {
+    public static void loadDnsCacheConfig(String propertiesFileName) {
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertiesFileName);
         if (inputStream == null) {
             inputStream = DnsCacheManipulator.class.getClassLoader().getResourceAsStream(propertiesFileName);

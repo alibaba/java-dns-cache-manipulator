@@ -3,10 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.oldratlee</groupId>
-	<artifactId>virtual-dns</artifactId>
+	<artifactId>dns-cache-manipulator</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
+	<description>Dns Cache Manipulator(DCM)</description>
 	<inceptionYear>2015</inceptionYear>
 
 	<licenses>

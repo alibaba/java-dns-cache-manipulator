@@ -1,4 +1,4 @@
-package com.oldratlee.vdns;
+package com.oldratlee.dcm;
 
 import java.io.Serializable;
 import java.util.Date;

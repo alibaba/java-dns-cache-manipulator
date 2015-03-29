@@ -1,4 +1,4 @@
-package com.oldratlee.vdns;
+package com.oldratlee.dcm;
 
 import org.junit.Test;
 
@@ -33,15 +33,15 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
-    public void test_configDnsCacheByClassPathProperties() throws Exception {
-        DnsCacheManipulator.configDnsCacheByClassPathProperties();
+    public void test_loadDnsCacheConfig() throws Exception {
+        DnsCacheManipulator.loadDnsCacheConfig();
         final String ip = InetAddress.getByName("www.hello1.com").getHostAddress();
         assertEquals("42.42.41.41", ip);
     }
 
     @Test
-    public void test_configDnsCacheByClassPathProperties_fromMyVDns() throws Exception {
-        DnsCacheManipulator.configDnsCacheByClassPathProperties("my-vdns.properties");
+    public void test_loadDnsCacheConfig_fromMyConfig() throws Exception {
+        DnsCacheManipulator.loadDnsCacheConfig("my-dns-cache.properties");
         final String ip = InetAddress.getByName("www.hello1.com").getHostAddress();
         assertEquals("42.42.43.43", ip);
     }
@@ -49,7 +49,7 @@ public class DnsCacheManipulatorTest {
     @Test
     public void test_configNotFound() throws Exception {
         try {
-            DnsCacheManipulator.configDnsCacheByClassPathProperties("not-existed.properties");
+            DnsCacheManipulator.loadDnsCacheConfig("not-existed.properties");
             fail();
         } catch (DnsCacheManipulatorException expected) {
             assertEquals("Fail to find not-existed.properties on classpath!", expected.getMessage());

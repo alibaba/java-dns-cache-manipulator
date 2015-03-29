@@ -1,6 +1,6 @@
-package com.oldratlee.vdns.internal;
+package com.oldratlee.dcm.internal;
 
-import com.oldratlee.vdns.DnsCacheEntry;
+import com.oldratlee.dcm.DnsCacheEntry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

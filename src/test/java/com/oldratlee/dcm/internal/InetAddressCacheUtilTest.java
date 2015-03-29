@@ -1,4 +1,4 @@
-package com.oldratlee.vdns.internal;
+package com.oldratlee.dcm.internal;
 
 /**
  * @author ding.lid

@@ -1,4 +1,4 @@
-package com.oldratlee.vdns;
+package com.oldratlee.dcm;
 
 import org.apache.commons.io.IOUtils;
 
