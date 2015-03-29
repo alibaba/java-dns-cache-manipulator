@@ -32,11 +32,16 @@ import javax.annotation.concurrent.GuardedBy;
  * @see InetAddress#cacheAddresses(String, InetAddress[], boolean)
  */
 public class InetAddressCacheUtil {
+    /**
+     * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
+     */
     public static void setInetAddressCache(String host, String[] ips, long expiration)
             throws NoSuchMethodException, UnknownHostException,
             IllegalAccessException, InstantiationException, InvocationTargetException,
             ClassNotFoundException, NoSuchFieldException {
+        host = host.toLowerCase();
         Object entry = createCacheEntry(host, ips, expiration);
+
         synchronized (getAddressCacheFieldOfInetAddress()) {
             getCacheFiledOfInetAddress$CacheEntry().put(host, entry);
         }
