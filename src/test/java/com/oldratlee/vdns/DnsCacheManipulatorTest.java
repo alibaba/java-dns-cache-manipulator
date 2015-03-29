@@ -15,32 +15,33 @@ import static org.junit.Assert.fail;
 /**
  * @author ding.lid
  */
-public class VirtualDnsTest {
+public class DnsCacheManipulatorTest {
     @Test
-    public void test_getAllVirtualDns() throws Exception {
-        VirtualDns.clearDnsCacheEntry();
+    public void test_getAllDnsCacheEntries() throws Exception {
+        DnsCacheManipulator.clearDnsCacheEntry();
 
-        VirtualDns.setVirtualDns("www.test_getAllVirtualDns.com", "42.42.42.42");
+        final String host = "www.test_getAllDnsCacheEntries.com";
+        final String ip = "42.42.42.42";
 
-        final List<DnsCacheEntry> allVirtualDns = VirtualDns.getAllDnsCacheEntries();
+        DnsCacheManipulator.setDnsCache(host, ip);
+
+        final List<DnsCacheEntry> allDnsCacheEntries = DnsCacheManipulator.getAllDnsCacheEntries();
         final List<DnsCacheEntry> expected = Arrays.asList(
-                new DnsCacheEntry("www.test_getAllVirtualDns.com".toLowerCase(),
-                        "42.42.42.42",
-                        new Date(Long.MAX_VALUE)));
+                new DnsCacheEntry(host.toLowerCase(), ip, new Date(Long.MAX_VALUE)));
 
-        assertEquals(expected, allVirtualDns);
+        assertEquals(expected, allDnsCacheEntries);
     }
 
     @Test
-    public void test_configVirtualDnsByClassPathProperties() throws Exception {
-        VirtualDns.configVirtualDnsByClassPathProperties();
+    public void test_configDnsCacheByClassPathProperties() throws Exception {
+        DnsCacheManipulator.configDnsCacheByClassPathProperties();
         final String ip = InetAddress.getByName("www.hello1.com").getHostAddress();
         assertEquals("42.42.41.41", ip);
     }
 
     @Test
-    public void test_configVirtualDnsByMyProperties() throws Exception {
-        VirtualDns.configVirtualDnsByClassPathProperties("my-vdns.properties");
+    public void test_configDnsCacheByClassPathProperties_fromMyVDns() throws Exception {
+        DnsCacheManipulator.configDnsCacheByClassPathProperties("my-vdns.properties");
         final String ip = InetAddress.getByName("www.hello1.com").getHostAddress();
         assertEquals("42.42.43.43", ip);
     }
@@ -48,18 +49,18 @@ public class VirtualDnsTest {
     @Test
     public void test_configNotFound() throws Exception {
         try {
-            VirtualDns.configVirtualDnsByClassPathProperties("not-existed.properties");
+            DnsCacheManipulator.configDnsCacheByClassPathProperties("not-existed.properties");
             fail();
-        } catch (VirtualDnsException expected) {
+        } catch (DnsCacheManipulatorException expected) {
             assertEquals("Fail to find not-existed.properties on classpath!", expected.getMessage());
         }
     }
 
     @Test
-    public void test_virtualDnsExpirationEffective() throws Exception {
-        final String notExistedHost = "www.not-existed-host-test_virtualDnsExpirationEffective.com";
+    public void test_DnsCache_canExpire() throws Exception {
+        final String notExistedHost = "www.not-existed-host-test_DnsCache_canExpire.com";
 
-        VirtualDns.setVirtualDns(500, notExistedHost, "42.42.43.43");
+        DnsCacheManipulator.setDnsCache(500, notExistedHost, "42.42.43.43");
         final String ip = InetAddress.getByName(notExistedHost).getHostAddress();
         assertEquals("42.42.43.43", ip);
 
@@ -75,14 +76,15 @@ public class VirtualDnsTest {
     }
 
     @Test
-    public void test_removeVirtualDns() throws Exception {
-        final String notExistedHost = "www.not-existed-host-test_removeVirtualDns.com";
+    public void test_removeDnsCache() throws Exception {
+        final String notExistedHost = "www.not-existed-host-test_removeDnsCache";
 
-        VirtualDns.setVirtualDns(notExistedHost, "42.42.43.43");
+        DnsCacheManipulator.setDnsCache(notExistedHost, "42.42.43.43");
         final String ip = InetAddress.getByName(notExistedHost).getHostAddress();
         assertEquals("42.42.43.43", ip);
 
-        VirtualDns.removeVirtualDns(notExistedHost);
+        DnsCacheManipulator.removeDnsCache(notExistedHost);
+
         try {
             InetAddress.getByName(notExistedHost).getHostAddress();
             fail();

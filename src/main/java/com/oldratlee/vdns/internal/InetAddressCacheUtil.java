@@ -119,7 +119,7 @@ public class InetAddressCacheUtil {
         return address;
     }
 
-    public static List<DnsCacheEntry> listAllVirtualDns()
+    public static List<DnsCacheEntry> listInetAddressCache()
             throws NoSuchFieldException, IllegalAccessException {
         List<DnsCacheEntry> list = new ArrayList<DnsCacheEntry>();
 

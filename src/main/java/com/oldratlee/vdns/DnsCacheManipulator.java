@@ -12,9 +12,9 @@ import java.util.Properties;
  *
  * @author ding.lid
  * @see DnsCacheEntry
- * @see VirtualDnsException
+ * @see DnsCacheManipulatorException
  */
-public class VirtualDns {
+public class DnsCacheManipulator {
     private static final long NEVER_EXPIRATION = Long.MAX_VALUE;
 
     /**
@@ -22,13 +22,13 @@ public class VirtualDns {
      *
      * @param host host
      * @param ips  ips
-     * @see VirtualDns#setVirtualDns(long, java.lang.String, java.lang.String...)
+     * @see DnsCacheManipulator#setDnsCache(long, java.lang.String, java.lang.String...)
      */
-    public static void setVirtualDns(String host, String... ips) {
+    public static void setDnsCache(String host, String... ips) {
         try {
             InetAddressCacheUtil.setInetAddressCache(host, ips, NEVER_EXPIRATION);
         } catch (Exception e) {
-            throw new VirtualDnsException("Fail to setVirtualDns, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to setDnsCache, cause: " + e.toString(), e);
         }
     }
 
@@ -39,11 +39,11 @@ public class VirtualDns {
      * @param host         host
      * @param ips          ips
      */
-    public static void setVirtualDns(long expireMillis, String host, String... ips) {
+    public static void setDnsCache(long expireMillis, String host, String... ips) {
         try {
             InetAddressCacheUtil.setInetAddressCache(host, ips, System.currentTimeMillis() + expireMillis);
         } catch (Exception e) {
-            throw new VirtualDnsException("Fail to setVirtualDns, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to setDnsCache, cause: " + e.toString(), e);
         }
     }
 
@@ -52,47 +52,47 @@ public class VirtualDns {
      *
      * @param properties input properties. eg. {@code www.example.com=42.42.42.42}
      */
-    public static void setVirtualDns(Properties properties) {
+    public static void setDnsCache(Properties properties) {
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
             final String host = (String) entry.getKey();
             final String ip = (String) entry.getValue();
 
-            setVirtualDns(host, ip);
+            setDnsCache(host, ip);
         }
     }
 
     /**
-     * Load virtual dns config from properties file {@code vdns.properties} on classpath, then set to dns cache.
+     * Load dns config from properties file {@code vdns.properties} on classpath, then set to dns cache.
      *
-     * @see VirtualDns#setVirtualDns(java.util.Properties)
-     * @see VirtualDns#configVirtualDnsByClassPathProperties(java.lang.String)
+     * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
+     * @see DnsCacheManipulator#configDnsCacheByClassPathProperties(java.lang.String)
      */
-    public static void configVirtualDnsByClassPathProperties() {
-        configVirtualDnsByClassPathProperties("vdns.properties");
+    public static void configDnsCacheByClassPathProperties() {
+        configDnsCacheByClassPathProperties("vdns.properties");
     }
 
     /**
-     * Load virtual dns config from the specified properties file on classpath, then set dns cache.
+     * Load dns config from the specified properties file on classpath, then set dns cache.
      *
      * @param propertiesFileName specified properties file name on classpath.
-     * @see com.oldratlee.vdns.VirtualDns#setVirtualDns(java.util.Properties)
+     * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      */
-    public static void configVirtualDnsByClassPathProperties(String propertiesFileName) {
+    public static void configDnsCacheByClassPathProperties(String propertiesFileName) {
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertiesFileName);
         if (inputStream == null) {
-            inputStream = VirtualDns.class.getClassLoader().getResourceAsStream(propertiesFileName);
+            inputStream = DnsCacheManipulator.class.getClassLoader().getResourceAsStream(propertiesFileName);
         }
         if (inputStream == null) {
-            throw new VirtualDnsException("Fail to find " + propertiesFileName + " on classpath!");
+            throw new DnsCacheManipulatorException("Fail to find " + propertiesFileName + " on classpath!");
         }
 
         try {
             Properties properties = new Properties();
             properties.load(inputStream);
             inputStream.close();
-            setVirtualDns(properties);
+            setDnsCache(properties);
         } catch (Exception e) {
-            throw new VirtualDnsException("Fail to configVirtualDnsByClassPathProperties, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to configDnsCacheByClassPathProperties, cause: " + e.toString(), e);
         }
     }
 
@@ -103,9 +103,9 @@ public class VirtualDns {
      */
     public static List<DnsCacheEntry> getAllDnsCacheEntries() {
         try {
-            return InetAddressCacheUtil.listAllVirtualDns();
+            return InetAddressCacheUtil.listInetAddressCache();
         } catch (Exception e) {
-            throw new VirtualDnsException("Fail to getAllVirtualDns, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to getAllDnsCacheEntries, cause: " + e.toString(), e);
         }
     }
 
@@ -113,13 +113,13 @@ public class VirtualDns {
      * Remove dns cache entry, cause lookup dns server for host after.
      *
      * @param host host
-     * @see VirtualDns#clearDnsCacheEntry
+     * @see DnsCacheManipulator#clearDnsCacheEntry
      */
-    public static void removeVirtualDns(String host) {
+    public static void removeDnsCache(String host) {
         try {
             InetAddressCacheUtil.removeInetAddressCache(host);
         } catch (Exception e) {
-            throw new VirtualDnsException("Fail to removeVirtualDns, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to removeDnsCache, cause: " + e.toString(), e);
         }
     }
 
@@ -130,7 +130,7 @@ public class VirtualDns {
         try {
             InetAddressCacheUtil.clearInetAddressCache();
         } catch (Exception e) {
-            throw new VirtualDnsException("Fail to clearDnsCacheEntry, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to clearDnsCacheEntry, cause: " + e.toString(), e);
         }
     }
 }
