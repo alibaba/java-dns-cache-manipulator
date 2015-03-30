@@ -22,6 +22,7 @@ public class DnsCacheManipulator {
      *
      * @param host host
      * @param ips  ips
+     * @throws DnsCacheManipulatorException Operation fail
      * @see DnsCacheManipulator#setDnsCache(long, java.lang.String, java.lang.String...)
      */
     public static void setDnsCache(String host, String... ips) {
@@ -38,6 +39,7 @@ public class DnsCacheManipulator {
      * @param expireMillis expire time in milliseconds.
      * @param host         host
      * @param ips          ips
+     * @throws DnsCacheManipulatorException Operation fail
      */
     public static void setDnsCache(long expireMillis, String host, String... ips) {
         try {
@@ -51,6 +53,7 @@ public class DnsCacheManipulator {
      * Set dns cache entries by properties
      *
      * @param properties input properties. eg. {@code www.example.com=42.42.42.42}
+     * @throws DnsCacheManipulatorException Operation fail
      */
     public static void setDnsCache(Properties properties) {
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
@@ -64,6 +67,7 @@ public class DnsCacheManipulator {
     /**
      * Load dns config from properties file {@code dns-cache.properties} on classpath, then set to dns cache.
      *
+     * @throws DnsCacheManipulatorException Operation fail
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      * @see DnsCacheManipulator#loadDnsCacheConfig(java.lang.String)
      */
@@ -75,6 +79,7 @@ public class DnsCacheManipulator {
      * Load dns config from the specified properties file on classpath, then set dns cache.
      *
      * @param propertiesFileName specified properties file name on classpath.
+     * @throws DnsCacheManipulatorException Operation fail
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      */
     public static void loadDnsCacheConfig(String propertiesFileName) {
@@ -92,7 +97,7 @@ public class DnsCacheManipulator {
             inputStream.close();
             setDnsCache(properties);
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to configDnsCacheByClassPathProperties, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to loadDnsCacheConfig, cause: " + e.toString(), e);
         }
     }
 
@@ -100,12 +105,13 @@ public class DnsCacheManipulator {
      * Get all dns cache entries.
      *
      * @return dns cache entries
+     * @throws DnsCacheManipulatorException Operation fail
      */
-    public static List<DnsCacheEntry> getAllDnsCacheEntries() {
+    public static List<DnsCacheEntry> getAllDnsCache() {
         try {
             return InetAddressCacheUtil.listInetAddressCache();
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to getAllDnsCacheEntries, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to getAllDnsCache, cause: " + e.toString(), e);
         }
     }
 
@@ -113,7 +119,8 @@ public class DnsCacheManipulator {
      * Remove dns cache entry, cause lookup dns server for host after.
      *
      * @param host host
-     * @see DnsCacheManipulator#clearDnsCacheEntry
+     * @throws DnsCacheManipulatorException Operation fail
+     * @see DnsCacheManipulator#clearDnsCache
      */
     public static void removeDnsCache(String host) {
         try {
@@ -125,12 +132,14 @@ public class DnsCacheManipulator {
 
     /**
      * Clear all dns cache entries, cause lookup dns server for all host after.
+     *
+     * @throws DnsCacheManipulatorException Operation fail
      */
-    public static void clearDnsCacheEntry() {
+    public static void clearDnsCache() {
         try {
             InetAddressCacheUtil.clearInetAddressCache();
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to clearDnsCacheEntry, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to clearDnsCache, cause: " + e.toString(), e);
         }
     }
 }

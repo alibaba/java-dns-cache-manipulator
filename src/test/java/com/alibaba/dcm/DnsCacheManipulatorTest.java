@@ -17,15 +17,15 @@ import static org.junit.Assert.fail;
  */
 public class DnsCacheManipulatorTest {
     @Test
-    public void test_getAllDnsCacheEntries() throws Exception {
-        DnsCacheManipulator.clearDnsCacheEntry();
+    public void test_getAllDnsCache() throws Exception {
+        DnsCacheManipulator.clearDnsCache();
 
         final String host = "www.test_getAllDnsCacheEntries.com";
         final String ip = "42.42.42.42";
 
         DnsCacheManipulator.setDnsCache(host, ip);
 
-        final List<DnsCacheEntry> allDnsCacheEntries = DnsCacheManipulator.getAllDnsCacheEntries();
+        final List<DnsCacheEntry> allDnsCacheEntries = DnsCacheManipulator.getAllDnsCache();
         final List<DnsCacheEntry> expected = Arrays.asList(
                 new DnsCacheEntry(host.toLowerCase(), ip, new Date(Long.MAX_VALUE)));
 
