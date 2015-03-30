@@ -11,18 +11,20 @@ Java Dns Cache Manipulator(DCM)
 
 - 设置/重置`DNS`（不会再去查找`DNS Server`）
     - 可以设置单条
-    - 或是通过`Properties`文件方便的批量设置
+    - 或是通过`Properties`文件批量设置
 - 查看`DNS Cache`内容
-- 删除一条`DNS Cache`（即会重新从`DNS Server`查找）
-- 清空`DNS Cache`
+- 删除一条`DNS Cache`（即重新从`DNS Server`查找）
+- 清空`DNS Cache`（即所有的域名重新从`DNS Server`查找）
 
 :art: 需求场景
 ----------------------
 
 1. 一些库中写死了连接域名，需要通过修改`host`文件绑定才能做测试。结果是：
-    - 自动持续集成的机器上一般同学是没有权限去修改`host`文件的，导致项目不能持续集成。（实际上是因为点，催生这个库的需求 :persevere::gun:）
+    - 自动持续集成的机器上一般同学是没有权限去修改`host`文件的，导致项目不能持续集成。  
+        实际上是因为这点，催生这个库的需求。 :persevere::gun:
     - 单元测试需要每个开发都在开发机上做绑定，增加了依赖的配置操作且繁琐重复。
-2. `Java`的`DNS`缺省是不会失效的。如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
+2. `Java`的`DNS`缺省是不会失效的。  
+    如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
     当然往往进行要先有能执行入口，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。
 
 :busts_in_silhouette: User Guide
@@ -82,9 +84,11 @@ public void beforeClass() throws Exception {
 
 ### 注意修改`JVM`的`DNS Cache`的线程安全问题
 
-`JVM`显然是全局共用的，修改肯定需要同步以保证没有并发问题。
+`JVM`的`DNS Cache`显然是全局共用的，所以修改需要同步以保证没有并发问题。
 
-通过查看类`InetAddress`的实现可以确定通过以`addressCache`字段为锁的`synchronized`块来保证线程安全，关键代码如下：
+通过查看类`InetAddress`的实现可以确定：通过以`addressCache`字段为锁的`synchronized`块来保证线程安全。
+
+关键代码如下：
 
 ```java
 /*
@@ -109,6 +113,6 @@ private static void cacheAddresses(String hostname,
 
 ### 相关资料
 
-- [tanhaichao](https://github.com/tanhaichao/javahost)的项目[javahost](https://github.com/tanhaichao/javahost)，
-    [使用文档](http://leopard.io/modules/javahost)  
+- [tanhaichao](https://github.com/tanhaichao/javahost)的[javahost](https://github.com/tanhaichao/javahost)项目，
+    项目的[使用文档](http://leopard.io/modules/javahost)。  
     本项目如何设置`Java DNS Cache`的解法来自此项目。刚开始在持续集成项目中碰到`host`绑定的问题时，也是使用这个项目来解决的 :+1:
