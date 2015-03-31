@@ -9,12 +9,12 @@ Java Dns Cache Manipulator(DCM)
 :wrench: 功能
 ----------------------------
 
-- 设置/重置`DNS`（不会再去查找`DNS Server`）
+- 设置/重置`DNS`（不会再去`Lookup DNS`）
     - 可以设置单条
     - 或是通过`Properties`文件批量设置
 - 查看`DNS Cache`内容
-- 删除一条`DNS Cache`（即重新从`DNS Server`查找）
-- 清空`DNS Cache`（即所有的域名重新从`DNS Server`查找）
+- 删除一条`DNS Cache`（即重新`Lookup DNS`）
+- 清空`DNS Cache`（即所有的域名重新`Lookup DNS`）
 
 :art: 需求场景
 ----------------------
@@ -46,7 +46,9 @@ String ip = InetAddress.getByName("www.hello-world.com").getHostAddress();
 
 ### 通过`dns-cache.properties`文件批量配置
 
-在代码测试中，会期望把域名绑定写在配置文件。使用方式如下：
+在代码测试中，会期望把域名绑定写在配置文件。
+
+使用方式如下：
 
 在`ClassPath`上，提供文件`dns-cache.properties`：
 
@@ -57,7 +59,7 @@ www.hello-world.com=192.168.10.113
 www.foo.com=192.168.10.2
 ```
 
-然后通过一行完成批量设置：
+然后通过下面的一行代码完成批量设置：
 
 ```java
 DnsCacheManipulator.loadDnsCacheConfig();
@@ -113,6 +115,6 @@ private static void cacheAddresses(String hostname,
 
 ### 相关资料
 
-- [tanhaichao](https://github.com/tanhaichao/javahost)的[javahost](https://github.com/tanhaichao/javahost)项目，
-    项目的[使用文档](http://leopard.io/modules/javahost)。  
-    本项目如何设置`Java DNS Cache`的解法来自此项目。刚开始在持续集成项目中碰到`host`绑定的问题时，也是使用这个项目来解决的 :+1:
+- [tanhaichao](https://github.com/tanhaichao)的[`javahost`项目](https://github.com/tanhaichao/javahost)，
+    该项目的[使用文档](http://leopard.io/modules/javahost)。  
+    本项目如何设置`Java DNS Cache`的解法来自该项目。刚开始在持续集成项目中碰到`host`绑定的问题时，也是使用该项目来解决的 :+1:
