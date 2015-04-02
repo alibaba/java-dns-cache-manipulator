@@ -114,7 +114,11 @@ public class InetAddressCacheUtil {
 
         byte[] address = new byte[ipParts.length];
         for (int i = 0; i < ipParts.length; i++) {
-            address[i] = (byte) Integer.parseInt(ipParts[i]);
+            final int part = Integer.parseInt(ipParts[i]);
+            if (part < 0 || part > 255) {
+                throw new IllegalStateException(ipParts[i] + "is not a byte!");
+            }
+            address[i] = (byte) part;
         }
         return address;
     }
