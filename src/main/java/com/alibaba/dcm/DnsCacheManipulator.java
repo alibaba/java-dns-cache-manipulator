@@ -3,6 +3,7 @@ package com.alibaba.dcm;
 import com.alibaba.dcm.internal.InetAddressCacheUtil;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -29,7 +30,9 @@ public class DnsCacheManipulator {
         try {
             InetAddressCacheUtil.setInetAddressCache(host, ips, NEVER_EXPIRATION);
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to setDnsCache, cause: " + e.toString(), e);
+            final String message = String.format("Fail to setDnsCache for host %s ip %s, cause: %s",
+                    host, Arrays.toString(ips), e.toString());
+            throw new DnsCacheManipulatorException(message, e);
         }
     }
 
@@ -97,7 +100,9 @@ public class DnsCacheManipulator {
             inputStream.close();
             setDnsCache(properties);
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to loadDnsCacheConfig, cause: " + e.toString(), e);
+            final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
+                    propertiesFileName, e.toString());
+            throw new DnsCacheManipulatorException(message, e);
         }
     }
 
@@ -126,7 +131,8 @@ public class DnsCacheManipulator {
         try {
             InetAddressCacheUtil.removeInetAddressCache(host);
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to removeDnsCache, cause: " + e.toString(), e);
+            final String message = String.format("Fail to removeDnsCache for host %s, cause: %s", host, e.toString());
+            throw new DnsCacheManipulatorException(message, e);
         }
     }
 
