@@ -1,33 +1,40 @@
 package com.alibaba.dcm;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public class DnsCacheEntry implements Serializable {
+public final class DnsCacheEntry implements Serializable {
     private static final long serialVersionUID = -7476648934387757732L;
 
     private final String host;
-    private final String ip;
+    private final String[] ips;
     private final Date expiration;
 
     public String getHost() {
         return host;
     }
 
+    public String[] getIps() {
+        return ips;
+    }
+
     public String getIp() {
-        return ip;
+        return ips[0];
     }
 
     public Date getExpiration() {
         return expiration;
     }
 
-    public DnsCacheEntry(String host, String ip, Date expiration) {
+    public DnsCacheEntry(String host, String[] ips, Date expiration) {
         this.host = host;
-        this.ip = ip;
+        this.ips = ips;
         this.expiration = expiration;
     }
 
@@ -35,7 +42,7 @@ public class DnsCacheEntry implements Serializable {
     public String toString() {
         return "DnsCacheEntry{" +
                 "host='" + host + '\'' +
-                ", ip='" + ip + '\'' +
+                ", ips=" + Arrays.toString(ips) +
                 ", expiration=" + expiration +
                 '}';
     }
@@ -45,19 +52,18 @@ public class DnsCacheEntry implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DnsCacheEntry dnsCacheEntry1 = (DnsCacheEntry) o;
+        DnsCacheEntry that = (DnsCacheEntry) o;
 
-        if (host != null ? !host.equals(dnsCacheEntry1.host) : dnsCacheEntry1.host != null)
+        if (host != null ? !host.equals(that.host) : that.host != null)
             return false;
-        if (ip != null ? !ip.equals(dnsCacheEntry1.ip) : dnsCacheEntry1.ip != null)
-            return false;
-        return !(expiration != null ? !expiration.equals(dnsCacheEntry1.expiration) : dnsCacheEntry1.expiration != null);
+        if (!Arrays.equals(ips, that.ips)) return false;
+        return !(expiration != null ? !expiration.equals(that.expiration) : that.expiration != null);
     }
 
     @Override
     public int hashCode() {
         int result = host != null ? host.hashCode() : 0;
-        result = 31 * result + (ip != null ? ip.hashCode() : 0);
+        result = 31 * result + (ips != null ? Arrays.hashCode(ips) : 0);
         result = 31 * result + (expiration != null ? expiration.hashCode() : 0);
         return result;
     }

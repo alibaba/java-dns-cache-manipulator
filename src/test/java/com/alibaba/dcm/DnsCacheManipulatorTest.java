@@ -27,7 +27,7 @@ public class DnsCacheManipulatorTest {
 
         final List<DnsCacheEntry> allDnsCacheEntries = DnsCacheManipulator.getAllDnsCache();
         final List<DnsCacheEntry> expected = Arrays.asList(
-                new DnsCacheEntry(host.toLowerCase(), ip, new Date(Long.MAX_VALUE)));
+                new DnsCacheEntry(host.toLowerCase(), new String[]{ip}, new Date(Long.MAX_VALUE)));
 
         assertEquals(expected, allDnsCacheEntries);
     }

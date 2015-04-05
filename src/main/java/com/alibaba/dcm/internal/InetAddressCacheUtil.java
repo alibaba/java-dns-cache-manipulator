@@ -133,12 +133,13 @@ public class InetAddressCacheUtil {
         }
 
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
-            list.addAll(inetAddress$CacheEntry2DnsCacheEntry(entry.getValue()));
+            final String host = entry.getKey();
+            list.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
         }
         return list;
     }
 
-    static List<DnsCacheEntry> inetAddress$CacheEntry2DnsCacheEntry(Object entry)
+    static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry)
             throws NoSuchFieldException, IllegalAccessException {
         Class<?> cacheEntryClass = entry.getClass();
 
@@ -150,13 +151,11 @@ public class InetAddressCacheUtil {
         addressesField.setAccessible(true);
         InetAddress[] addresses = (InetAddress[]) addressesField.get(entry);
 
-        List<DnsCacheEntry> dnsCacheEntries = new ArrayList<DnsCacheEntry>();
-        for (InetAddress address : addresses) {
-            DnsCacheEntry dnsCacheEntry = new DnsCacheEntry(address.getHostName(),
-                    address.getHostAddress(), new Date(expiration));
-            dnsCacheEntries.add(dnsCacheEntry);
+        String[] ips = new String[addresses.length];
+        for (int i = 0; i < addresses.length; i++) {
+            ips[i] = addresses[i].getHostAddress();
         }
-        return dnsCacheEntries;
+        return new DnsCacheEntry(host, ips, new Date(expiration));
     }
 
     public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {
