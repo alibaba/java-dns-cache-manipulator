@@ -1,5 +1,6 @@
 package com.alibaba.dcm;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.net.InetAddress;
@@ -16,34 +17,32 @@ import static org.junit.Assert.fail;
  * @author ding.lid
  */
 public class DnsCacheManipulatorTest {
-    @Test
-    public void test_getAllDnsCache() throws Exception {
+    static final String DOMAIN1 = "www.hello1.com";
+    static final String IP1 = "42.42.41.41";
+    static final String DOMAIN2 = "www.hello2.com";
+    static final String IP2 = "42.42.41.42";
+    public static final String IP3 = "42.42.43.43";
+
+    static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-7352jt-12559-AZ-7524087.com";
+
+    @BeforeClass
+    public static void beforeClass() throws Exception {
         DnsCacheManipulator.clearDnsCache();
-
-        final String host = "www.test_getAllDnsCacheEntries.com";
-        final String ip = "42.42.42.42";
-
-        DnsCacheManipulator.setDnsCache(host, ip);
-
-        final List<DnsCacheEntry> allDnsCacheEntries = DnsCacheManipulator.getAllDnsCache();
-        final List<DnsCacheEntry> expected = Arrays.asList(
-                new DnsCacheEntry(host.toLowerCase(), new String[]{ip}, new Date(Long.MAX_VALUE)));
-
-        assertEquals(expected, allDnsCacheEntries);
+        assertEquals(0, DnsCacheManipulator.getAllDnsCache().size());
     }
 
     @Test
     public void test_loadDnsCacheConfig() throws Exception {
         DnsCacheManipulator.loadDnsCacheConfig();
-        final String ip = InetAddress.getByName("www.hello1.com").getHostAddress();
-        assertEquals("42.42.41.41", ip);
+        final String ip = InetAddress.getByName(DOMAIN1).getHostAddress();
+        assertEquals(IP1, ip);
     }
 
     @Test
     public void test_loadDnsCacheConfig_fromMyConfig() throws Exception {
         DnsCacheManipulator.loadDnsCacheConfig("my-dns-cache.properties");
-        final String ip = InetAddress.getByName("www.hello1.com").getHostAddress();
-        assertEquals("42.42.43.43", ip);
+        final String ip = InetAddress.getByName(DOMAIN2).getHostAddress();
+        assertEquals(IP2, ip);
     }
 
     @Test
@@ -57,31 +56,24 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
-    public void test_DnsCache_canExpire() throws Exception {
-        final String notExistedHost = "www.not-existed-host-test_DnsCache_canExpire.com";
+    public void test_setDnsCache_getAllDnsCache() throws Exception {
+        final String host = "www.test_setDnsCache_getAllDnsCache.com";
+        DnsCacheManipulator.setDnsCache(host, IP3);
 
-        DnsCacheManipulator.setDnsCache(30, notExistedHost, "42.42.43.43");
-        final String ip = InetAddress.getByName(notExistedHost).getHostAddress();
-        assertEquals("42.42.43.43", ip);
+        final List<DnsCacheEntry> allDnsCacheEntries = DnsCacheManipulator.getAllDnsCache();
+        final List<DnsCacheEntry> expected = Arrays.asList(
+                new DnsCacheEntry(host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE)));
 
-        Thread.sleep(32);
-
-        try {
-            InetAddress.getByName(notExistedHost).getHostAddress();
-            fail();
-        } catch (UnknownHostException expected) {
-            System.out.println(expected.toString());
-            assertTrue(true);
-        }
+        assertEquals(expected, allDnsCacheEntries);
     }
 
     @Test
     public void test_removeDnsCache() throws Exception {
         final String notExistedHost = "www.not-existed-host-test_removeDnsCache";
 
-        DnsCacheManipulator.setDnsCache(notExistedHost, "42.42.43.43");
+        DnsCacheManipulator.setDnsCache(notExistedHost, IP3);
         final String ip = InetAddress.getByName(notExistedHost).getHostAddress();
-        assertEquals("42.42.43.43", ip);
+        assertEquals(IP3, ip);
 
         DnsCacheManipulator.removeDnsCache(notExistedHost);
 
@@ -95,8 +87,38 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
+    public void test_canResetExistedDomain_canExpire_thenReLookupBack() throws Exception {
+        final String domain = "github.com";
+
+        final String ip = InetAddress.getByName(domain).getHostAddress();
+
+        DnsCacheManipulator.setDnsCache(30, domain, IP3);
+        assertEquals(IP3, InetAddress.getByName(domain).getHostAddress());
+
+        Thread.sleep(32);
+
+        assertEquals(ip, InetAddress.getByName(domain).getHostAddress());
+    }
+
+    @Test
+    public void test_DnsCache_setNotExistedDomain_canExpire_thenReLookupAndNotExisted() throws Exception {
+        DnsCacheManipulator.setDnsCache(30, DOMAIN_NOT_EXISTED, IP3);
+        final String ip = InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
+        assertEquals(IP3, ip);
+
+        Thread.sleep(32);
+
+        try {
+            InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
+            fail();
+        } catch (UnknownHostException expected) {
+            System.out.println(expected.toString());
+            assertTrue(true);
+        }
+    }
+
+    @Test
     public void test_multi_ips_in_config_file() throws Exception {
-        DnsCacheManipulator.clearDnsCache();
         DnsCacheManipulator.loadDnsCacheConfig("dns-cache-multi-ips.properties");
 
         final String host = "www.hello-multi-ips.com";
