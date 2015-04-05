@@ -170,4 +170,7 @@ public class DnsCacheManipulator {
             throw new DnsCacheManipulatorException("Fail to clearDnsCache, cause: " + e.toString(), e);
         }
     }
+
+    private DnsCacheManipulator() {
+    }
 }

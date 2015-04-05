@@ -174,4 +174,7 @@ public class InetAddressCacheUtil {
             getCacheFiledOfInetAddress$CacheEntry().clear();
         }
     }
+
+    private InetAddressCacheUtil() {
+    }
 }
