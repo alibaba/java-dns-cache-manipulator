@@ -25,7 +25,7 @@ import javax.annotation.concurrent.GuardedBy;
  * you can see the implementation of {@link InetAddress} to confirm this
  * (<b><i>See Also</i></b> lists key code of {@link InetAddress} related to this point).
  *
- * @author ding.lid
+ * @author Jerry Lee (oldratlee at gmail dot com)
  * @see InetAddress
  * @see InetAddress#addressCache
  * @see InetAddress#cacheInitIfNeeded()
@@ -110,7 +110,7 @@ public class InetAddressCacheUtil {
     private static Pattern PATTERN_DOT = Pattern.compile("\\.");
 
     static byte[] ip2ByteArray(String ip) {
-        final String[] ipParts = PATTERN_DOT.split(ip); // FIXME check ip validation
+        final String[] ipParts = PATTERN_DOT.split(ip);
 
         byte[] address = new byte[ipParts.length];
         for (int i = 0; i < ipParts.length; i++) {

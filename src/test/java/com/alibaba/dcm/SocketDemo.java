@@ -5,7 +5,7 @@ import org.apache.commons.io.IOUtils;
 import java.net.Socket;
 
 /**
- * @author ding.lid
+ * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class SocketDemo {
     public static void main(String[] args) throws Exception {

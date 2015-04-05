@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * A simple lib for setting dns (in fact dns cache) programmatically.
  *
- * @author ding.lid
+ * @author Jerry Lee (oldratlee at gmail dot com)
  * @see DnsCacheEntry
  * @see DnsCacheManipulatorException
  */

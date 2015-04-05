@@ -10,7 +10,7 @@ import static org.junit.Assert.assertNotEquals;
 
 
 /**
- * @author ding.lid
+ * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class DnsCacheEntryTest {
     @Test

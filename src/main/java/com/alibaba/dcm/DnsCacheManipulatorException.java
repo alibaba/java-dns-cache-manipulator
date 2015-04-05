@@ -1,7 +1,7 @@
 package com.alibaba.dcm;
 
 /**
- * @author ding.lid
+ * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class DnsCacheManipulatorException extends RuntimeException {
     private static final long serialVersionUID = -7843069964883320844L;
