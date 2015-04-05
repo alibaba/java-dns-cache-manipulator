@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * A simple lib for setting dns (in fact dns cache) programmatically.
@@ -52,18 +53,24 @@ public class DnsCacheManipulator {
         }
     }
 
+    private static Pattern COMMA_SEPARATOR = Pattern.compile("\\s*,\\s*");
+
     /**
      * Set dns cache entries by properties
      *
-     * @param properties input properties. eg. {@code www.example.com=42.42.42.42}
+     * @param properties input properties. eg. {@code www.example.com=42.42.42.42}, or {@code www.example.com=42.42.42.42,43.43.43.43}
      * @throws DnsCacheManipulatorException Operation fail
      */
     public static void setDnsCache(Properties properties) {
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
             final String host = (String) entry.getKey();
-            final String ip = (String) entry.getValue();
+            String ipList = (String) entry.getValue();
 
-            setDnsCache(host, ip);
+            ipList = ipList.trim();
+            if (ipList.isEmpty()) continue;
+
+            final String[] ips = COMMA_SEPARATOR.split(ipList);
+            setDnsCache(host, ips);
         }
     }
 
@@ -103,6 +110,21 @@ public class DnsCacheManipulator {
             final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
                     propertiesFileName, e.toString());
             throw new DnsCacheManipulatorException(message, e);
+        }
+    }
+
+
+    /**
+     * Get dns cache.
+     *
+     * @return dns cache
+     * @throws DnsCacheManipulatorException Operation fail
+     */
+    public static DnsCacheEntry getDnsCache(String host) {
+        try {
+            return InetAddressCacheUtil.getInetAddressCache(host);
+        } catch (Exception e) {
+            throw new DnsCacheManipulatorException("Fail to getDnsCache, cause: " + e.toString(), e);
         }
     }
 

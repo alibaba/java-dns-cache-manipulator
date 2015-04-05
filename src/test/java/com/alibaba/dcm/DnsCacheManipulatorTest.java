@@ -93,4 +93,20 @@ public class DnsCacheManipulatorTest {
             assertTrue(true);
         }
     }
+
+    @Test
+    public void test_multi_ips_in_config_file() throws Exception {
+        DnsCacheManipulator.clearDnsCache();
+        DnsCacheManipulator.loadDnsCacheConfig("dns-cache-multi-ips.properties");
+
+        final String host = "www.hello-multi-ips.com";
+        DnsCacheEntry entry = new DnsCacheEntry(host,
+                new String[]{"42.42.41.1", "42.42.41.2"}, new Date(Long.MAX_VALUE));
+        assertEquals(entry, DnsCacheManipulator.getDnsCache(host));
+
+        final String hostLoose = "www.hello-multi-ips-loose.com";
+        DnsCacheEntry entryLoose = new DnsCacheEntry(hostLoose,
+                new String[]{"42.42.41.1", "42.42.41.2", "42.42.41.3", "42.42.41.4"}, new Date(Long.MAX_VALUE));
+        assertEquals(entryLoose, DnsCacheManipulator.getDnsCache(hostLoose));
+    }
 }

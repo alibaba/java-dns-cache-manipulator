@@ -123,6 +123,17 @@ public class InetAddressCacheUtil {
         return address;
     }
 
+    public static DnsCacheEntry getInetAddressCache(String host)
+            throws NoSuchFieldException, IllegalAccessException {
+        host = host.toLowerCase();
+
+        Object cacheEntry;
+        synchronized (getAddressCacheFieldOfInetAddress()) {
+            cacheEntry = getCacheFiledOfInetAddress$CacheEntry().get(host);
+        }
+        return inetAddress$CacheEntry2DnsCacheEntry(host, cacheEntry);
+    }
+
     public static List<DnsCacheEntry> listInetAddressCache()
             throws NoSuchFieldException, IllegalAccessException {
         List<DnsCacheEntry> list = new ArrayList<DnsCacheEntry>();
