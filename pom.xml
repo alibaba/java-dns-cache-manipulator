@@ -135,7 +135,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>snapshot</id>
+			<id>srcDoc</id>
 			<activation>
 				<property>
 					<name>performRelease</name>
@@ -186,7 +186,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>release</id>
+			<id>sign</id>
 			<activation>
 				<property>
 					<name>performRelease</name>
