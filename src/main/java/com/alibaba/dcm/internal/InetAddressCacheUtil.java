@@ -28,6 +28,7 @@ import javax.annotation.concurrent.GuardedBy;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @see InetAddress
  * @see InetAddress#addressCache
+ * @see InetAddress.CacheEntry
  * @see InetAddress#cacheInitIfNeeded()
  * @see InetAddress#cacheAddresses(String, InetAddress[], boolean)
  */
@@ -61,7 +62,17 @@ public class InetAddressCacheUtil {
             IllegalAccessException, InvocationTargetException, InstantiationException {
         String className = "java.net.InetAddress$CacheEntry";
         Class<?> clazz = Class.forName(className);
-        Constructor<?> constructor = clazz.getDeclaredConstructor(InetAddress[].class, long.class);
+
+        // InetAddress.CacheEntry has only a constructor:
+        // - for jdk 6, constructor signature is CacheEntry(Object address, long expiration)
+        // - for jdk 7+, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
+        // code in jdk 6:
+        //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b27/java/net/InetAddress.java#InetAddress.CacheEntry
+        // code in jdk 7:
+        //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/7-b147/java/net/InetAddress.java#InetAddress.CacheEntry
+        // code in jdk 8:
+        //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8-b132/java/net/InetAddress.java#InetAddress.CacheEntry
+        Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
         return constructor.newInstance(toInetAddressArray(host, ips), expiration);
     }
@@ -90,9 +101,11 @@ public class InetAddressCacheUtil {
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE == null) {
             synchronized (InetAddressCacheUtil.class) {
-                final Field cacheField = InetAddress.class.getDeclaredField("addressCache");
-                cacheField.setAccessible(true);
-                ADDRESS_CACHE = cacheField.get(InetAddress.class);
+                if (ADDRESS_CACHE == null) {  // double check
+                    final Field cacheField = InetAddress.class.getDeclaredField("addressCache");
+                    cacheField.setAccessible(true);
+                    ADDRESS_CACHE = cacheField.get(InetAddress.class);
+                }
             }
         }
         return ADDRESS_CACHE;
@@ -150,17 +163,45 @@ public class InetAddressCacheUtil {
         return list;
     }
 
+
+    static volatile Field expirationFieldOfInetAddress$CacheEntry = null;
+    static volatile Field addressesFieldOfInetAddress$CacheEntry = null;
+
     static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry)
             throws NoSuchFieldException, IllegalAccessException {
-        Class<?> cacheEntryClass = entry.getClass();
+        if (expirationFieldOfInetAddress$CacheEntry == null || addressesFieldOfInetAddress$CacheEntry == null) {
+            synchronized (InetAddressCacheUtil.class) {
+                if (expirationFieldOfInetAddress$CacheEntry == null) { // double check
+                    Class<?> cacheEntryClass = entry.getClass();
+                    // InetAddress.CacheEntry has 2 filed:
+                    // - for jdk 6, address and expiration
+                    // - for jdk 7+, addresses(*renamed* from 6!) and expiration
+                    // code in jdk 6:
+                    //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b27/java/net/InetAddress.java#InetAddress.CacheEntry
+                    // code in jdk 7:
+                    //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/7-b147/java/net/InetAddress.java#InetAddress.CacheEntry
+                    // code in jdk 8:
+                    //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8-b132/java/net/InetAddress.java#InetAddress.CacheEntry
+                    final Field[] fields = cacheEntryClass.getDeclaredFields();
+                    for (Field field : fields) {
+                        final String name = field.getName();
+                        if (name.equals("expiration")) {
+                            field.setAccessible(true);
+                            expirationFieldOfInetAddress$CacheEntry = field;
+                        } else if (name.startsWith("address")) { // use startWith so works for jdk 6 and jdk 7+
+                            field.setAccessible(true);
+                            addressesFieldOfInetAddress$CacheEntry = field;
+                        } else {
+                            throw new IllegalStateException("JDK add new Field " + name +
+                                    " for class InetAddress.CacheEntry, report bug for dns-cache-manipulator lib!");
+                        }
+                    }
+                }
+            }
+        }
 
-        Field expirationField = cacheEntryClass.getDeclaredField("expiration");
-        expirationField.setAccessible(true);
-        long expiration = (Long) expirationField.get(entry);
-
-        Field addressesField = cacheEntryClass.getDeclaredField("addresses");
-        addressesField.setAccessible(true);
-        InetAddress[] addresses = (InetAddress[]) addressesField.get(entry);
+        long expiration = (Long) expirationFieldOfInetAddress$CacheEntry.get(entry);
+        InetAddress[] addresses = (InetAddress[]) addressesFieldOfInetAddress$CacheEntry.get(entry);
 
         String[] ips = new String[addresses.length];
         for (int i = 0; i < addresses.length; i++) {

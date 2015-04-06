@@ -1,8 +1,6 @@
 language: java
 jdk:
-  # java.lang.NoSuchMethodException: java.net.InetAddress$CacheEntry.<init>([Ljava.net.InetAddress;, long)
-  # at com.alibaba.dcm.internal.InetAddressCacheUtil.createCacheEntry
-  # - openjdk6
+  - openjdk6
   - oraclejdk7
   - openjdk7
   - oraclejdk8
