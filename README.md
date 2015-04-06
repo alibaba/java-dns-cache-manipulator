@@ -2,7 +2,7 @@ Java Dns Cache Manipulator(DCM)
 =========================
 
 [![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/alibaba/java-dns-cache-manipulator) [![Coverage Status](https://coveralls.io/repos/alibaba/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/r/alibaba/java-dns-cache-manipulator?branch=master) 
-[![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)  [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/) [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 :point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 7+`。
 
@@ -75,6 +75,26 @@ public void beforeClass() throws Exception {
 ```
 
 更多详细功能参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
+
+:electric_plug: Java API Docs
+=====================================
+
+`Java API`文档地址： <http://alibaba.github.io/java-dns-cache-manipulator/apidocs>
+
+:cookie: 依赖
+=====================================
+
+`Maven`示例：
+
+```xml
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>dns-cache-manipulator</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+可以在[search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.alibaba%22%20AND%20a%3A%22dns-cache-manipulator%22)查看可用的版本。
 
 :mortar_board: Developer Guide
 =====================================
