@@ -1,7 +1,7 @@
 Java Dns Cache Manipulator(DCM)
 =========================
 
-[![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/alibaba/java-dns-cache-manipulator) [![Coverage Status](https://coveralls.io/repos/alibaba/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/r/alibaba/java-dns-cache-manipulator?branch=master) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/) 
+[![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=v1.1.0)](https://travis-ci.org/alibaba/java-dns-cache-manipulator) [![Coverage Status](https://coveralls.io/repos/alibaba/java-dns-cache-manipulator/badge.svg?branch=v1.1.0)](https://coveralls.io/r/alibaba/java-dns-cache-manipulator?branch=v1.1.0) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/) 
 [![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues) [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 :point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`。
