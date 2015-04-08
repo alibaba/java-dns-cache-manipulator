@@ -69,7 +69,7 @@ DnsCacheManipulator.loadDnsCacheConfig();
 
 ```java
 @BeforeClass
-public void beforeClass() throws Exception {
+public static void beforeClass() throws Exception {
     DnsCacheManipulator.loadDnsCacheConfig();
 }
 ```
