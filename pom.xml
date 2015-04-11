@@ -7,7 +7,7 @@
 	<version>1.2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Java Dns Cache Manipulator(DCM)</name>
-	<description>A simpile lib for setting dns programmatically without setting host file, make unit/integration test portable.</description>
+	<description>A simple 0-dependency lib for setting dns programmatically without touching host file, make unit/integration test portable.</description>
 	<url>https://github.com/alibaba/java-dns-cache-manipulator</url>
 	<inceptionYear>2015</inceptionYear>
 
@@ -37,10 +37,13 @@
 			<name>Jerry Lee</name>
 			<id>oldratlee</id>
 			<email>oldratlee(AT)gmail(DOT)com</email>
-			<roles>
-				<role>Developer</role>
-			</roles>
 			<timezone>+8</timezone>
+			<url>http://oldratlee.com/</url>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<organization>Alibaba</organization>
+			<organizationUrl>http://www.alibaba.com</organizationUrl>
 		</developer>
 	</developers>
 
