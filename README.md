@@ -6,7 +6,7 @@ Java Dns Cache Manipulator(DCM)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/)
 [![GitHub release](https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases)
 [![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
-[![License](https://img.shields.io/badge/license-Apache%202-orange.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 :point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`。
 
@@ -27,8 +27,9 @@ Java Dns Cache Manipulator(DCM)
     - 自动持续集成的机器上一般同学是没有权限去修改`host`文件的，导致项目不能持续集成。  
         实际上是因为这点，催生这个库的需求。 :persevere::gun:
     - 单元测试需要每个开发都在开发机上做绑定，增加了依赖的配置操作且繁琐重复。
-2. `Java`的`DNS`缺省是不会失效的。  
-    如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
+2. 一些功能需要域名作为输入参数，如使用`HTTP`请求的网关 或是 有域名检查限制的`Web`应用。  
+    这样情况下，为了让一个域名连接测试机器的IP上，或是 使用一个不同的域名但不想或不能配置`DNS`。
+3. `Java`的`DNS`缺省是不会失效的。如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
     当然往往进行要先有能执行入口，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。
 
 :busts_in_silhouette: User Guide
