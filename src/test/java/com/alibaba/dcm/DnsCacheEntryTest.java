@@ -7,6 +7,8 @@ import java.util.Date;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 
 
 /**
@@ -45,12 +47,19 @@ public class DnsCacheEntryTest {
     }
 
     @Test
-    public void test_getIp() throws Exception {
-        DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, new Date());
+    public void test_getter() throws Exception {
+        final Date expiration = new Date();
+        DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);
+        assertEquals("a.com", entry1.getHost());
         assertEquals("1.1.1.1", entry1.getIp());
-        assertArrayEquals(new String[]{"1.1.1.1"}, entry1.getIps());
 
-        DnsCacheEntry entryIps = new DnsCacheEntry("a.com", new String[]{"1.1.1.1", "2.2.2.2"}, new Date());
+        assertArrayEquals(new String[]{"1.1.1.1"}, entry1.getIps());
+        assertNotSame(entry1.getIps(), entry1.getIps());
+        assertArrayEquals(entry1.getIps(), entry1.getIps());
+
+        assertSame(expiration, entry1.getExpiration());
+
+        DnsCacheEntry entryIps = new DnsCacheEntry("a.com", new String[]{"1.1.1.1", "2.2.2.2"}, expiration);
         assertEquals("1.1.1.1", entryIps.getIp());
         assertArrayEquals(new String[]{"1.1.1.1", "2.2.2.2"}, entryIps.getIps());
     }
