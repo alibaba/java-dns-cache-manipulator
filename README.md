@@ -26,9 +26,9 @@ Java Dns Cache Manipulator(DCM)
 1. 一些库中写死了连接域名，需要通过修改`host`文件绑定才能做测试。结果是：
     - 自动持续集成的机器上一般同学是没有权限去修改`host`文件的，导致项目不能持续集成。  
         实际上是因为这点，催生这个库的需求。 :persevere::gun:
-    - 单元测试需要每个开发都在开发机上做绑定，增加了依赖的配置操作且繁琐重复。
+    - 单元测试需要每个开发都在开发机上做`host`绑定，增加了依赖的配置操作且繁琐重复。
 2. 一些功能需要域名作为输入参数，如使用`HTTP`请求的网关 或是 有域名检查限制的`Web`应用。  
-    这样情况下，为了让一个域名连接测试机器的IP上，或是 使用一个不同的域名但不想或不能配置`DNS`。
+    这种情况下，让需要让一个域名连接到测试机器的IP上，或是 使用一个还不存在的域名但又不想或不能去配置`DNS`。
 3. `Java`的`DNS`缺省是不会失效的。如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
     当然往往进行要先有能执行入口，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。
 
@@ -148,3 +148,9 @@ private static void cacheAddresses(String hostname,
     - `JDK 6`的[`InetAddress`](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b27/java/net/InetAddress.java#InetAddress.CacheEntry)
     - `JDK 7`的[`InetAddress`](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/7-b147/java/net/InetAddress.java#InetAddress.CacheEntry)
     - `JDK 8`的[`InetAddress`](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8-b132/java/net/InetAddress.java#InetAddress.CacheEntry)
+- [`JVM Networking Properties` - `java docs`](http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html)
+- [Domain Name System - wikipedia](http://en.wikipedia.org/wiki/Domain_Name_System)
+- `Java DNS` FAQ
+    - [`Java DNS cache` viewer - stackoverflow](http://stackoverflow.com/questions/1835421/java-dns-cache-viewer)
+    - [Disable `DNS caching`](http://www.rgagnon.com/javadetails/java-0445.html)
+    - [FileOutput Node - Java DNS caching pitfall - quick clarification and tips](https://www.ibm.com/developerworks/community/blogs/aimsupport/entry/fileoutput_node_dns_caching_pitfall?lang=en)
