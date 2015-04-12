@@ -29,7 +29,7 @@ Java Dns Cache Manipulator(DCM)
     - 单元测试需要每个开发都在开发机上做`host`绑定，增加了依赖的配置操作且繁琐重复。
 2. 一些功能需要域名作为输入参数，如使用`HTTP`请求的网关 或是 有域名检查限制的`Web`应用。  
     这种情况下，让需要让一个域名连接到测试机器的IP上，或是 使用一个还不存在的域名但又不想或不能去配置`DNS`。
-3. `Java`的`DNS`缺省是不会失效的。如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
+3. 打开`Java`中的`SecurityManager`时（如在`Web`容器`Tomcat`中的`Web`应用），`Java`的`DNS`缺省是不会失效的。如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
     当然往往进行要先有能执行入口，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。
 
 :busts_in_silhouette: User Guide
