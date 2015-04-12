@@ -150,6 +150,10 @@ private static void cacheAddresses(String hostname,
     - `JDK 8`的[`InetAddress`](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8-b132/java/net/InetAddress.java#InetAddress.CacheEntry)
 - [`JVM Networking Properties` - `java docs`](http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html)
 - [Domain Name System - wikipedia](http://en.wikipedia.org/wiki/Domain_Name_System)
+- [`java dns`解析缓存之源码解析](http://rongmayisheng.com/post/java-dns%E7%BC%93%E5%AD%98%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90)  
+    - 写得很完整，源码解析
+    - 给出值得注意的结论：  
+        打开`Java`中的`SecurityManager`，`DNS`缓存将不会生效。否则，可访问的`DNS`解析缺省缓存30秒，不可访问的`DNS`解析缺省缓存10秒。
 - `Java DNS` FAQ
     - [`Java DNS cache` viewer - stackoverflow](http://stackoverflow.com/questions/1835421/java-dns-cache-viewer)
     - [Disable `DNS caching`](http://www.rgagnon.com/javadetails/java-0445.html)
