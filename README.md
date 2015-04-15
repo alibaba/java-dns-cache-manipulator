@@ -166,3 +166,5 @@ private static void cacheAddresses(String hostname,
     - [`Java DNS cache` viewer - stackoverflow](http://stackoverflow.com/questions/1835421/java-dns-cache-viewer)
     - [Disable `DNS caching`](http://www.rgagnon.com/javadetails/java-0445.html)
     - [FileOutput Node - Java DNS caching pitfall - quick clarification and tips](https://www.ibm.com/developerworks/community/blogs/aimsupport/entry/fileoutput_node_dns_caching_pitfall?lang=en)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/alibaba/java-dns-cache-manipulator/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
