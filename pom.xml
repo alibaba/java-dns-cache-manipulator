@@ -7,7 +7,7 @@
 	<version>1.2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Java Dns Cache Manipulator(DCM)</name>
-	<description>A simple 0-dependency lib for setting dns programmatically without touching host file, make unit/integration test portable.</description>
+	<description>A simple 0-dependency thread-safe lib for setting dns programmatically without touching host file, make unit/integration test portable.</description>
 	<url>https://github.com/alibaba/java-dns-cache-manipulator</url>
 	<inceptionYear>2015</inceptionYear>
 
@@ -172,6 +172,7 @@
 							<links>
 								<link>http://docs.oracle.com/javase/7/docs/api</link>
 							</links>
+							<overview>src/api/overview.html</overview>
 							<additionalJOptions>
 								<additionalJOption>-J-Duser.language=en -J-Duser.country=US</additionalJOption>
 							</additionalJOptions>

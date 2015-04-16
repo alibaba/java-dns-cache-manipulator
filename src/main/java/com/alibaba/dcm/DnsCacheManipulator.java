@@ -10,7 +10,7 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 /**
- * A simple lib for setting dns (in fact dns cache) programmatically.
+ * Setting dns (in fact dns cache).
  *
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @see DnsCacheEntry
