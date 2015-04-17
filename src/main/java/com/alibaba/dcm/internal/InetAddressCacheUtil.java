@@ -201,6 +201,10 @@ public class InetAddressCacheUtil {
         List<DnsCacheEntry> retCache = new ArrayList<DnsCacheEntry>();
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
+
+            if ("0.0.0.0".equals(host) || host == null) { // exclude expired entries!
+                continue;
+            }
             retCache.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
         }
         List<DnsCacheEntry> retNegativeCache = new ArrayList<DnsCacheEntry>();

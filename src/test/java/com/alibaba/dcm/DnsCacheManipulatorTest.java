@@ -1,5 +1,6 @@
 package com.alibaba.dcm;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,10 +26,11 @@ public class DnsCacheManipulatorTest {
 
     static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-7352jt-12559-AZ-7524087.com";
 
-    @BeforeClass
-    public static void beforeClass() throws Exception {
+    @Before
+    public void before() throws Exception {
         DnsCacheManipulator.clearDnsCache();
-        assertEquals(0, DnsCacheManipulator.getAllDnsCache().size());
+        assertTrue(DnsCacheManipulator.getAllDnsCache().isEmpty());
+        assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
     }
 
     @Test
@@ -65,29 +67,11 @@ public class DnsCacheManipulatorTest {
                 new DnsCacheEntry(host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE)));
 
         assertEquals(expected, allDnsCacheEntries);
+        assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
     }
 
     @Test
-    public void test_removeDnsCache() throws Exception {
-        final String notExistedHost = "www.not-existed-host-test_removeDnsCache";
-
-        DnsCacheManipulator.setDnsCache(notExistedHost, IP3);
-        final String ip = InetAddress.getByName(notExistedHost).getHostAddress();
-        assertEquals(IP3, ip);
-
-        DnsCacheManipulator.removeDnsCache(notExistedHost);
-
-        try {
-            InetAddress.getByName(notExistedHost).getHostAddress();
-            fail();
-        } catch (UnknownHostException expected) {
-            System.out.println(expected.toString());
-            assertTrue(true);
-        }
-    }
-
-    @Test
-    public void test_canResetExistedDomain_canExpire_thenReLookupBack() throws Exception {
+    public void test_canSetExistedDomain_canExpire_thenReLookupBack() throws Exception {
         final String domain = "github.com";
 
         final String ip = InetAddress.getByName(domain).getHostAddress();
@@ -101,7 +85,33 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
-    public void test_DnsCache_setNotExistedDomain_canExpire_thenReLookupAndNotExisted() throws Exception {
+    public void test_canSetNotExistedDomain_RemoveThenReLookupAndNotExisted() throws Exception {
+        DnsCacheManipulator.setDnsCache(DOMAIN_NOT_EXISTED, IP3);
+        final String ip = InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
+        assertEquals(IP3, ip);
+
+        DnsCacheManipulator.removeDnsCache(DOMAIN_NOT_EXISTED);
+
+        try {
+            InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
+            fail();
+        } catch (UnknownHostException expected) {
+            System.out.println(expected.toString());
+            assertTrue(true);
+        }
+
+        final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
+        System.out.println("test_canSetNotExistedDomain_RemoveThenReLookupAndNotExisted expired entries: " + cache);
+        assertTrue(cache.isEmpty());
+
+        final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
+        assertEquals(1, negativeCache.size());
+        System.out.println("test_canSetNotExistedDomain_RemoveThenReLookupAndNotExisted expired negative entries: " + negativeCache);
+        assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost());
+    }
+
+    @Test
+    public void test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted() throws Exception {
         DnsCacheManipulator.setDnsCache(30, DOMAIN_NOT_EXISTED, IP3);
         final String ip = InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
         assertEquals(IP3, ip);
@@ -115,6 +125,15 @@ public class DnsCacheManipulatorTest {
             System.out.println(expected.toString());
             assertTrue(true);
         }
+
+        final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
+        System.out.println("test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted expired entries: " + cache);
+        assertTrue(cache.isEmpty());
+
+        final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
+        System.out.println("test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted expired negative entries: " + negativeCache);
+        assertEquals(1, negativeCache.size());
+        assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost());
     }
 
     @Test
