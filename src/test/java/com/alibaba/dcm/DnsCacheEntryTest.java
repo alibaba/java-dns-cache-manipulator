@@ -63,4 +63,13 @@ public class DnsCacheEntryTest {
         assertEquals("1.1.1.1", entryIps.getIp());
         assertArrayEquals(new String[]{"1.1.1.1", "2.2.2.2"}, entryIps.getIps());
     }
+
+    @Test
+    public void test_toString() throws Exception {
+        final Date expiration = new Date();
+        DnsCacheEntry entry = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);
+
+        String expected = String.format("DnsCacheEntry{host='a.com', ips=[1.1.1.1], expiration=%s}", expiration);
+        assertEquals(expected, entry.toString());
+    }
 }

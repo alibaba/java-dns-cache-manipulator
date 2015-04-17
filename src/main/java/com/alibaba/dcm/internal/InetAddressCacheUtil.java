@@ -1,5 +1,6 @@
 package com.alibaba.dcm.internal;
 
+import com.alibaba.dcm.DnsCache;
 import com.alibaba.dcm.DnsCacheEntry;
 
 import java.lang.reflect.Constructor;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
 /**
@@ -41,10 +43,11 @@ public class InetAddressCacheUtil {
             IllegalAccessException, InstantiationException, InvocationTargetException,
             ClassNotFoundException, NoSuchFieldException {
         host = host.toLowerCase();
-        Object entry = createCacheEntry(host, ips, expiration);
+        Object entry = newCacheEntry(host, ips, expiration);
 
         synchronized (getAddressCacheFieldOfInetAddress()) {
-            getCacheFiledOfInetAddress$CacheEntry().put(host, entry);
+            getCacheFiledOfAddressCacheFiledOfInetAddress().put(host, entry);
+            getCacheFiledOfNegativeCacheFiledOfInetAddress().remove(host);
         }
     }
 
@@ -53,11 +56,12 @@ public class InetAddressCacheUtil {
         host = host.toLowerCase();
 
         synchronized (getAddressCacheFieldOfInetAddress()) {
-            getCacheFiledOfInetAddress$CacheEntry().remove(host);
+            getCacheFiledOfAddressCacheFiledOfInetAddress().remove(host);
+            getCacheFiledOfNegativeCacheFiledOfInetAddress().remove(host);
         }
     }
 
-    static Object createCacheEntry(String host, String[] ips, long expiration)
+    static Object newCacheEntry(String host, String[] ips, long expiration)
             throws UnknownHostException, ClassNotFoundException, NoSuchMethodException,
             IllegalAccessException, InvocationTargetException, InstantiationException {
         String className = "java.net.InetAddress$CacheEntry";
@@ -80,11 +84,24 @@ public class InetAddressCacheUtil {
     /**
      * @return {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}
      */
-    @SuppressWarnings("unchecked")
     @GuardedBy("getAddressCacheFieldOfInetAddress()")
-    static Map<String, Object> getCacheFiledOfInetAddress$CacheEntry()
+    static Map<String, Object> getCacheFiledOfAddressCacheFiledOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
-        final Object inetAddressCache = getAddressCacheFieldOfInetAddress();
+        return getCacheFiledOfInetAddress$Cache0(getAddressCacheFieldOfInetAddress());
+    }
+
+    /**
+     * @return {@link InetAddress.Cache#cache} in {@link InetAddress#negativeCache}
+     */
+    @GuardedBy("getAddressCacheFieldOfInetAddress()")
+    static Map<String, Object> getCacheFiledOfNegativeCacheFiledOfInetAddress()
+            throws NoSuchFieldException, IllegalAccessException {
+        return getCacheFiledOfInetAddress$Cache0(getNegativeCacheFieldOfInetAddress());
+    }
+
+    @SuppressWarnings("unchecked")
+    static Map<String, Object> getCacheFiledOfInetAddress$Cache0(Object inetAddressCache)
+            throws NoSuchFieldException, IllegalAccessException {
         Class clazz = inetAddressCache.getClass();
 
         final Field cacheMapField = clazz.getDeclaredField("cache");
@@ -92,23 +109,46 @@ public class InetAddressCacheUtil {
         return (Map<String, Object>) cacheMapField.get(inetAddressCache);
     }
 
-    static volatile Object ADDRESS_CACHE = null;
-
     /**
      * @return {@link InetAddress#addressCache}
      */
     static Object getAddressCacheFieldOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
-        if (ADDRESS_CACHE == null) {
+        return getAddressCacheFieldsOfInetAddress0()[0];
+    }
+
+    /**
+     * @return {@link InetAddress#negativeCache}
+     */
+    static Object getNegativeCacheFieldOfInetAddress()
+            throws NoSuchFieldException, IllegalAccessException {
+        return getAddressCacheFieldsOfInetAddress0()[1];
+    }
+
+    static volatile Object[] ADDRESS_CACHE_AND_NEGATIVE_CACHE = null;
+
+    /**
+     * @return {@link InetAddress#addressCache} and {@link InetAddress#negativeCache}
+     */
+    static Object[] getAddressCacheFieldsOfInetAddress0()
+            throws NoSuchFieldException, IllegalAccessException {
+        if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {
             synchronized (InetAddressCacheUtil.class) {
-                if (ADDRESS_CACHE == null) {  // double check
+                if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {  // double check
                     final Field cacheField = InetAddress.class.getDeclaredField("addressCache");
                     cacheField.setAccessible(true);
-                    ADDRESS_CACHE = cacheField.get(InetAddress.class);
+
+                    final Field negativeCacheField = InetAddress.class.getDeclaredField("negativeCache");
+                    negativeCacheField.setAccessible(true);
+
+                    ADDRESS_CACHE_AND_NEGATIVE_CACHE = new Object[]{
+                            cacheField.get(InetAddress.class),
+                            negativeCacheField.get(InetAddress.class)
+                    };
                 }
             }
         }
-        return ADDRESS_CACHE;
+        return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
     }
 
     static InetAddress[] toInetAddressArray(String host, String[] ips) throws UnknownHostException {
@@ -136,31 +176,39 @@ public class InetAddressCacheUtil {
         return address;
     }
 
+    @Nullable
     public static DnsCacheEntry getInetAddressCache(String host)
             throws NoSuchFieldException, IllegalAccessException {
         host = host.toLowerCase();
 
         Object cacheEntry;
         synchronized (getAddressCacheFieldOfInetAddress()) {
-            cacheEntry = getCacheFiledOfInetAddress$CacheEntry().get(host);
+            cacheEntry = getCacheFiledOfAddressCacheFiledOfInetAddress().get(host);
         }
         return inetAddress$CacheEntry2DnsCacheEntry(host, cacheEntry);
     }
 
-    public static List<DnsCacheEntry> listInetAddressCache()
+    public static DnsCache listInetAddressCache()
             throws NoSuchFieldException, IllegalAccessException {
-        List<DnsCacheEntry> list = new ArrayList<DnsCacheEntry>();
 
         final Map<String, Object> cache;
+        final Map<String, Object> negativeCache;
         synchronized (getAddressCacheFieldOfInetAddress()) {
-            cache = new HashMap<String, Object>(getCacheFiledOfInetAddress$CacheEntry());
+            cache = new HashMap<String, Object>(getCacheFiledOfAddressCacheFiledOfInetAddress());
+            negativeCache = new HashMap<String, Object>(getCacheFiledOfNegativeCacheFiledOfInetAddress());
         }
 
+        List<DnsCacheEntry> retCache = new ArrayList<DnsCacheEntry>();
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
-            list.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
+            retCache.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
         }
-        return list;
+        List<DnsCacheEntry> retNegativeCache = new ArrayList<DnsCacheEntry>();
+        for (Map.Entry<String, Object> entry : negativeCache.entrySet()) {
+            final String host = entry.getKey();
+            retNegativeCache.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
+        }
+        return new DnsCache(retCache, retNegativeCache);
     }
 
 
@@ -212,7 +260,8 @@ public class InetAddressCacheUtil {
 
     public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {
         synchronized (getAddressCacheFieldOfInetAddress()) {
-            getCacheFiledOfInetAddress$CacheEntry().clear();
+            getCacheFiledOfAddressCacheFiledOfInetAddress().clear();
+            getCacheFiledOfNegativeCacheFiledOfInetAddress().clear();
         }
     }
 

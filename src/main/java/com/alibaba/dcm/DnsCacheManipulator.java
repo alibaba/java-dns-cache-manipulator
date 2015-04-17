@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 
 /**
  * Setting dns (in fact dns cache).
+ * <p/>
+ * Throw {@link DnsCacheManipulatorException} if operation fail for all methods.
  *
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @see DnsCacheEntry
@@ -133,8 +135,37 @@ public class DnsCacheManipulator {
      *
      * @return dns cache entries
      * @throws DnsCacheManipulatorException Operation fail
+     * @deprecated use {@link #listDnsCache} instead.
      */
+    @Deprecated
     public static List<DnsCacheEntry> getAllDnsCache() {
+        return listDnsCache();
+    }
+
+    /**
+     * Get all dns cache entries.
+     *
+     * @return dns cache entries
+     * @throws DnsCacheManipulatorException Operation fail
+     * @see #getWholeDnsCache()
+     * @since 1.2.0
+     */
+    public static List<DnsCacheEntry> listDnsCache() {
+        try {
+            return InetAddressCacheUtil.listInetAddressCache().getCache();
+        } catch (Exception e) {
+            throw new DnsCacheManipulatorException("Fail to getAllDnsCache, cause: " + e.toString(), e);
+        }
+    }
+
+    /**
+     * Get whole dns cache info.
+     *
+     * @return dns cache entries
+     * @throws DnsCacheManipulatorException Operation fail
+     * @since 1.2.0
+     */
+    public static DnsCache getWholeDnsCache() {
         try {
             return InetAddressCacheUtil.listInetAddressCache();
         } catch (Exception e) {

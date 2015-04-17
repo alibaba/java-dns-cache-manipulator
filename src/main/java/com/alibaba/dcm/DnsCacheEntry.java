@@ -8,6 +8,10 @@ import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
+/**
+ * @author Jerry Lee (oldratlee at gmail dot com)
+ * @see DnsCache
+ */
 @Immutable
 public final class DnsCacheEntry implements Serializable {
     private static final long serialVersionUID = -7476648934387757732L;
