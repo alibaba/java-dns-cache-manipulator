@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
+
 /**
  * Setting dns (in fact dns cache).
  * <p/>
@@ -119,9 +121,10 @@ public class DnsCacheManipulator {
     /**
      * Get dns cache.
      *
-     * @return dns cache
+     * @return dns cache. return {@code null} if no entry for host or dns cache is expired.
      * @throws DnsCacheManipulatorException Operation fail
      */
+    @Nullable
     public static DnsCacheEntry getDnsCache(String host) {
         try {
             return InetAddressCacheUtil.getInetAddressCache(host);

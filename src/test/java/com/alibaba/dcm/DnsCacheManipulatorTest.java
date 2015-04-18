@@ -1,7 +1,6 @@
 package com.alibaba.dcm;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.net.InetAddress;
@@ -11,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -149,5 +149,11 @@ public class DnsCacheManipulatorTest {
         DnsCacheEntry entryLoose = new DnsCacheEntry(hostLoose,
                 new String[]{"42.42.41.1", "42.42.41.2", "42.42.41.3", "42.42.41.4"}, new Date(Long.MAX_VALUE));
         assertEquals(entryLoose, DnsCacheManipulator.getDnsCache(hostLoose));
+    }
+
+    @Test
+    public void test_nullSafeForGetDnsCache() throws Exception {
+        final DnsCacheEntry dnsCache = DnsCacheManipulator.getDnsCache(DOMAIN_NOT_EXISTED);
+        assertNull(dnsCache);
     }
 }

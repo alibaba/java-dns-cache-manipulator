@@ -181,11 +181,21 @@ public class InetAddressCacheUtil {
             throws NoSuchFieldException, IllegalAccessException {
         host = host.toLowerCase();
 
-        Object cacheEntry;
+        final Object cacheEntry;
         synchronized (getAddressCacheFieldOfInetAddress()) {
             cacheEntry = getCacheFiledOfAddressCacheFiledOfInetAddress().get(host);
         }
-        return inetAddress$CacheEntry2DnsCacheEntry(host, cacheEntry);
+
+        if (null == cacheEntry) return null;
+
+        final DnsCacheEntry dnsCacheEntry = inetAddress$CacheEntry2DnsCacheEntry(host, cacheEntry);
+        if (isDnsCacheEntryExpired(dnsCacheEntry.getHost())) return null;
+
+        return dnsCacheEntry;
+    }
+
+    static boolean isDnsCacheEntryExpired(String host) {
+        return null == host || "0.0.0.0".equals(host);
     }
 
     public static DnsCache listInetAddressCache()
@@ -202,7 +212,7 @@ public class InetAddressCacheUtil {
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
 
-            if ("0.0.0.0".equals(host) || host == null) { // exclude expired entries!
+            if (isDnsCacheEntryExpired(host)) { // exclude expired entries!
                 continue;
             }
             retCache.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
