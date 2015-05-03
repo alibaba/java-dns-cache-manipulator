@@ -7,7 +7,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -74,14 +76,23 @@ public class DnsCacheManipulatorTest {
     public void test_canSetExistedDomain_canExpire_thenReLookupBack() throws Exception {
         final String domain = "github.com";
 
-        final String ip = InetAddress.getByName(domain).getHostAddress();
+        Set<String> expected = getAllHostAddresses(domain);
 
         DnsCacheManipulator.setDnsCache(30, domain, IP3);
         assertEquals(IP3, InetAddress.getByName(domain).getHostAddress());
 
         Thread.sleep(32);
 
-        assertEquals(ip, InetAddress.getByName(domain).getHostAddress());
+        assertEquals(expected, getAllHostAddresses(domain));
+    }
+
+    static Set<String> getAllHostAddresses(String domain) throws Exception {
+        final InetAddress[] allByName = InetAddress.getAllByName(domain);
+        Set<String> all = new HashSet<String>();
+        for (InetAddress inetAddress : allByName) {
+            all.add(inetAddress.getHostAddress());
+        }
+        return all;
     }
 
     @Test
