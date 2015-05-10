@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.lang.System.currentTimeMillis;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -96,8 +97,13 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
-    public void test_canSetNotExistedDomain_RemoveThenReLookupAndNotExisted() throws Exception {
+    public void test_setNotExistedDomain_RemoveThenReLookupAndNotExisted() throws Exception {
+        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s\n",
+                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         DnsCacheManipulator.setDnsCache(DOMAIN_NOT_EXISTED, IP3);
+
+        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s\n",
+                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         final String ip = InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
         assertEquals(IP3, ip);
 
@@ -111,23 +117,29 @@ public class DnsCacheManipulatorTest {
             assertTrue(true);
         }
 
+
+        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s\n",
+                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
-        System.out.println("test_canSetNotExistedDomain_RemoveThenReLookupAndNotExisted expired entries: " + cache);
         assertTrue(cache.isEmpty());
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
-        System.out.println("test_canSetNotExistedDomain_RemoveThenReLookupAndNotExisted expired negative entries: " + negativeCache);
         assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost());
     }
 
     @Test
     public void test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted() throws Exception {
-        DnsCacheManipulator.setDnsCache(30, DOMAIN_NOT_EXISTED, IP3);
+        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s\n",
+                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
+        DnsCacheManipulator.setDnsCache(100, DOMAIN_NOT_EXISTED, IP3);
+
+        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s\n",
+                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         final String ip = InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
         assertEquals(IP3, ip);
 
-        Thread.sleep(32);
+        Thread.sleep(100);
 
         try {
             InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
@@ -137,12 +149,12 @@ public class DnsCacheManipulatorTest {
             assertTrue(true);
         }
 
+        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s\n",
+                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
-        System.out.println("test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted expired entries: " + cache);
         assertTrue(cache.isEmpty());
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
-        System.out.println("test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted expired negative entries: " + negativeCache);
         assertEquals(1, negativeCache.size());
         assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost());
     }
