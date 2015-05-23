@@ -217,6 +217,8 @@ public class DnsCacheManipulator {
      * <li> {@code -1} means never expired.(In effect, all negative value)</li>
      * <li> {@code 0} never cached.</li>
      * </ul>
+     * @throws DnsCacheManipulatorException Operation fail
+     * @since 1.3.0
      */
     public static int getDnsCachePolicy() {
         try {
@@ -237,6 +239,7 @@ public class DnsCacheManipulator {
      *                     <li> {@code 0} never cached.</li>
      *                     </ul>
      * @throws DnsCacheManipulatorException Operation fail
+     * @since 1.3.0
      */
     public static void setDnsCachePolicy(int cacheSeconds) {
         try {
@@ -255,6 +258,8 @@ public class DnsCacheManipulator {
      * <li> {@code -1} means never expired.(In effect, all negative value)</li>
      * <li> {@code 0} never cached.</li>
      * </ul>
+     * @throws DnsCacheManipulatorException Operation fail
+     * @since 1.3.0
      */
     public static int getDnsNegativeCachePolicy() {
         try {
@@ -273,6 +278,7 @@ public class DnsCacheManipulator {
      *                             <li> {@code 0} never cached.</li>
      *                             </ul>
      * @throws DnsCacheManipulatorException Operation fail
+     * @since 1.3.0
      */
     public static void setDnsNegativeCachePolicy(int negativeCacheSeconds) {
         try {
