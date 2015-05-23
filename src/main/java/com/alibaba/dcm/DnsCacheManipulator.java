@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
+
 /**
  * Setting dns (in fact dns cache).
  * <p/>
@@ -53,7 +54,9 @@ public class DnsCacheManipulator {
         try {
             InetAddressCacheUtil.setInetAddressCache(host, ips, System.currentTimeMillis() + expireMillis);
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to setDnsCache, cause: " + e.toString(), e);
+            final String message = String.format("Fail to setDnsCache for host %s ip %s expireMillis %s, cause: %s",
+                    host, Arrays.toString(ips), expireMillis, e.toString());
+            throw new DnsCacheManipulatorException(message, e);
         }
     }
 
@@ -157,7 +160,7 @@ public class DnsCacheManipulator {
         try {
             return InetAddressCacheUtil.listInetAddressCache().getCache();
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to getAllDnsCache, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to listDnsCache, cause: " + e.toString(), e);
         }
     }
 
@@ -172,7 +175,7 @@ public class DnsCacheManipulator {
         try {
             return InetAddressCacheUtil.listInetAddressCache();
         } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to getAllDnsCache, cause: " + e.toString(), e);
+            throw new DnsCacheManipulatorException("Fail to getWholeDnsCache, cause: " + e.toString(), e);
         }
     }
 
