@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
+import sun.net.InetAddressCachePolicy;
+
 /**
  * Util class to manipulate dns cache {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}.
  * <p/>
@@ -277,6 +279,50 @@ public class InetAddressCacheUtil {
             getCacheFiledOfAddressCacheFiledOfInetAddress().clear();
             getCacheFiledOfNegativeCacheFiledOfInetAddress().clear();
         }
+    }
+
+    /**
+     * Set JVM DNS cache policy
+     *
+     * @param cacheSeconds set default dns cache time. Special input case:
+     *                     <ul>
+     *                     <li> {@code -1} means never expired.(In effect, all negative value)</li>
+     *                     <li> {@code 0} never cached.</li>
+     *                     </ul>
+     * @see InetAddressCachePolicy
+     * @see InetAddressCachePolicy#cachePolicy
+     */
+    public static void setDnsCachePolicy(int cacheSeconds)
+            throws NoSuchFieldException, IllegalAccessException {
+        setCachePolicy0(false, cacheSeconds);
+    }
+
+    /**
+     * Set JVM DNS negative cache policy
+     *
+     * @param negativeCacheSeconds set default dns cache time. Special input case:
+     *                             <ul>
+     *                             <li> {@code -1} means never expired.(In effect, all negative value)</li>
+     *                             <li> {@code 0} never cached.</li>
+     *                             </ul>
+     * @see InetAddressCachePolicy
+     * @see InetAddressCachePolicy#negativeCachePolicy
+     */
+    public static void setDnsNegativeCachePolicy(int negativeCacheSeconds)
+            throws NoSuchFieldException, IllegalAccessException {
+        setCachePolicy0(true, negativeCacheSeconds);
+    }
+
+    static void setCachePolicy0(boolean isNegative, int seconds)
+            throws NoSuchFieldException, IllegalAccessException {
+        if (seconds < 0) {
+            seconds = -1;
+        }
+        Class<?> clazz = sun.net.InetAddressCachePolicy.class;
+        Field cachePolicyFiled = clazz.getDeclaredField(
+                isNegative ? "negativeCachePolicy" : "cachePolicy");
+        cachePolicyFiled.setAccessible(true);
+        cachePolicyFiled.set(null, seconds);
     }
 
     private InetAddressCacheUtil() {
