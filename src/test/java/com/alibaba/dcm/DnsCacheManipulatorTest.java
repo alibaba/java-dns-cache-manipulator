@@ -194,8 +194,7 @@ public class DnsCacheManipulatorTest {
         InetAddress.getByName(host).getHostAddress();
 
         final DnsCacheEntry dnsCache = DnsCacheManipulator.getDnsCache(host);
-        assertTrue(tick < dnsCache.getExpiration().getTime() &&
-                dnsCache.getExpiration().getTime() < tick + 2001);
+        assertBetween(dnsCache.getExpiration().getTime(), tick, tick + 2001);
 
         sleep(1001);
 
@@ -212,8 +211,7 @@ public class DnsCacheManipulatorTest {
         InetAddress.getByName(host).getHostAddress();
         final DnsCacheEntry relookup = DnsCacheManipulator.getDnsCache(host);
         final long relookupTick = currentTimeMillis();
-        assertTrue(relookupTick < relookup.getExpiration().getTime() &&
-                relookup.getExpiration().getTime() < relookupTick + 2001);
+        assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2001);
     }
 
     @Test
@@ -231,8 +229,7 @@ public class DnsCacheManipulatorTest {
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
         final DnsCacheEntry dnsCache = negativeCache.get(0);
-        assertTrue(tick < dnsCache.getExpiration().getTime() &&
-                dnsCache.getExpiration().getTime() < tick + 2001);
+        assertBetween(dnsCache.getExpiration().getTime(), tick, tick + 2001);
 
         sleep(1000);
         try {
@@ -254,7 +251,13 @@ public class DnsCacheManipulatorTest {
         final List<DnsCacheEntry> relookupNegativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, relookupNegativeCache.size());
         final DnsCacheEntry relookup = relookupNegativeCache.get(0);
-        assertTrue(relookupTick < relookup.getExpiration().getTime() &&
-                relookup.getExpiration().getTime() < relookupTick + 2001);
+        assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2001);
+    }
+
+    static void assertBetween(long actual, long start, long end) {
+        final boolean ok = (start <= actual) && (actual <= end);
+        if (!ok) {
+            fail(start + " <= " + actual + " <= " + end + ", failed!");
+        }
     }
 }
