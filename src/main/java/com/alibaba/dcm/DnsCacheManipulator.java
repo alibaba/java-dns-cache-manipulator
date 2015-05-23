@@ -228,6 +228,8 @@ public class DnsCacheManipulator {
 
     /**
      * Set JVM DNS cache policy
+     * <p/>
+     * NOTE: if Security Manage is turn on, JVM DNS cache policy set will not take effective. You can check by method {@link #getDnsCachePolicy()}.
      *
      * @param cacheSeconds set default dns cache time. Special input case:
      *                     <ul>

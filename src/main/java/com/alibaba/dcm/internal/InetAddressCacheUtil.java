@@ -323,19 +323,55 @@ public class InetAddressCacheUtil {
         return InetAddressCachePolicy.getNegative();
     }
 
+
+    static volatile Field setFiled$InetAddressCachePolicy = null;
+    static volatile Field negativeSet$InetAddressCachePolicy = null;
+
     static void setCachePolicy0(boolean isNegative, int seconds)
             throws NoSuchFieldException, IllegalAccessException {
         if (seconds < 0) {
             seconds = -1;
         }
 
-        Class<?> clazz = InetAddressCachePolicy.class;
-        Field cachePolicyFiled = clazz.getDeclaredField(
+        final Class<?> clazz = InetAddressCachePolicy.class;
+        final Field cachePolicyFiled = clazz.getDeclaredField(
                 isNegative ? "negativeCachePolicy" : "cachePolicy");
         cachePolicyFiled.setAccessible(true);
 
+        final Field setField;
+        if (isNegative) {
+            if (negativeSet$InetAddressCachePolicy == null) {
+                synchronized (InetAddressCacheUtil.class) {
+                    if (negativeSet$InetAddressCachePolicy == null) {
+                        try {
+                            negativeSet$InetAddressCachePolicy = clazz.getDeclaredField("propertyNegativeSet");
+                        } catch (NoSuchFieldException e) {
+                            negativeSet$InetAddressCachePolicy = clazz.getDeclaredField("negativeSet");
+                        }
+                        negativeSet$InetAddressCachePolicy.setAccessible(true);
+                    }
+                }
+            }
+            setField = negativeSet$InetAddressCachePolicy;
+        } else {
+            if (setFiled$InetAddressCachePolicy == null) {
+                synchronized (InetAddressCacheUtil.class) {
+                    if (setFiled$InetAddressCachePolicy == null) {
+                        try {
+                            setFiled$InetAddressCachePolicy = clazz.getDeclaredField("propertySet");
+                        } catch (NoSuchFieldException e) {
+                            setFiled$InetAddressCachePolicy = clazz.getDeclaredField("set");
+                        }
+                        setFiled$InetAddressCachePolicy.setAccessible(true);
+                    }
+                }
+            }
+            setField = setFiled$InetAddressCachePolicy;
+        }
+
         synchronized (InetAddressCachePolicy.class) { // static synchronized method! 
             cachePolicyFiled.set(null, seconds);
+            setField.set(null, true);
         }
     }
 
