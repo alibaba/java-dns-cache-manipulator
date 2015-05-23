@@ -209,6 +209,24 @@ public class DnsCacheManipulator {
     }
 
     /**
+     * Get JVM DNS cache policy.
+     *
+     * @return cache seconds.
+     * <p/>
+     * <ul>
+     * <li> {@code -1} means never expired.(In effect, all negative value)</li>
+     * <li> {@code 0} never cached.</li>
+     * </ul>
+     */
+    public static int getDnsCachePolicy() {
+        try {
+            return InetAddressCacheUtil.getDnsCachePolicy();
+        } catch (Exception e) {
+            throw new DnsCacheManipulatorException("Fail to getDnsCachePolicy, cause: " + e.toString(), e);
+        }
+    }
+
+    /**
      * Set JVM DNS cache policy
      *
      * @param cacheSeconds set default dns cache time. Special input case:
@@ -223,6 +241,24 @@ public class DnsCacheManipulator {
             InetAddressCacheUtil.setDnsCachePolicy(cacheSeconds);
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to setDnsCachePolicy, cause: " + e.toString(), e);
+        }
+    }
+
+    /**
+     * JVM DNS negative cache policy
+     *
+     * @return negative cache seconds.
+     * <p/>
+     * <ul>
+     * <li> {@code -1} means never expired.(In effect, all negative value)</li>
+     * <li> {@code 0} never cached.</li>
+     * </ul>
+     */
+    public static int getDnsNegativeCachePolicy() {
+        try {
+            return InetAddressCacheUtil.getDnsNegativeCachePolicy();
+        } catch (Exception e) {
+            throw new DnsCacheManipulatorException("Fail to getDnsNegativeCachePolicy, cause: " + e.toString(), e);
         }
     }
 

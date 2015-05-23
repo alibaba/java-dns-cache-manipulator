@@ -297,6 +297,11 @@ public class InetAddressCacheUtil {
         setCachePolicy0(false, cacheSeconds);
     }
 
+    public static int getDnsCachePolicy()
+            throws NoSuchFieldException, IllegalAccessException {
+        return InetAddressCachePolicy.get();
+    }
+
     /**
      * Set JVM DNS negative cache policy
      *
@@ -313,16 +318,25 @@ public class InetAddressCacheUtil {
         setCachePolicy0(true, negativeCacheSeconds);
     }
 
+    public static int getDnsNegativeCachePolicy()
+            throws NoSuchFieldException, IllegalAccessException {
+        return InetAddressCachePolicy.getNegative();
+    }
+
     static void setCachePolicy0(boolean isNegative, int seconds)
             throws NoSuchFieldException, IllegalAccessException {
         if (seconds < 0) {
             seconds = -1;
         }
-        Class<?> clazz = sun.net.InetAddressCachePolicy.class;
+
+        Class<?> clazz = InetAddressCachePolicy.class;
         Field cachePolicyFiled = clazz.getDeclaredField(
                 isNegative ? "negativeCachePolicy" : "cachePolicy");
         cachePolicyFiled.setAccessible(true);
-        cachePolicyFiled.set(null, seconds);
+
+        synchronized (InetAddressCachePolicy.class) { // static synchronized method! 
+            cachePolicyFiled.set(null, seconds);
+        }
     }
 
     private InetAddressCacheUtil() {

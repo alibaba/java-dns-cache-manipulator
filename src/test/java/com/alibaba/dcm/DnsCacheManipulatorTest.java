@@ -186,6 +186,7 @@ public class DnsCacheManipulatorTest {
     public void test_setDnsCachePolicy() throws Exception {
         final String host = "baidu.com";
         DnsCacheManipulator.setDnsCachePolicy(2);
+        assertEquals(2, DnsCacheManipulator.getDnsCachePolicy());
 
         InetAddress.getByName(host).getHostAddress();
         final long tick = currentTimeMillis();
@@ -217,6 +218,7 @@ public class DnsCacheManipulatorTest {
     @Test
     public void test_setNegativeDnsCachePolicy() throws Exception {
         DnsCacheManipulator.setDnsNegativeCachePolicy(2);
+        assertEquals(2, DnsCacheManipulator.getDnsNegativeCachePolicy());
 
         try {
             InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
