@@ -113,7 +113,34 @@ DnsCacheManipulator.getDnsNegativeCachePolicy()
 DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 ```
 
-更多详细功能参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
+### 使用注意
+
+对于已经完成解析保存了`IP`的逻辑，修改`JVM DNS`缓存，不会生效！可以重新创建 连接或`Client`解决。
+
+如对于`HttpClient`:
+
+```java
+HttpClient client = new HttpClient();
+GetMethod m1 = new GetMethod("http://www.baidu.com");
+client.executeMethod(m1);
+String content = m1.getResponseBodyAsString();
+
+// 修改DNS，绑定到自己的机器
+DnsCacheManipulator.setDnsCache("www.baidu.com", "192.168.10.2");
+
+// 重新执行m1，仍然是老结果
+client.executeMethod(m1);
+String content = m1.getResponseBodyAsString();
+
+// 重新创建GetMethod，才能得到自己机器上的结果
+GetMethod m2 = new GetMethod("http://www.baidu.com");
+client.executeMethod(m2);
+content = m2.getResponseBodyAsString();
+```
+
+### 更多详细功能
+
+参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
 
 :electric_plug: Java API Docs
 =====================================
@@ -190,6 +217,8 @@ private static void cacheAddresses(String hostname,
     - 在缓存有效期内，取到的`IP`永远是缓存中全部A记录的第一条，并没有轮循之类的策略。
     - 缓存失效之后重新进行DNS解析，因为每次域名解析返回的A记录顺序会发生变化(`dig www.google.com`测试可见)，所以缓存中的数据顺序也变了，取到的`IP`也变化。
 - [通过`JAVA`反射修改`JDK 1.6`当中`DNS`缓存内容](http://www.tuicool.com/articles/auYzui)，给出了修改`DNS`缓存在性能测试下使用的场景。
+- [java InetAddress 的dns cache问题](http://www.blogjava.net/jjwwhmm/archive/2008/07/09/213685.html)，
+说明`HttpClient`需要重新创建`GetMethod`/`PostMethod`对象以使设置`DNS`生效问题。
 - [Domain Name System - wikipedia](http://en.wikipedia.org/wiki/Domain_Name_System)
 - `Java DNS` FAQ
     - [`Java DNS cache` viewer - stackoverflow](http://stackoverflow.com/questions/1835421/java-dns-cache-viewer)
