@@ -99,6 +99,20 @@ DnsCache dnsCache = DnsCacheManipulator.getWholeDnsCache()
 System.out.println(dnsCache);
 ```
 
+### 修改/查看`JVM`缺省的`DNS`的缓存时间
+
+```java
+// 查看缓存时间，单位秒。-1表示永远缓存，0表示不缓存
+int cachePolicy = DnsCacheManipulator.getDnsCachePolicy();
+// 查看缓存时间
+DnsCacheManipulator.setDnsCachePolicy(2);
+
+// 查看未命中条目的缓存时间
+DnsCacheManipulator.getDnsNegativeCachePolicy()
+// 修改未命中条目的缓存时间
+DnsCacheManipulator.setDnsNegativeCachePolicy(0);
+```
+
 更多详细功能参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
 
 :electric_plug: Java API Docs
