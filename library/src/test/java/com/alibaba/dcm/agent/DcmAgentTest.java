@@ -7,9 +7,12 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -75,43 +78,53 @@ public class DcmAgentTest {
 
     @Test
     public void test_agentmain_setPolicy() throws Exception {
-        DcmAgent.agentmain("   setPolicy    5  ");
-        assertEquals(5, DnsCacheManipulator.getDnsCachePolicy());
+        DcmAgent.agentmain("   setPolicy    345  ");
+        assertEquals(345, DnsCacheManipulator.getDnsCachePolicy());
     }
 
     @Test
     public void test_agentmain_getPolicy() throws Exception {
-        DnsCacheManipulator.setDnsCachePolicy(77);
-        DcmAgent.agentmain("   getPolicy    5  ");
-        assertEquals(77, DnsCacheManipulator.getDnsCachePolicy());
+        DnsCacheManipulator.setDnsCachePolicy(456);
+        DcmAgent.agentmain("   getPolicy     ");
+        assertEquals(456, DnsCacheManipulator.getDnsCachePolicy());
     }
 
     @Test
     public void test_agentmain_setNegativePolicy() throws Exception {
-        DcmAgent.agentmain("   setNegativePolicy    42  ");
+        DcmAgent.agentmain("   setNegativePolicy 42 ");
         assertEquals(42, DnsCacheManipulator.getDnsNegativeCachePolicy());
     }
 
     @Test
     public void test_agentmain_getNegativePolicy() throws Exception {
         DnsCacheManipulator.setDnsNegativeCachePolicy(45);
-        DcmAgent.agentmain("   getNegativePolicy    5  ");
+        DcmAgent.agentmain("   getNegativePolicy");
         assertEquals(45, DnsCacheManipulator.getDnsNegativeCachePolicy());
     }
-    
+
     @Test
     public void test_agentmain_skipNoActionArguments() throws Exception {
         DcmAgent.agentmain("  arg1  arg2   ");
     }
-    
+
     @Test
     public void test_agentmain_actionNeedMoreArgument() throws Exception {
-        DcmAgent.agentmain("  setNegativePolicy   ");
+        try {
+            DcmAgent.agentmain("  setNegativePolicy   ");
+            fail();
+        } catch (IllegalStateException expected) {
+            assertThat(expected.getMessage(), startsWith("action setNegativePolicy need more argument"));
+        }
     }
-    
+
     @Test
     public void test_agentmain_actionTooMoreArgument() throws Exception {
-        DcmAgent.agentmain("  setNegativePolicy 737 HaHa  ");
+        try {
+            DcmAgent.agentmain("  setNegativePolicy 737 HaHa  ");
+            fail();
+        } catch (IllegalStateException expected) {
+            assertThat(expected.getMessage(), startsWith("Too more arguments for Action"));
+        }
     }
 
     @Test

@@ -19,11 +19,14 @@ public class DcmAgent {
     public static final String FILE = "file";
 
     public static void agentmain(String agentArgument) throws Exception {
+        System.out.printf("Run %s!\n", DcmAgent.class.getName());
+
         agentArgument = agentArgument.trim();
         if (agentArgument.isEmpty()) {
             System.out.println(DcmAgent.class.getName() + ": empty agent argument, do nothing!");
             return;
         }
+        System.out.println("Arguments: " + agentArgument);
 
         initAction2Method();
 
@@ -32,23 +35,36 @@ public class DcmAgent {
         try {
             final Map<String, List<String>> action2Arguments = parseArgument(agentArgument);
             if (action2Arguments.containsKey(FILE)) {
-                outputStream = new FileOutputStream(action2Arguments.get(FILE).get(0), true);
+                outputStream = new FileOutputStream(action2Arguments.get(FILE).get(0), false);
                 final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
 
                 writer = new PrintWriter(outputStreamWriter, true);
                 action2Arguments.remove(FILE);
             }
-            writer.printf("Run %s!\n", DcmAgent.class.getName());
-            writer.println("Arguments: " + agentArgument);
 
             if (action2Arguments.isEmpty()) {
-                writer.println(DcmAgent.class.getName() + ": No action in agent argument, do nothing!");
+                System.out.println(DcmAgent.class.getName() + ": No action in agent argument, do nothing!");
+                writer.println("No action in agent argument, do nothing! agent argument: " + agentArgument);
+                return;
             }
 
             for (Map.Entry<String, List<String>> entry : action2Arguments.entrySet()) {
                 final String action = entry.getKey();
                 final List<String> arguments = entry.getValue();
-                doAction(action, arguments.toArray(new String[0]), writer);
+
+                if (!action2Method.containsKey(action)) {
+                    StringBuilder sb = new StringBuilder();
+                    for (String argument : arguments) {
+                        if (sb.length() > 0) {
+                            sb.append(" ");
+                        }
+                        sb.append(argument);
+                    }
+                    writer.printf("Unknown action %s! ignore %<s %s !\n", action, sb);
+                }
+
+                final Object result = doAction(action, arguments.toArray(new String[0]));
+                printResult(action, result, writer);
             }
         } finally {
             if (outputStream != null) {
@@ -63,7 +79,7 @@ public class DcmAgent {
         int idx = 0;
         Map<String, List<String>> action2Arguments = new HashMap<String, List<String>>();
         while (idx < split.length) {
-            final String action = split[idx++].toLowerCase();
+            final String action = split[idx++];
             if (!action2Method.containsKey(action)) {
                 continue; // TODO error message
             }
@@ -81,26 +97,16 @@ public class DcmAgent {
         return action2Arguments;
     }
 
-    static void doAction(String action, String[] arguments, PrintWriter writer) throws Exception {
+    static Object doAction(String action, String[] arguments) throws Exception {
         Method method = action2Method.get(action);
-
-        if (method == null) {
-            StringBuilder sb = new StringBuilder();
-            for (String argument : arguments) {
-                if (sb.length() > 0) {
-                    sb.append(" ");
-                }
-                sb.append(argument);
-            }
-            writer.printf("Unknown action %s! ignore %<s %s !\n", action, sb);
-        }
 
         final Class<?>[] parameterTypes = method.getParameterTypes();
         final Object[] methodArgs = convertStringArray2Arguments(action, arguments, parameterTypes);
-        final Object ret = method.invoke(null, methodArgs);
-        if (ret != null) {
-            writer.println(ret);
-        }
+        return method.invoke(null, methodArgs);
+    }
+
+    static void printResult(String action, Object result, PrintWriter writer) {
+        
     }
 
     static volatile Map<String, Method> action2Method;
