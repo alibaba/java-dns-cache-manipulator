@@ -92,6 +92,20 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Agent-Class>com.alibaba.dcm.agent.DcmAgent</Agent-Class>
+							<Can-Redefine-Classes>false</Can-Redefine-Classes>
+							<Can-Retransform-Classes>false</Can-Retransform-Classes>
+							<Can-Set-Native-Method-Prefix>false</Can-Set-Native-Method-Prefix>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.8.2</version>
