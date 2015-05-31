@@ -150,6 +150,25 @@ content = m2.getResponseBodyAsString();
 
 参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
 
+经过测试的`JDK`
+----------------------------------
+
+JDK | 系统 | On
+--- | ---- | ---
+openjdk6 64-Bit | Linux | travis-ci
+oraclejdk7 64-Bit | Linux | travis-ci
+openjdk7 64-Bit | Linux | travis-ci
+oraclejdk8 64-Bit | Linux | travis-ci
+Mac自带的jdk6 64-Bit | Mac | 个人Mac
+oraclejdk7 64-Bit | Mac | 个人Mac
+oraclejdk7 64-Bit | windows server 2012 r2 | appveyor
+oraclejdk7 32-Bit | windows server 2012 r2 | appveyor
+oraclejdk8 64-Bit | windows server 2012 r2 | appveyor
+oraclejdk8 32-Bit | windows server 2012 r2 | appveyor
+
+PS：  
+多谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供持续集成环境。
+
 :electric_plug: Java API Docs
 =====================================
 
@@ -208,6 +227,13 @@ private static void cacheAddresses(String hostname,
 ```
 
 [`InetAddressCacheUtil`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtil.java)类中对`DNS Cache`的读写也一致地加了以`addressCache`为锁的`synchronized`块，以保证线程安全。
+
+需要测试不同版本`JDK`
+----------------------------------
+
+本库实现使用了`JDK`的非公开`API`，不同`JDK`实现会不一样，即需要有兼容逻辑，并对不同版本`JDK`进行测试，以保证功能。
+
+目前测试包含`JDK`版本参见【经过测试的`JDK`】一节。
 
 :books: 相关资料
 =====================================
