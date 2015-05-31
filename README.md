@@ -13,7 +13,7 @@ Java Dns Cache Manipulator(DCM)
 :point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`。
 
 :wrench: 功能
-----------------------------
+=====================================
 
 - 设置/重置`DNS`（不会再去`Lookup DNS`）
     - 可以设置单条
@@ -21,9 +21,10 @@ Java Dns Cache Manipulator(DCM)
 - 查看`DNS Cache`内容
 - 删除一条`DNS Cache`（即重新`Lookup DNS`）
 - 清空`DNS Cache`（即所有的域名重新`Lookup DNS`）
+- 修改/查看`JVM`缺省的`DNS`的缓存时间
 
 :art: 需求场景
-----------------------
+=====================================
 
 1. 一些库中写死了连接域名，需要通过修改`host`文件绑定才能做测试。结果是：
     - 自动持续集成的机器上一般同学是没有权限去修改`host`文件的，导致项目不能持续集成。  
@@ -44,7 +45,8 @@ Java Dns Cache Manipulator(DCM)
 
 通过类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)设置`DNS`。
 
-### 直接设置
+直接设置
+----------------------------------
 
 ```java
 DnsCacheManipulator.setDnsCache("www.hello-world.com", "192.168.10.113");
@@ -56,7 +58,8 @@ String ip = InetAddress.getByName("www.hello-world.com").getHostAddress();
 // ip = "192.168.10.113"
 ```
 
-### 通过`dns-cache.properties`文件批量配置
+通过`dns-cache.properties`文件批量配置
+----------------------------------
 
 在代码测试中，会期望把域名绑定写在配置文件。
 
@@ -86,20 +89,23 @@ public static void beforeClass() throws Exception {
 }
 ```
 
-### 清空`JVM DNS Cache`
+清空`JVM DNS Cache`
+----------------------------------
 
 ```java
 DnsCacheManipulator.clearDnsCache();
 ```
 
-### 查看`JVM DNS Cache`
+查看`JVM DNS Cache`
+----------------------------------
 
 ```java
 DnsCache dnsCache = DnsCacheManipulator.getWholeDnsCache()
 System.out.println(dnsCache);
 ```
 
-### 修改/查看`JVM`缺省的`DNS`的缓存时间
+修改/查看`JVM`缺省的`DNS`的缓存时间
+----------------------------------
 
 ```java
 // 查看缓存时间，单位秒。-1表示永远缓存，0表示不缓存
@@ -113,7 +119,8 @@ DnsCacheManipulator.getDnsNegativeCachePolicy()
 DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 ```
 
-### 使用注意
+使用注意
+----------------------------------
 
 对于已经完成解析保存了`IP`的逻辑，修改`JVM DNS`缓存，不会生效！可以重新创建 连接或`Client`解决。
 
@@ -138,7 +145,8 @@ client.executeMethod(m2);
 content = m2.getResponseBodyAsString();
 ```
 
-### 更多详细功能
+更多详细功能
+----------------------------------
 
 参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
 
@@ -165,12 +173,14 @@ content = m2.getResponseBodyAsString();
 :mortar_board: Developer Guide
 =====================================
 
-### 如何修改`JVM`的`DNS Cache`
+如何修改`JVM`的`DNS Cache`
+----------------------------------
 
 `JVM`的`DNS Cache`维护在类`InetAddress`的`addressCache`私有字段中，通过反射来修改，
 具体参见[`InetAddressCacheUtil`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtil.java)。
 
-### 注意修改`JVM`的`DNS Cache`的线程安全问题
+注意修改`JVM`的`DNS Cache`的线程安全问题
+----------------------------------
 
 `JVM`的`DNS Cache`显然是全局共用的，所以修改需要同步以保证没有并发问题。
 
