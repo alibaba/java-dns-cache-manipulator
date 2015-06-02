@@ -5,6 +5,7 @@ import com.alibaba.dcm.DnsCacheManipulator;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,58 +18,89 @@ import java.util.Map;
  */
 public class DcmAgent {
     public static final String FILE = "file";
+    public static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
     public static void agentmain(String agentArgument) throws Exception {
-        System.out.printf("Run %s!\n", DcmAgent.class.getName());
+        System.out.printf("%s: attached with agent argument: \"%s\".\n", DcmAgent.class.getName(), agentArgument);
 
         agentArgument = agentArgument.trim();
         if (agentArgument.isEmpty()) {
-            System.out.println(DcmAgent.class.getName() + ": empty agent argument, do nothing!");
+            System.out.println(DcmAgent.class.getName() + ": agent argument is blank, do nothing!");
             return;
         }
-        System.out.println("Arguments: " + agentArgument);
 
         initAction2Method();
 
-        PrintWriter writer = new PrintWriter(System.out, true);
-        FileOutputStream outputStream = null;
+        FileOutputStream fileOutputStream = null;
         try {
             final Map<String, List<String>> action2Arguments = parseArgument(agentArgument);
-            if (action2Arguments.containsKey(FILE)) {
-                outputStream = new FileOutputStream(action2Arguments.get(FILE).get(0), false);
-                final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
 
-                writer = new PrintWriter(outputStreamWriter, true);
+            PrintWriter filePrinter = null;
+            if (action2Arguments.containsKey(FILE)) {
+                fileOutputStream = new FileOutputStream(action2Arguments.get(FILE).get(0), false);
+                final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
+
+                filePrinter = new PrintWriter(outputStreamWriter, true);
                 action2Arguments.remove(FILE);
             }
 
             if (action2Arguments.isEmpty()) {
                 System.out.println(DcmAgent.class.getName() + ": No action in agent argument, do nothing!");
-                writer.println("No action in agent argument, do nothing! agent argument: " + agentArgument);
+                if (filePrinter != null) {
+                    filePrinter.println("No action in agent argument, do nothing! agent argument: " + agentArgument);
+                }
                 return;
             }
+
+            boolean allSuccess = true;
 
             for (Map.Entry<String, List<String>> entry : action2Arguments.entrySet()) {
                 final String action = entry.getKey();
                 final List<String> arguments = entry.getValue();
 
-                if (!action2Method.containsKey(action)) {
-                    StringBuilder sb = new StringBuilder();
-                    for (String argument : arguments) {
-                        if (sb.length() > 0) {
-                            sb.append(" ");
-                        }
-                        sb.append(argument);
+                StringBuilder argumentString = new StringBuilder();
+                for (String argument : arguments) {
+                    if (argumentString.length() > 0) {
+                        argumentString.append(" ");
                     }
-                    writer.printf("Unknown action %s! ignore %<s %s !\n", action, sb);
+                    argumentString.append(argument);
                 }
 
-                final Object result = doAction(action, arguments.toArray(new String[0]));
-                printResult(action, result, writer);
+                if (!action2Method.containsKey(action)) {
+                    System.out.printf("%s: Unknown action %s! ignore %<s %s !\n", DcmAgent.class.getName(), action, argumentString);
+                    if (filePrinter != null) {
+                        filePrinter.printf("Unknown action %s! ignore %<s %s !\n", action, argumentString);
+                    }
+                    continue;
+                }
+
+                try {
+                    final Object result = doAction(action, arguments.toArray(new String[0]));
+                    printResult(action, result, filePrinter);
+                } catch (Exception e) {
+                    allSuccess = false;
+
+                    final StringWriter w = new StringWriter();
+                    e.printStackTrace(new PrintWriter(w));
+                    final String exString = w.toString();
+
+                    System.out.printf("%s: Error to do action %s %s, cause: %s\n", DcmAgent.class.getName(), action, argumentString, exString);
+                    if (filePrinter != null) {
+                        filePrinter.printf("Error to do action %s %s, cause: %s\n", action, argumentString, exString);
+                    }
+                }
+            }
+
+            if (allSuccess && filePrinter != null) {
+                filePrinter.println(DCM_AGENT_SUCCESS_MARK_LINE);
             }
         } finally {
-            if (outputStream != null) {
-                outputStream.close();
+            if (fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
+                } catch (Throwable e) {
+                    // do nothing!
+                }
             }
         }
     }
@@ -87,7 +119,7 @@ public class DcmAgent {
             List<String> arguments = new ArrayList<String>();
             while (idx < split.length) {
                 if (action2Method.containsKey(split[idx])) {
-                    continue;
+                    break;
                 }
                 arguments.add(split[idx++]);
             }
@@ -106,7 +138,11 @@ public class DcmAgent {
     }
 
     static void printResult(String action, Object result, PrintWriter writer) {
-        
+        final Method method = action2Method.get(action);
+        if (method.getReturnType() != void.class) {
+            writer.println(result.toString());
+        }
+        writer.printf("%s DONE.\n", action);
     }
 
     static volatile Map<String, Method> action2Method;
@@ -126,7 +162,7 @@ public class DcmAgent {
         map.put("setNegativePolicy", DnsCacheManipulator.class.getMethod("setDnsNegativeCachePolicy", int.class));
         map.put("getNegativePolicy", DnsCacheManipulator.class.getMethod("getDnsNegativeCachePolicy"));
 
-        map.put(FILE, null);
+        map.put(FILE, null); // FAKE KEY
 
         action2Method = map;
     }

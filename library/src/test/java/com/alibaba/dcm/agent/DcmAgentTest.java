@@ -31,6 +31,15 @@ public class DcmAgentTest {
         DnsCacheManipulator.clearDnsCache();
     }
 
+    void checkOutputFile() throws Exception {
+        System.out.println("============================================");
+        System.out.println("Agent Output File Content");
+        System.out.println("============================================");
+        final String text = FileUtils.readFileToString(outputFile);
+        assertTrue(text.length() > 0);
+        System.out.println(text);
+    }
+
     @Test
     public void test_agentmain_empty() throws Exception {
         DcmAgent.agentmain("   ");
@@ -41,15 +50,22 @@ public class DcmAgentTest {
         final String output = outputFile.getAbsolutePath();
         DcmAgent.agentmain("file " + output);
 
-        final String text = FileUtils.readFileToString(new File(output));
-        assertTrue(text.length() > 0);
-        System.out.println(text);
+        checkOutputFile();
     }
 
     @Test
     public void test_agentmain_set() throws Exception {
         DcmAgent.agentmain("set baidu.com 1.2.3.4");
         assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("baidu.com").getIp());
+    }
+
+    @Test
+    public void test_agentmain_set_toFile() throws Exception {
+        final String output = outputFile.getAbsolutePath();
+        DcmAgent.agentmain("set baidu.com 1.2.3.4 file " + output);
+        assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("baidu.com").getIp());
+        
+        checkOutputFile();
     }
 
     @Test
