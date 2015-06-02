@@ -1,6 +1,7 @@
 package com.alibaba.dcm;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -44,10 +45,12 @@ public final class DnsCacheEntry implements Serializable {
 
     @Override
     public String toString() {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+
         return "DnsCacheEntry{" +
                 "host='" + host + '\'' +
                 ", ips=" + Arrays.toString(ips) +
-                ", expiration=" + expiration +
+                ", expiration=" + dateFormat.format(expiration) +
                 '}';
     }
 
