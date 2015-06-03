@@ -37,8 +37,11 @@ Java Dns Cache Manipulator(DCM) Library
     - 可以动态修改`DNS`缓存，无需修改`host`文件和`http`链接等不灵活的方式。
     - 一个`JVM`进程可以对应一套域名绑定，相互之间不影响，可以实现多场景，多域名绑定的需求压测。
 1. 打开`Java`中的`SecurityManager`时（如在`Web`容器`Tomcat`中的`Web`应用），`Java`的`DNS`缺省是不会失效的。
-    如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。  
-    当然往往进行要先有能执行入口，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。
+    如果域名绑定的`IP`变了，可以通过这个库重置`DNS`，作为一个临时的手段（***强烈不推荐***）。
+    - 通过[`Java Dns Cache Manipulator Tool`](tool)修改运行中`JVM DNS Cache`。  
+        **无需**应用包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
+    - 或通过执行入口调用`Java Dns Cache Manipulator Library`的方法，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。  
+        ***需要***应用已经包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
 
 :busts_in_silhouette: User Guide
 =====================================
@@ -110,12 +113,12 @@ System.out.println(dnsCache);
 ```java
 // 查看缓存时间，单位秒。-1表示永远缓存，0表示不缓存
 int cachePolicy = DnsCacheManipulator.getDnsCachePolicy();
-// 查看缓存时间
+// 设置缓存时间
 DnsCacheManipulator.setDnsCachePolicy(2);
 
 // 查看未命中条目的缓存时间
 DnsCacheManipulator.getDnsNegativeCachePolicy()
-// 修改未命中条目的缓存时间
+// 设置未命中条目的缓存时间
 DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 ```
 
@@ -167,7 +170,7 @@ oraclejdk8 64-Bit | windows server 2012 r2 | appveyor
 oraclejdk8 32-Bit | windows server 2012 r2 | appveyor
 
 PS：  
-多谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供持续集成环境。
+感谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供持续集成环境。
 
 :electric_plug: Java API Docs
 =====================================
@@ -183,7 +186,7 @@ PS：
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
@@ -247,7 +250,7 @@ private static void cacheAddresses(String hostname,
     - `JDK 8`的[`InetAddress`](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8-b132/java/net/InetAddress.java#InetAddress.CacheEntry)
 - [`JVM Networking Properties` - `java docs`](http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html)
 - [`java dns`解析缓存之源码解析](http://rongmayisheng.com/post/java-dns%E7%BC%93%E5%AD%98%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90)，写得很完整，源码解析。给出值得注意的结论：
-    - 打开`Java`中的`SecurityManager`，`DNS`缓存将不会生效。
+    - 打开`Java`中的`SecurityManager`，`DNS`缓存将不会失效。
     - 否则，可访问的`DNS`解析缺省缓存30秒，不可访问的`DNS`解析缺省缓存10秒。
 - [关于`jvm dns cache`(域名缓存时间)](http://www.piao2010.com/%E5%85%B3%E4%BA%8Ejvm-dns-cache-%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E6%97%B6%E9%97%B4)，给出“对于多条A记录是采用什么策略返回`IP`”的结论：  
     - 在缓存有效期内，取到的`IP`永远是缓存中全部A记录的第一条，并没有轮循之类的策略。
