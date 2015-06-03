@@ -2,11 +2,14 @@ package com.alibaba.dcm.agent;
 
 import com.alibaba.dcm.DnsCacheManipulator;
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.List;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -19,6 +22,7 @@ import static org.junit.Assert.fail;
  */
 public class DcmAgentTest {
     File outputFile;
+    String outputFilePath;
 
     @Before
     public void setUp() throws Exception {
@@ -28,15 +32,17 @@ public class DcmAgentTest {
         assertTrue(outputFile.length() == 0);
         System.out.println("Prepared output file: " + outputFile.getAbsolutePath());
 
+        outputFilePath = outputFile.getAbsolutePath();
+
         DnsCacheManipulator.clearDnsCache();
     }
 
-    void checkOutputFile() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         System.out.println("============================================");
         System.out.println("Agent Output File Content");
         System.out.println("============================================");
         final String text = FileUtils.readFileToString(outputFile);
-        assertTrue(text.length() > 0);
         System.out.println(text);
     }
 
@@ -47,10 +53,10 @@ public class DcmAgentTest {
 
     @Test
     public void test_agentmain_file() throws Exception {
-        final String output = outputFile.getAbsolutePath();
-        DcmAgent.agentmain("file " + output);
+        DcmAgent.agentmain("file " + outputFilePath);
 
-        checkOutputFile();
+        final List<String> content = FileUtils.readLines(outputFile);
+        assertThat(content.get(0), containsString("No action in agent argument, do nothing!"));
     }
 
     @Test
@@ -61,11 +67,12 @@ public class DcmAgentTest {
 
     @Test
     public void test_agentmain_set_toFile() throws Exception {
-        final String output = outputFile.getAbsolutePath();
-        DcmAgent.agentmain("set baidu.com 1.2.3.4 file " + output);
+        DcmAgent.agentmain("set baidu.com 1.2.3.4 file " + outputFilePath);
         assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("baidu.com").getIp());
-        
-        checkOutputFile();
+
+        final List<String> content = FileUtils.readLines(outputFile);
+        assertThat(content.get(0), containsString("set DONE."));
+        assertEquals(DcmAgent.DCM_AGENT_SUCCESS_MARK_LINE, content.get(content.size() - 1));
     }
 
     @Test
@@ -125,26 +132,35 @@ public class DcmAgentTest {
 
     @Test
     public void test_agentmain_actionNeedMoreArgument() throws Exception {
-        try {
-            DcmAgent.agentmain("  setNegativePolicy   ");
-            fail();
-        } catch (IllegalStateException expected) {
-            assertThat(expected.getMessage(), startsWith("action setNegativePolicy need more argument"));
-        }
+        DnsCacheManipulator.setDnsNegativeCachePolicy(1110);
+
+        DcmAgent.agentmain("  setNegativePolicy     file " + outputFilePath);
+
+        assertEquals(1110, DnsCacheManipulator.getDnsNegativeCachePolicy());
+
+        final List<String> content = FileUtils.readLines(outputFile);
+        assertThat(content.get(0), containsString("Error to do action setNegativePolicy"));
+        assertThat(content.get(0), containsString("action setNegativePolicy need more argument!"));
     }
 
     @Test
     public void test_agentmain_actionTooMoreArgument() throws Exception {
-        try {
-            DcmAgent.agentmain("  setNegativePolicy 737 HaHa  ");
-            fail();
-        } catch (IllegalStateException expected) {
-            assertThat(expected.getMessage(), startsWith("Too more arguments for Action"));
-        }
+        DnsCacheManipulator.setDnsNegativeCachePolicy(1111);
+
+        DcmAgent.agentmain("  setNegativePolicy 737 HaHa  file " + outputFilePath);
+
+        assertEquals(1111, DnsCacheManipulator.getDnsNegativeCachePolicy());
+
+        final List<String> content = FileUtils.readLines(outputFile);
+        assertThat(content.get(0), containsString("Error to do action setNegativePolicy 737 HaHa"));
+        assertThat(content.get(0), containsString("Too more arguments for Action setNegativePolicy! arguments: [737, HaHa]"));
     }
 
     @Test
     public void test_agentmain_unknownAction() throws Exception {
-        DcmAgent.agentmain("  unknownAction  arg1  arg2   ");
+        DcmAgent.agentmain("  unknownAction  arg1  arg2   file " + outputFilePath);
+
+        final List<String> content = FileUtils.readLines(outputFile);
+        assertThat(content.get(0), containsString("No action in agent argument, do nothing!"));
     }
 }

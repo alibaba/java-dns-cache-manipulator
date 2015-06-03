@@ -21,7 +21,7 @@ public class DcmAgent {
     public static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
     public static void agentmain(String agentArgument) throws Exception {
-        System.out.printf("%s: attached with agent argument: \"%s\".\n", DcmAgent.class.getName(), agentArgument);
+        System.out.printf("%s: attached with agent argument: %s.\n", DcmAgent.class.getName(), agentArgument);
 
         agentArgument = agentArgument.trim();
         if (agentArgument.isEmpty()) {
@@ -47,7 +47,7 @@ public class DcmAgent {
             if (action2Arguments.isEmpty()) {
                 System.out.println(DcmAgent.class.getName() + ": No action in agent argument, do nothing!");
                 if (filePrinter != null) {
-                    filePrinter.println("No action in agent argument, do nothing! agent argument: " + agentArgument);
+                    filePrinter.printf("No action in agent argument, do nothing! agent argument: %s.\n", agentArgument);
                 }
                 return;
             }
@@ -67,9 +67,9 @@ public class DcmAgent {
                 }
 
                 if (!action2Method.containsKey(action)) {
-                    System.out.printf("%s: Unknown action %s! ignore %<s %s !\n", DcmAgent.class.getName(), action, argumentString);
+                    System.out.printf("%s: Unknown action %s, ignore! action: %<s %s!\n", DcmAgent.class.getName(), action, argumentString);
                     if (filePrinter != null) {
-                        filePrinter.printf("Unknown action %s! ignore %<s %s !\n", action, argumentString);
+                        filePrinter.printf("Unknown action %s, ignore! action: %<s %s !\n", action, argumentString);
                     }
                     continue;
                 }

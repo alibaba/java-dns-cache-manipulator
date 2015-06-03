@@ -2,6 +2,7 @@ package com.alibaba.dcm;
 
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -33,6 +34,9 @@ public class DnsCacheTest {
     @Test
     public void test_toString() throws Exception {
         final Date expiration = new Date();
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+        final String date = dateFormat.format(expiration);
+        
         DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);
         DnsCacheEntry entry2 = new DnsCacheEntry("b.com", new String[]{"1.1.1.2"}, expiration);
         DnsCacheEntry entry3 = new DnsCacheEntry("c.com", new String[]{"1.1.1.2"}, expiration);
@@ -43,7 +47,7 @@ public class DnsCacheTest {
 
         String expected = String.format("DnsCache{cache=[DnsCacheEntry{host='a.com', ips=[1.1.1.1], expiration=%s}" +
                 ", DnsCacheEntry{host='b.com', ips=[1.1.1.2], expiration=%<s}]" +
-                ", negativeCache=[DnsCacheEntry{host='c.com', ips=[1.1.1.2], expiration=%<s}]}", expiration);
+                ", negativeCache=[DnsCacheEntry{host='c.com', ips=[1.1.1.2], expiration=%<s}]}", date);
 
         assertEquals(expected, dnsCache.toString());
     }
