@@ -5,7 +5,7 @@
 	<formats>
 		<format>tar.gz</format>
 	</formats>
-	<includeBaseDirectory>false</includeBaseDirectory>
+	<baseDirectory>dcm-${project.version}</baseDirectory>
 	<dependencySets>
 		<dependencySet>
 			<outputDirectory>dependencies</outputDirectory>

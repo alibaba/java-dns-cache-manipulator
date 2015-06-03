@@ -16,6 +16,7 @@ import static java.lang.System.exit;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
+ * @since 1.4.0
  */
 public class DcmTool {
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
@@ -27,6 +28,7 @@ public class DcmTool {
     static {
         actionList.add("set");
         actionList.add("get");
+        actionList.add("rm");
 
         actionList.add("list");
         actionList.add("clear");
@@ -76,7 +78,7 @@ public class DcmTool {
         }
 
         StringBuilder agentArgument = new StringBuilder();
-        agentArgument.append(action).append(' ');
+        agentArgument.append(action);
         for (int i = 1; i < arguments.length; i++) {
             String s = arguments[i];
             agentArgument.append(' ').append(s);

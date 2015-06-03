@@ -10,12 +10,12 @@ import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -85,6 +85,23 @@ public class DcmAgentTest {
     public void test_agentmain_get() throws Exception {
         DnsCacheManipulator.setDnsCache("baidu.com", "3.3.3.3");
         DcmAgent.agentmain("get baidu.com");
+    }
+
+    @Test
+    public void test_agentmain_rm() throws Exception {
+        DnsCacheManipulator.setDnsCache("baidu.com", "3.3.3.3");
+        DcmAgent.agentmain("rm baidu.com");
+        
+        assertNull(DnsCacheManipulator.getDnsCache("baidu.com"));
+    }
+
+    @Test
+    public void test_agentmain_rm_withFile() throws Exception {
+        DnsCacheManipulator.setDnsCache("baidu.com", "3.3.3.3");
+        assertNotNull(DnsCacheManipulator.getDnsCache("baidu.com"));
+        DcmAgent.agentmain("rm  baidu.com file " + outputFilePath);
+
+        assertNull(DnsCacheManipulator.getDnsCache("baidu.com"));
     }
 
     @Test

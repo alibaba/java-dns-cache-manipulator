@@ -15,6 +15,7 @@ import java.util.Map;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
+ * @since 1.4.0
  */
 public class DcmAgent {
     public static final String FILE = "file";
@@ -140,9 +141,13 @@ public class DcmAgent {
     static void printResult(String action, Object result, PrintWriter writer) {
         final Method method = action2Method.get(action);
         if (method.getReturnType() != void.class) {
-            writer.println(result.toString());
+            if (writer != null) {
+                writer.println(result.toString());
+            }
         }
-        writer.printf("%s DONE.\n", action);
+        if (writer != null) {
+            writer.printf("%s DONE.\n", action);
+        }
     }
 
     static volatile Map<String, Method> action2Method;
@@ -153,6 +158,7 @@ public class DcmAgent {
         Map<String, Method> map = new HashMap<String, Method>();
         map.put("set", DnsCacheManipulator.class.getMethod("setDnsCache", String.class, String[].class));
         map.put("get", DnsCacheManipulator.class.getMethod("getDnsCache", String.class));
+        map.put("rm", DnsCacheManipulator.class.getMethod("removeDnsCache", String.class));
 
         map.put("list", DnsCacheManipulator.class.getMethod("getWholeDnsCache"));
         map.put("clear", DnsCacheManipulator.class.getMethod("clearDnsCache"));

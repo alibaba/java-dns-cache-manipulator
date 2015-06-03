@@ -164,6 +164,7 @@ openjdk7 64-Bit | Linux | travis-ci
 oraclejdk8 64-Bit | Linux | travis-ci
 Mac自带的jdk6 64-Bit | Mac | 个人Mac
 oraclejdk7 64-Bit | Mac | 个人Mac
+oraclejdk8 64-Bit | Mac | 个人Mac
 oraclejdk7 64-Bit | windows server 2012 r2 | appveyor
 oraclejdk7 32-Bit | windows server 2012 r2 | appveyor
 oraclejdk8 64-Bit | windows server 2012 r2 | appveyor

@@ -26,12 +26,13 @@ Java Dns Cache Manipulator Tool
 下载
 ----------
 
-运行脚本`dcm.sh`/`dcm.bat`，执行操作。
+在[项目Release页面](https://github.com/alibaba/java-dns-cache-manipulator/releases)下载文件`dcm-tool-x.x.x.tar.gz`。
+
+解压后，运行`bin`目录下的`dcm`脚本（`Shell脚本`）。
 
 ```bash
-$ ./dcm.sh -h
+$ dcm -h
 usage: Options
- -a,--action <arg>     action
  -h,--help             show help
  -p,--pid <arg>        java process id to attach
 ```
@@ -40,7 +41,9 @@ usage: Options
 ---------------
 
 ```bash
-$ ./dcm.sh -p 12345 set baidu.com 1.1.1.1
+# 对进程ID是12345的Java进程，设置域名 baidu.com IP为 1.1.1.1
+$ dcm -p 12345 set baidu.com 1.1.1.1
+set DONE.
 ```
 
 查看`DNS Cache`内容
@@ -49,20 +52,26 @@ $ ./dcm.sh -p 12345 set baidu.com 1.1.1.1
 查看单条
 
 ```bash
-$ ./dcm.sh -p 12345 get baidu.com
+# 对进程ID是12345的Java进程，获取域名 baidu.com 的DNS条目信息
+$ dcm -p 12345 get baidu.com
+DnsCacheEntry{host='baidu.com', ips=[1.1.1.1], expiration=292278994-08-17 15:12:55.807+0800}
+get DONE.
 ```
 
 查看全部
 
 ```bash
-$ ./dcm.sh -p 12345 list
+$ dcm -p 12345 list
+DnsCache{cache=[DnsCacheEntry{host='bar.com', ips=[1.1.1.1], expiration=292278994-08-17 15:12:55.807+0800}, DnsCacheEntry{host='foo.com', ips=[1.1.1.1], expiration=292278994-08-17 15:12:55.807+0800}, DnsCacheEntry{host='baidu.com', ips=[180.149.132.47, 123.125.114.144, 220.181.57.217], expiration=2015-06-03 17:49:42.077+0800}], negativeCache=[]}
+list DONE.
 ```
 
 清空`DNS Cache`
 ---------------
 
 ```bash
-$ ./dcm.sh -p 12345 clear
+$ dcm -p 12345 clear
+clear DONE.
 ```
 
 修改/查看`JVM`缺省的`DNS`的缓存时间
@@ -70,22 +79,23 @@ $ ./dcm.sh -p 12345 clear
 
 ```bash
 # 查看缓存时间，单位秒。-1表示永远缓存，0表示不缓存
-$ ./dcm.sh -p 12345 getPolicy
+$ dcm -p 12345 getPolicy
+30
+getPolicy DONE.
 
 # 设置缓存时间
-$ ./dcm.sh --pid 12345 setPolicy 5
+$ dcm --pid 12345 setPolicy 5
+setPolicy DONE.
 
 # 查看未命中条目的缓存时间，单位秒。-1表示永远缓存，0表示不缓存
-$ ./dcm.sh -p 12345 getNegativePolicy
+$ dcm -p 12345 getNegativePolicy
+10
+getNegativePolicy DONE.
 
 # 修改未命中条目的缓存时间
-$ ./dcm.sh -p 12345 setNegativePolicy 0
+$ dcm -p 12345 setNegativePolicy 0
+setNegativePolicy DONE.
 ```
-
-:mortar_board: Developer Guide
-=================================
-
-TODO
 
 :books: 相关资料
 =================================
