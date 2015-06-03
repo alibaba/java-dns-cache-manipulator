@@ -9,9 +9,9 @@ import java.util.Date;
 public class TestMainForAgentInject {
     public static void main(String[] args) throws Exception {
         while (true) {
-            System.out.println(new Date());
-            System.out.printf("\tbaidu.com: %s\n\n",
+            System.out.printf("%s: baidu.com: %s\n", new Date(),
                     InetAddress.getByName("baidu.com").getHostAddress());
+
             Thread.sleep(1000);
         }
     }

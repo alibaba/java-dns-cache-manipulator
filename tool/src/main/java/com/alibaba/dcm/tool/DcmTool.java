@@ -19,6 +19,8 @@ import static java.lang.System.exit;
  */
 public class DcmTool {
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
+    static final String DCM_TOOLS_TMP_FILE = "DCM_TOOLS_TMP_FILE";
+    static final String DCM_TOOLS_AGENT_JAR = "DCM_TOOLS_AGENT_JAR";
 
     static List<String> actionList = new ArrayList<String>();
 
@@ -35,10 +37,9 @@ public class DcmTool {
         actionList.add("getNegativePolicy");
     }
 
-
     public static void main(String[] args) throws Exception {
-        final String tmpFile = System.getenv("DCM_TOOLS_TMP_FILE");
-        final String agentJar = System.getenv("DCM_TOOLS_AGENT_JAR");
+        final String tmpFile = getConfig(DCM_TOOLS_TMP_FILE);
+        final String agentJar = getConfig(DCM_TOOLS_AGENT_JAR);
         if (tmpFile == null || tmpFile.trim().isEmpty() || agentJar == null || agentJar.trim().isEmpty()) {
             throw new IllegalStateException("blank tmp file " + tmpFile + ", or blank agent jar file " + agentJar);
         }
@@ -109,5 +110,13 @@ public class DcmTool {
         if (!actionSuccess) {
             exit(1);
         }
+    }
+
+    static String getConfig(String name) {
+        String var = System.getenv(name);
+        if (var == null) {
+            var = System.getProperty(name);
+        }
+        return var;
     }
 }
