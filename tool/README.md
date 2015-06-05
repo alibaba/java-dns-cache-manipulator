@@ -66,10 +66,15 @@ DnsCache{cache=[DnsCacheEntry{host='bar.com', ips=[1.1.1.1], expiration=29227899
 list DONE.
 ```
 
-清空`DNS Cache`
+删除/清空`DNS Cache`
 ---------------
 
 ```bash
+# 删除一条DNS
+$ dcm -p 12345 rm baidu.com
+rm DONE.
+
+# 清除DNS
 $ dcm -p 12345 clear
 clear DONE.
 ```
