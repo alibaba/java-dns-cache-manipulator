@@ -41,9 +41,10 @@ usage: Options
 ---------------
 
 ```bash
-# 对进程ID是12345的Java进程，设置域名 baidu.com IP为 1.1.1.1
-$ dcm -p 12345 set baidu.com 1.1.1.1
-set DONE.
+# 对进程ID是12345的Java进程，设置域名 foo.com IP为 1.1.1.1
+$ dcm -p 12345 set foo.com 1.1.1.1
+# 对进程ID是12345的Java进程，设置域名 bar.com IP为 2.2.2.2 3.3.3.3(可以多个IP)
+$ dcm -p 12345 set bar.com 2.2.2.2 3.3.3.3
 ```
 
 查看`DNS Cache`内容
@@ -54,16 +55,21 @@ set DONE.
 ```bash
 # 对进程ID是12345的Java进程，获取域名 baidu.com 的DNS条目信息
 $ dcm -p 12345 get baidu.com
-DnsCacheEntry{host='baidu.com', ips=[1.1.1.1], expiration=292278994-08-17 15:12:55.807+0800}
-get DONE.
+baidu.com 220.181.57.217,180.149.132.47,123.125.114.144 2015-06-05T18:56:09.635+0800
+# 输出格式是 域名 IP列表（可能有多个IP） ​失效时间
 ```
 
 查看全部
 
 ```bash
 $ dcm -p 12345 list
-DnsCache{cache=[DnsCacheEntry{host='bar.com', ips=[1.1.1.1], expiration=292278994-08-17 15:12:55.807+0800}, DnsCacheEntry{host='foo.com', ips=[1.1.1.1], expiration=292278994-08-17 15:12:55.807+0800}, DnsCacheEntry{host='baidu.com', ips=[180.149.132.47, 123.125.114.144, 220.181.57.217], expiration=2015-06-03 17:49:42.077+0800}], negativeCache=[]}
-list DONE.
+Dns cache:
+    bar.com 2.2.2.2,3.3.3.3 292278994-08-17T15:12:55.807+0800
+    baidu.com 220.181.57.217,180.149.132.47,123.125.114.144 2015-06-05T19:00:30.514+0800
+    foo.com 1.1.1.1 292278994-08-17T15:12:55.807+0800
+Dns negative cache:
+# 输出包含Cache 和 Negative Cache的条目。条目缩进了4个空格。
+# 上面的示例中，Negative Cache为空。
 ```
 
 删除/清空`DNS Cache`
@@ -72,11 +78,8 @@ list DONE.
 ```bash
 # 删除一条DNS
 $ dcm -p 12345 rm baidu.com
-rm DONE.
-
-# 清除DNS
+# 清除所有DNS Cache
 $ dcm -p 12345 clear
-clear DONE.
 ```
 
 修改/查看`JVM`缺省的`DNS`的缓存时间
@@ -86,20 +89,13 @@ clear DONE.
 # 查看缓存时间，单位秒。-1表示永远缓存，0表示不缓存
 $ dcm -p 12345 getPolicy
 30
-getPolicy DONE.
-
 # 设置缓存时间
 $ dcm --pid 12345 setPolicy 5
-setPolicy DONE.
-
 # 查看未命中条目的缓存时间，单位秒。-1表示永远缓存，0表示不缓存
 $ dcm -p 12345 getNegativePolicy
 10
-getNegativePolicy DONE.
-
 # 修改未命中条目的缓存时间
 $ dcm -p 12345 setNegativePolicy 0
-setNegativePolicy DONE.
 ```
 
 :books: 相关资料
