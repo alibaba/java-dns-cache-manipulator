@@ -4,7 +4,7 @@
 
 	<groupId>com.alibaba</groupId>
 	<artifactId>dns-cache-manipulator-tool</artifactId>
-	<version>1.4.1-SNAPSHOT</version>
+	<version>1.4.1</version>
 	<packaging>jar</packaging>
 	<name>Java Dns Cache Manipulator(DCM) Tool</name>
 	<inceptionYear>2015</inceptionYear>
