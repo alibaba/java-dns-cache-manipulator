@@ -71,7 +71,6 @@ public class DcmAgentTest {
         assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("baidu.com").getIp());
 
         final List<String> content = FileUtils.readLines(outputFile);
-        assertThat(content.get(0), containsString("set DONE."));
         assertEquals(DcmAgent.DCM_AGENT_SUCCESS_MARK_LINE, content.get(content.size() - 1));
     }
 

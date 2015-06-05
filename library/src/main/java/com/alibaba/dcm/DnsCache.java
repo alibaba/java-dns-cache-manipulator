@@ -53,7 +53,6 @@ public class DnsCache implements Serializable {
         if (cache != null ? !cache.equals(dnsCache.cache) : dnsCache.cache != null)
             return false;
         return !(negativeCache != null ? !negativeCache.equals(dnsCache.negativeCache) : dnsCache.negativeCache != null);
-
     }
 
     @Override

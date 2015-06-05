@@ -68,7 +68,7 @@ public class DnsCacheEntryTest {
     @Test
     public void test_toString() throws Exception {
         final Date expiration = new Date();
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         final String date = dateFormat.format(expiration);
         DnsCacheEntry entry = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);
 

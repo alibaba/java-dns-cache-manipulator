@@ -3,7 +3,6 @@ package com.alibaba.dcm;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -34,7 +33,7 @@ public class DnsCacheTest {
     @Test
     public void test_toString() throws Exception {
         final Date expiration = new Date();
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         final String date = dateFormat.format(expiration);
         
         DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);

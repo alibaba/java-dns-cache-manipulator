@@ -1,5 +1,7 @@
 package com.alibaba.dcm.agent;
 
+import com.alibaba.dcm.DnsCache;
+import com.alibaba.dcm.DnsCacheEntry;
 import com.alibaba.dcm.DnsCacheManipulator;
 
 import java.io.FileOutputStream;
@@ -7,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,8 +21,8 @@ import java.util.Map;
  * @since 1.4.0
  */
 public class DcmAgent {
-    public static final String FILE = "file";
-    public static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
+    static final String FILE = "file";
+    static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
     public static void agentmain(String agentArgument) throws Exception {
         System.out.printf("%s: attached with agent argument: %s.\n", DcmAgent.class.getName(), agentArgument);
@@ -34,9 +37,11 @@ public class DcmAgent {
 
         FileOutputStream fileOutputStream = null;
         try {
-            final Map<String, List<String>> action2Arguments = parseArgument(agentArgument);
+            final Map<String, List<String>> action2Arguments = parseAgentArgument(agentArgument);
 
             PrintWriter filePrinter = null;
+
+            // Extract file argument, set file printer if needed
             if (action2Arguments.containsKey(FILE)) {
                 fileOutputStream = new FileOutputStream(action2Arguments.get(FILE).get(0), false);
                 final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
@@ -58,14 +63,7 @@ public class DcmAgent {
             for (Map.Entry<String, List<String>> entry : action2Arguments.entrySet()) {
                 final String action = entry.getKey();
                 final List<String> arguments = entry.getValue();
-
-                StringBuilder argumentString = new StringBuilder();
-                for (String argument : arguments) {
-                    if (argumentString.length() > 0) {
-                        argumentString.append(" ");
-                    }
-                    argumentString.append(argument);
-                }
+                final String argumentString = join(arguments);
 
                 if (!action2Method.containsKey(action)) {
                     System.out.printf("%s: Unknown action %s, ignore! action: %<s %s!\n", DcmAgent.class.getName(), action, argumentString);
@@ -80,10 +78,7 @@ public class DcmAgent {
                     printResult(action, result, filePrinter);
                 } catch (Exception e) {
                     allSuccess = false;
-
-                    final StringWriter w = new StringWriter();
-                    e.printStackTrace(new PrintWriter(w));
-                    final String exString = w.toString();
+                    final String exString = throwable2StackString(e);
 
                     System.out.printf("%s: Error to do action %s %s, cause: %s\n", DcmAgent.class.getName(), action, argumentString, exString);
                     if (filePrinter != null) {
@@ -106,7 +101,7 @@ public class DcmAgent {
         }
     }
 
-    static Map<String, List<String>> parseArgument(String argument) {
+    static Map<String, List<String>> parseAgentArgument(String argument) {
         final String[] split = argument.split("\\s+");
 
         int idx = 0;
@@ -130,47 +125,27 @@ public class DcmAgent {
         return action2Arguments;
     }
 
+    static String join(List<String> list) {
+        return join(list, " ");
+    }
+
+    static String join(List<String> list, String separator) {
+        StringBuilder ret = new StringBuilder();
+        for (String argument : list) {
+            if (ret.length() > 0) {
+                ret.append(separator);
+            }
+            ret.append(argument);
+        }
+        return ret.toString();
+    }
+
     static Object doAction(String action, String[] arguments) throws Exception {
         Method method = action2Method.get(action);
 
         final Class<?>[] parameterTypes = method.getParameterTypes();
         final Object[] methodArgs = convertStringArray2Arguments(action, arguments, parameterTypes);
         return method.invoke(null, methodArgs);
-    }
-
-    static void printResult(String action, Object result, PrintWriter writer) {
-        final Method method = action2Method.get(action);
-        if (method.getReturnType() != void.class) {
-            if (writer != null) {
-                writer.println(result.toString());
-            }
-        }
-        if (writer != null) {
-            writer.printf("%s DONE.\n", action);
-        }
-    }
-
-    static volatile Map<String, Method> action2Method;
-
-    static synchronized void initAction2Method() throws Exception {
-        if (action2Method != null) return;
-
-        Map<String, Method> map = new HashMap<String, Method>();
-        map.put("set", DnsCacheManipulator.class.getMethod("setDnsCache", String.class, String[].class));
-        map.put("get", DnsCacheManipulator.class.getMethod("getDnsCache", String.class));
-        map.put("rm", DnsCacheManipulator.class.getMethod("removeDnsCache", String.class));
-
-        map.put("list", DnsCacheManipulator.class.getMethod("getWholeDnsCache"));
-        map.put("clear", DnsCacheManipulator.class.getMethod("clearDnsCache"));
-
-        map.put("setPolicy", DnsCacheManipulator.class.getMethod("setDnsCachePolicy", int.class));
-        map.put("getPolicy", DnsCacheManipulator.class.getMethod("getDnsCachePolicy"));
-        map.put("setNegativePolicy", DnsCacheManipulator.class.getMethod("setDnsNegativeCachePolicy", int.class));
-        map.put("getNegativePolicy", DnsCacheManipulator.class.getMethod("getDnsNegativeCachePolicy"));
-
-        map.put(FILE, null); // FAKE KEY
-
-        action2Method = map;
     }
 
     static Object[] convertStringArray2Arguments(String action, String[] arguments, Class<?>[] parameterTypes) {
@@ -213,5 +188,66 @@ public class DcmAgent {
         }
 
         return methodArgs;
+    }
+
+    static void printResult(String action, Object result, PrintWriter writer) {
+        if (writer == null) {
+            return;
+        }
+
+        final Method method = action2Method.get(action);
+        if (method.getReturnType() == void.class) {
+            return;
+        }
+        if (result == null) {
+            writer.println((Object) null);
+        } else if (result instanceof DnsCacheEntry) {
+            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            DnsCacheEntry entry = (DnsCacheEntry) result;
+            writer.printf("%s %s %s\n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
+        } else if (result instanceof DnsCache) {
+            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            DnsCache dnsCache = (DnsCache) result;
+
+            writer.println("Dns cache:");
+            for (DnsCacheEntry entry : dnsCache.getCache()) {
+                writer.printf("    %s %s %s\n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
+            }
+            writer.println("Dns negative cache: ");
+            for (DnsCacheEntry entry : dnsCache.getNegativeCache()) {
+                writer.printf("    %s %s %s\n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
+            }
+        } else {
+            writer.println(result.toString());
+        }
+    }
+
+    static String throwable2StackString(Throwable e) {
+        final StringWriter w = new StringWriter();
+        e.printStackTrace(new PrintWriter(w, true));
+        return w.toString();
+    }
+
+    static volatile Map<String, Method> action2Method;
+
+    static synchronized void initAction2Method() throws Exception {
+        if (action2Method != null) return;
+
+        Map<String, Method> map = new HashMap<String, Method>();
+        map.put("set", DnsCacheManipulator.class.getMethod("setDnsCache", String.class, String[].class));
+        map.put("get", DnsCacheManipulator.class.getMethod("getDnsCache", String.class));
+        map.put("rm", DnsCacheManipulator.class.getMethod("removeDnsCache", String.class));
+
+        map.put("list", DnsCacheManipulator.class.getMethod("getWholeDnsCache"));
+        map.put("clear", DnsCacheManipulator.class.getMethod("clearDnsCache"));
+
+        map.put("setPolicy", DnsCacheManipulator.class.getMethod("setDnsCachePolicy", int.class));
+        map.put("getPolicy", DnsCacheManipulator.class.getMethod("getDnsCachePolicy"));
+        map.put("setNegativePolicy", DnsCacheManipulator.class.getMethod("setDnsNegativeCachePolicy", int.class));
+        map.put("getNegativePolicy", DnsCacheManipulator.class.getMethod("getDnsNegativeCachePolicy"));
+
+        map.put(FILE, null); // FAKE KEY
+
+        action2Method = map;
     }
 }

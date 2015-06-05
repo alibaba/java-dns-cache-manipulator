@@ -45,7 +45,7 @@ public final class DnsCacheEntry implements Serializable {
 
     @Override
     public String toString() {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
         return "DnsCacheEntry{" +
                 "host='" + host + '\'' +
