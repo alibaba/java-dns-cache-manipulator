@@ -18,9 +18,9 @@ Java Dns Cache Manipulator(DCM) Library
 - 设置/重置`DNS`（不会再去`Lookup DNS`）
     - 可以设置单条
     - 或是通过`Properties`文件批量设置
-- 查看`DNS Cache`内容
-- 删除一条`DNS Cache`（即重新`Lookup DNS`）
 - 清空`DNS Cache`（即所有的域名重新`Lookup DNS`）
+- 删除一条`DNS Cache`（即重新`Lookup DNS`）
+- 查看`DNS Cache`内容
 - 修改/查看`JVM`缺省的`DNS`的缓存时间
 
 :art: 需求场景
@@ -99,6 +99,15 @@ public static void beforeClass() throws Exception {
 DnsCacheManipulator.clearDnsCache();
 ```
 
+删除一条`DNS Cache`
+----------------------------------
+
+即重新`Lookup DNS`。
+
+```java
+DnsCacheManipulator.removeDnsCache("baidu.com");
+```
+
 查看`JVM DNS Cache`
 ----------------------------------
 
@@ -125,8 +134,9 @@ DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 使用注意
 ----------------------------------
 
-对于已经完成解析保存了`IP`的逻辑，修改`JVM DNS`缓存，不会生效！可以重新创建 连接或`Client`解决。
-
+- 域名不区分大小写，域名会统一转成小写，再进入`DNS Cache`。  
+    其中一个引发的现象是，`DNS`查询结果的域名会和输入的域名大小写不同，如果输入的域名有大写字母。
+- 对于已经完成解析保存了`IP`的逻辑，修改`JVM DNS`缓存，不会生效！可以重新创建 连接或`Client`解决。  
 如对于`HttpClient`:
 
 ```java
