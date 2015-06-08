@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>com.sun</groupId>
 			<artifactId>tools</artifactId>
-			<version>1.6.0</version>
+			<version>${java.version}</version>
 			<scope>system</scope>
 			<systemPath>${tools-jar-path}</systemPath>
 		</dependency>
@@ -129,7 +129,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>use-standard-tools-jar</id>
+			<id>standard-jdk</id>
 			<activation>
 				<file>
 					<exists>${java.home}/../lib/tools.jar</exists>
@@ -140,8 +140,8 @@
 			</properties>
 		</profile>
 		<profile>
-			<!-- Only for mac brewed jdk, tools.jar is put at ${java.home}/../Classes/classes.jar. -->
-			<id>use-classes-jar-instead-of-tools-jar</id>
+			<!-- Only for apple brewed jdk, tools.jar is put at ${java.home}/../Classes/classes.jar. -->
+			<id>apple-jdk</id>
 			<activation>
 				<file>
 					<exists>${java.home}/../Classes/classes.jar</exists>
