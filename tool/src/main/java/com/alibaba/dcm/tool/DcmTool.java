@@ -1,6 +1,7 @@
 package com.alibaba.dcm.tool;
 
 import com.sun.tools.attach.VirtualMachine;
+import com.sun.tools.attach.VirtualMachineDescriptor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -9,8 +10,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import static java.lang.System.exit;
 
@@ -59,13 +63,6 @@ public class DcmTool {
             return;
         }
 
-        final String pid; // TODO improve command, if no pid, list local jvm for user
-        if (cmd.hasOption('p')) {
-            pid = cmd.getOptionValue('p');
-        } else {
-            throw new IllegalStateException("required pid argument!");
-        }
-
         final String[] arguments = cmd.getArgs();
         if (arguments.length < 1) {
             System.out.println("No Action! Available action: " + actionList);
@@ -75,6 +72,13 @@ public class DcmTool {
         final String action = arguments[0].trim();
         if (!actionList.contains(action)) {
             throw new IllegalStateException("Unknown action " + action + ". Available action: " + actionList);
+        }
+
+        final String pid;
+        if (cmd.hasOption('p')) {
+            pid = cmd.getOptionValue('p');
+        } else {
+            pid = selectProcess();
         }
 
         StringBuilder agentArgument = new StringBuilder();
@@ -115,10 +119,47 @@ public class DcmTool {
     }
 
     static String getConfig(String name) {
-        String var = System.getenv(name);
+        String var = System.getProperty(name);
         if (var == null) {
-            var = System.getProperty(name);
+            var = System.getenv(name);
         }
         return var;
+    }
+
+    static String selectProcess() {
+        System.out.println("Which java process to attache:");
+        final List<VirtualMachineDescriptor> list = VirtualMachine.list();
+
+        // remove current process
+        for (Iterator<VirtualMachineDescriptor> iterator = list.iterator(); iterator.hasNext(); ) {
+            VirtualMachineDescriptor vm = iterator.next();
+            if (vm.id().equals(pid())) iterator.remove();
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            final VirtualMachineDescriptor vm = list.get(i);
+            System.out.printf("%d) %-5s %s\n", i + 1, vm.id(), vm.displayName());
+        }
+
+        Scanner in = new Scanner(System.in);
+        while (true) {
+            System.out.print("?# ");
+            final String select = in.nextLine();
+            try {
+                final int idx = Integer.parseInt(select);
+                if (idx > 0 && idx <= list.size()) {
+                    return list.get(idx - 1).id();
+                }
+                System.out.println("Invalid selection!");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, not number!");
+            }
+        }
+    }
+
+    static String pid() {
+        final String name = ManagementFactory.getRuntimeMXBean().getName();
+        final int idx = name.indexOf("@");
+        return name.substring(0, idx);
     }
 }
