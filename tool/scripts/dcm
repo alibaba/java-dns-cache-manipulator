@@ -169,4 +169,4 @@ cleanupWhenExit() {
 }
 trap "cleanupWhenExit" EXIT
 
-"$JAVACMD" -classpath $CLASSPATH com.alibaba.dcm.tool.DcmTool "$@"
+"$JAVACMD" -Xmx128m $DCM_OPTS -classpath $CLASSPATH com.alibaba.dcm.tool.DcmTool "$@"
