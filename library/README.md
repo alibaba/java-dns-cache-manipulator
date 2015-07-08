@@ -52,13 +52,13 @@ Java Dns Cache Manipulator(DCM) Library
 ----------------------------------
 
 ```java
-DnsCacheManipulator.setDnsCache("www.hello-world.com", "192.168.10.113");
+DnsCacheManipulator.setDnsCache("www.hello-world.com", "192.168.1.1");
 
 // 之后Java代码中使用到域名都会解析成上面指定的IP。
 // 下面是一个简单获取域名对应的IP，演示一下：
 
 String ip = InetAddress.getByName("www.hello-world.com").getHostAddress();
-// ip = "192.168.10.113"
+// ip = "192.168.1.1"
 ```
 
 通过`dns-cache.properties`文件批量配置
@@ -73,8 +73,8 @@ String ip = InetAddress.getByName("www.hello-world.com").getHostAddress();
 ```bash
 # 配置格式：
 # <host> = <ip>
-www.hello-world.com=192.168.10.113
-www.foo.com=192.168.10.2
+www.hello-world.com=192.168.1.1
+www.foo.com=192.168.1.2
 ```
 
 然后通过下面的一行代码完成批量设置：
@@ -146,7 +146,7 @@ client.executeMethod(m1);
 String content = m1.getResponseBodyAsString();
 
 // 修改DNS，绑定到自己的机器
-DnsCacheManipulator.setDnsCache("www.baidu.com", "192.168.10.2");
+DnsCacheManipulator.setDnsCache("www.baidu.com", "192.168.1.1");
 
 // 重新执行m1，仍然是老结果
 client.executeMethod(m1);
@@ -181,7 +181,7 @@ oraclejdk8 64-Bit | windows server 2012 r2 | appveyor |
 oraclejdk8 32-Bit | windows server 2012 r2 | appveyor |
 
 PS：  
-感谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供持续集成环境。
+感谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供了持续集成环境。
 
 :electric_plug: Java API Docs
 =====================================
@@ -197,11 +197,11 @@ PS：
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.1</version>
 </dependency>
 ```
 
-可以在[search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.alibaba%22%20AND%20a%3A%22dns-cache-manipulator%22)查看可用的版本。
+可以在[search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.alibaba%22%20AND%20a%3A%22dns-cache-manipulator%22)查看最新的版本。
 
 :mortar_board: Developer Guide
 =====================================
