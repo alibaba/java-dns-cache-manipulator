@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
@@ -156,26 +155,10 @@ public class InetAddressCacheUtil {
     static InetAddress[] toInetAddressArray(String host, String[] ips) throws UnknownHostException {
         InetAddress[] addresses = new InetAddress[ips.length];
         for (int i = 0; i < addresses.length; i++) {
-            addresses[i] = InetAddress.getByAddress(host, ip2ByteArray(ips[i]));
+            addresses[i] = InetAddress.getByAddress(host, IpParserUtil.ip2ByteArray(ips[i]));
         }
 
         return addresses;
-    }
-
-    private static Pattern PATTERN_DOT = Pattern.compile("\\.");
-
-    static byte[] ip2ByteArray(String ip) {
-        final String[] ipParts = PATTERN_DOT.split(ip);
-
-        byte[] address = new byte[ipParts.length];
-        for (int i = 0; i < ipParts.length; i++) {
-            final int part = Integer.parseInt(ipParts[i]);
-            if (part < 0 || part > 255) {
-                throw new IllegalStateException(ipParts[i] + " is not a byte!");
-            }
-            address[i] = (byte) part;
-        }
-        return address;
     }
 
     @Nullable
