@@ -10,7 +10,7 @@ Java Dns Cache Manipulator(DCM) Library
 [![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-:point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`。
+:point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`，支持`IPv6`。
 
 :wrench: 功能
 =====================================
@@ -52,13 +52,16 @@ Java Dns Cache Manipulator(DCM) Library
 ----------------------------------
 
 ```java
-DnsCacheManipulator.setDnsCache("www.hello-world.com", "192.168.1.1");
+DnsCacheManipulator.setDnsCache("www.hello.com", "192.168.1.1");
+DnsCacheManipulator.setDnsCache("www.world.com", "1234:5678:0:0:0:0:0:200e"); // 支持IPv6设备
 
 // 之后Java代码中使用到域名都会解析成上面指定的IP。
 // 下面是一个简单获取域名对应的IP，演示一下：
 
-String ip = InetAddress.getByName("www.hello-world.com").getHostAddress();
+String ip = InetAddress.getByName("www.hello.com").getHostAddress();
 // ip = "192.168.1.1"
+String ipv6 = InetAddress.getByName("www.world.com").getHostAddress();
+// ipv6 = "1234:5678:0:0:0:0:0:200e"
 ```
 
 通过`dns-cache.properties`文件批量配置
