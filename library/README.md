@@ -200,7 +200,7 @@ PS：
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.4.1</version>
+    <version>1.5.0</version>
 </dependency>
 ```
 
