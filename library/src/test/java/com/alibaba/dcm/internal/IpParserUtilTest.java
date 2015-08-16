@@ -63,7 +63,7 @@ public class IpParserUtilTest {
 
     @Test
     public void test_ip2ByteArray_ipv6_exception() throws Exception {
-        // ipv4 with char
+        // ipv6 with char
         try {
             IpParserUtil.ip2ByteArray("2404:6800:4005:80a:0:0:0:200z");
             fail();
@@ -71,7 +71,7 @@ public class IpParserUtilTest {
             expected.printStackTrace();
         }
         
-        // ipv4_minus
+        // ipv6 minus
         try {
             IpParserUtil.ip2ByteArray("-2404:6800:4005:80a:0:0:0:200e");
             fail();
@@ -79,7 +79,7 @@ public class IpParserUtilTest {
             expected.printStackTrace();
         }
 
-        // ipv4 too long
+        // ipv6 too long
         try {
             IpParserUtil.ip2ByteArray("2404:6800:4005:80a:0:0:0:200:123");
             fail();

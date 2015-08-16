@@ -53,7 +53,7 @@ Java Dns Cache Manipulator(DCM) Library
 
 ```java
 DnsCacheManipulator.setDnsCache("www.hello.com", "192.168.1.1");
-DnsCacheManipulator.setDnsCache("www.world.com", "1234:5678:0:0:0:0:0:200e"); // 支持IPv6设备
+DnsCacheManipulator.setDnsCache("www.world.com", "1234:5678:0:0:0:0:0:200e"); // 支持IPv6地址
 
 // 之后Java代码中使用到域名都会解析成上面指定的IP。
 // 下面是一个简单获取域名对应的IP，演示一下：

@@ -26,7 +26,7 @@ Java Dns Cache Manipulator Tool
 下载
 ----------
 
-在[项目Release页面](https://github.com/alibaba/java-dns-cache-manipulator/releases)下载文件`dcm-tool-x.x.x.tar.gz`。
+在[项目Release页面](https://github.com/alibaba/java-dns-cache-manipulator/releases)下载文件`dcm-x.x.x.tar.gz`。
 
 解压后，运行`bin`目录下的`dcm`脚本（`Shell脚本`）。
 
