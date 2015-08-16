@@ -81,6 +81,10 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.5.4</version>
+				<configuration>
+					<finalName>dcm-${project.version}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
+				</configuration>
 				<executions>
 					<execution>
 						<id>tgz-assembly</id>
