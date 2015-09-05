@@ -39,6 +39,19 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.versioneye</groupId>
+				<artifactId>versioneye-maven-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<propertiesPath>${basedir}/versioneye.properties</propertiesPath>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<profiles>
 		<profile>
 			<id>travis</id>
@@ -63,7 +76,7 @@
 					<plugin>
 						<groupId>org.eluder.coveralls</groupId>
 						<artifactId>coveralls-maven-plugin</artifactId>
-						<version>3.1.0</version>
+						<version>4.0.0</version>
 					</plugin>
 				</plugins>
 			</build>
