@@ -175,7 +175,7 @@ openjdk6 64-Bit | Linux | travis-ci |
 oraclejdk7 64-Bit | Linux | travis-ci |
 openjdk7 64-Bit | Linux | travis-ci |
 oraclejdk8 64-Bit | Linux | travis-ci |
-applejdk6 64-Bit | Mac | 个人Mac | [jdk6及以下，Apple提供了自己的Java版本](https://java.com/zh_CN/download/faq/java_mac.xml)。
+applejdk6 64-Bit | Mac | 个人Mac | jdk6由Apple[提供](https://java.com/zh_CN/download/faq/java_mac.xml)，[下载地址](https://support.apple.com/kb/DL1572?locale=zh_CN)。
 oraclejdk7 64-Bit | Mac | 个人Mac | 从jdk7开始，Mac jdk直接在`Oracle`下载。
 oraclejdk8 64-Bit | Mac | 个人Mac |
 oraclejdk7 64-Bit | windows server 2012 r2 | appveyor |
