@@ -3,10 +3,10 @@ Java Dns Cache Manipulator(DCM) Library
 
 [![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/alibaba/java-dns-cache-manipulator)
 [![Windows Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=windows%20build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
-[![Coverage Status](https://coveralls.io/repos/alibaba/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/r/alibaba/java-dns-cache-manipulator?branch=master)  
+[![Coverage Status](https://coveralls.io/repos/alibaba/java-dns-cache-manipulator/badge.svg?branch=master&service=github)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)  
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/)
 [![GitHub release](https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases)
-[![Dependency Status](https://www.versioneye.com/user/projects/55eb1371a65c8c000e0449d3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55eb1371a65c8c000e0449d3)  
+[![Dependency Status](https://www.versioneye.com/user/projects/55eb1371a65c8c000e0449d3/badge.svg)](https://www.versioneye.com/user/projects/55eb1371a65c8c000e0449d3)  
 [![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
