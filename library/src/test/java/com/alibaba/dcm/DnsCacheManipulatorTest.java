@@ -1,5 +1,6 @@
 package com.alibaba.dcm;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,11 +14,7 @@ import java.util.Set;
 
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -50,6 +47,18 @@ public class DnsCacheManipulatorTest {
         DnsCacheManipulator.loadDnsCacheConfig("my-dns-cache.properties");
         final String ip = InetAddress.getByName(DOMAIN2).getHostAddress();
         assertEquals(IP2, ip);
+    }
+
+    @Test
+    public void test_setMultiIp() throws Exception {
+        DnsCacheManipulator.setDnsCache("multi.ip.com", "1.1.1.1", "2.2.2.2");
+        String ip = InetAddress.getByName("multi.ip.com").getHostAddress();
+        assertEquals("1.1.1.1", ip);
+
+        InetAddress[] all = InetAddress.getAllByName("multi.ip.com");
+        assertEquals(2, all.length);
+        String[] ips = {all[0].getHostAddress(), all[1].getHostAddress()};
+        assertArrayEquals(new String[]{"1.1.1.1", "2.2.2.2"}, ips);
     }
 
     @Test
