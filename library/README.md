@@ -72,7 +72,7 @@ String ipHw = InetAddress.getByName("www.hello-world.com").getHostAddress();
 InetAddress[] allIps = InetAddress.getAllByName("www.hello-world.com");
 // 上面读到设置的多个IP
 
-// 设置过期时间，单元毫秒
+// 设置失效时间，单元毫秒
 DnsCacheManipulator.setDnsCache(3600 * 1000, "www.hello-hell.com", "192.168.1.1", "192.168.1.2");
 ```
 
@@ -120,7 +120,7 @@ DnsCacheManipulator.clearDnsCache();
 即重新`Lookup DNS`。
 
 ```java
-DnsCacheManipulator.removeDnsCache("baidu.com");
+DnsCacheManipulator.removeDnsCache("aliyun.com");
 ```
 
 查看`JVM DNS Cache`
@@ -156,19 +156,19 @@ DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 
 ```java
 HttpClient client = new HttpClient();
-GetMethod m1 = new GetMethod("http://www.baidu.com");
+GetMethod m1 = new GetMethod("http://www.aliyun.com");
 client.executeMethod(m1);
 String content = m1.getResponseBodyAsString();
 
 // 修改DNS，绑定到自己的机器
-DnsCacheManipulator.setDnsCache("www.baidu.com", "192.168.1.1");
+DnsCacheManipulator.setDnsCache("www.aliyun.com", "192.168.1.1");
 
 // 重新执行m1，仍然是老结果
 client.executeMethod(m1);
 String content = m1.getResponseBodyAsString();
 
 // 重新创建GetMethod，才能得到自己机器上的结果
-GetMethod m2 = new GetMethod("http://www.baidu.com");
+GetMethod m2 = new GetMethod("http://www.aliyun.com");
 client.executeMethod(m2);
 content = m2.getResponseBodyAsString();
 ```
@@ -177,26 +177,6 @@ content = m2.getResponseBodyAsString();
 ----------------------------------
 
 参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
-
-经过测试的`JDK`
-----------------------------------
-
-JDK | 系统 | On | 备注
---- | --- | --- | ----
-openjdk6 64-Bit | Linux | travis-ci |
-oraclejdk7 64-Bit | Linux | travis-ci |
-openjdk7 64-Bit | Linux | travis-ci |
-oraclejdk8 64-Bit | Linux | travis-ci |
-applejdk6 64-Bit | Mac | 个人Mac | jdk6由Apple[提供](https://java.com/zh_CN/download/faq/java_mac.xml)，[下载地址](https://support.apple.com/kb/DL1572?locale=zh_CN)。
-oraclejdk7 64-Bit | Mac | 个人Mac | 从jdk7开始，Mac jdk直接在`Oracle`下载。
-oraclejdk8 64-Bit | Mac | 个人Mac |
-oraclejdk7 64-Bit | windows server 2012 r2 | appveyor |
-oraclejdk7 32-Bit | windows server 2012 r2 | appveyor |
-oraclejdk8 64-Bit | windows server 2012 r2 | appveyor |
-oraclejdk8 32-Bit | windows server 2012 r2 | appveyor |
-
-PS：  
-感谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供了持续集成环境。
 
 :electric_plug: Java API Docs
 =====================================
@@ -217,6 +197,26 @@ PS：
 ```
 
 可以在[search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.alibaba%22%20AND%20a%3A%22dns-cache-manipulator%22)查看最新的版本。
+
+经过测试的`JDK`
+----------------------------------
+
+JDK | 系统 | On | 备注
+--- | --- | --- | ----
+openjdk6 64-Bit | Linux | travis-ci |
+oraclejdk7 64-Bit | Linux | travis-ci |
+openjdk7 64-Bit | Linux | travis-ci |
+oraclejdk8 64-Bit | Linux | travis-ci |
+applejdk6 64-Bit | Mac | 个人Mac | jdk6由Apple[提供](https://java.com/zh_CN/download/faq/java_mac.xml)，[下载地址](https://support.apple.com/kb/DL1572?locale=zh_CN)。
+oraclejdk7 64-Bit | Mac | 个人Mac | 从jdk7开始，Mac jdk直接在`Oracle`下载。
+oraclejdk8 64-Bit | Mac | 个人Mac |
+oraclejdk7 64-Bit | windows server 2012 r2 | appveyor |
+oraclejdk7 32-Bit | windows server 2012 r2 | appveyor |
+oraclejdk8 64-Bit | windows server 2012 r2 | appveyor |
+oraclejdk8 32-Bit | windows server 2012 r2 | appveyor |
+
+PS：  
+感谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供了持续集成环境。
 
 :mortar_board: Developer Guide
 =====================================
