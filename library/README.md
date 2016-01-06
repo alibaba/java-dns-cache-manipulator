@@ -12,6 +12,32 @@ Java Dns Cache Manipulator(DCM) Library
 
 :point_right: 通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`，支持`IPv6`。
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [:wrench: 功能](#wrench-%E5%8A%9F%E8%83%BD)
+- [:art: 需求场景](#art-%E9%9C%80%E6%B1%82%E5%9C%BA%E6%99%AF)
+- [:busts_in_silhouette: User Guide](#busts_in_silhouette-user-guide)
+  - [直接设置](#%E7%9B%B4%E6%8E%A5%E8%AE%BE%E7%BD%AE)
+  - [通过`dns-cache.properties`文件批量配置](#%E9%80%9A%E8%BF%87dns-cacheproperties%E6%96%87%E4%BB%B6%E6%89%B9%E9%87%8F%E9%85%8D%E7%BD%AE)
+  - [清空`JVM DNS Cache`](#%E6%B8%85%E7%A9%BAjvm-dns-cache)
+  - [删除一条`DNS Cache`](#%E5%88%A0%E9%99%A4%E4%B8%80%E6%9D%A1dns-cache)
+  - [查看`JVM DNS Cache`](#%E6%9F%A5%E7%9C%8Bjvm-dns-cache)
+  - [修改/查看`JVM`缺省的`DNS`的缓存时间](#%E4%BF%AE%E6%94%B9%E6%9F%A5%E7%9C%8Bjvm%E7%BC%BA%E7%9C%81%E7%9A%84dns%E7%9A%84%E7%BC%93%E5%AD%98%E6%97%B6%E9%97%B4)
+  - [使用注意](#%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F)
+  - [更多详细功能](#%E6%9B%B4%E5%A4%9A%E8%AF%A6%E7%BB%86%E5%8A%9F%E8%83%BD)
+- [:electric_plug: Java API Docs](#electric_plug-java-api-docs)
+- [:cookie: 依赖](#cookie-%E4%BE%9D%E8%B5%96)
+- [:eyeglasses: 经过测试的`JDK`](#eyeglasses-%E7%BB%8F%E8%BF%87%E6%B5%8B%E8%AF%95%E7%9A%84jdk)
+- [:mortar_board: Developer Guide](#mortar_board-developer-guide)
+  - [如何修改`JVM`的`DNS Cache`](#%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9jvm%E7%9A%84dns-cache)
+  - [注意修改`JVM`的`DNS Cache`的线程安全问题](#%E6%B3%A8%E6%84%8F%E4%BF%AE%E6%94%B9jvm%E7%9A%84dns-cache%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98)
+  - [需要测试不同版本`JDK`](#%E9%9C%80%E8%A6%81%E6%B5%8B%E8%AF%95%E4%B8%8D%E5%90%8C%E7%89%88%E6%9C%ACjdk)
+- [:books: 相关资料](#books-%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 :wrench: 功能
 =====================================
 
@@ -55,7 +81,7 @@ Java Dns Cache Manipulator(DCM) Library
 DnsCacheManipulator.setDnsCache("www.hello.com", "192.168.1.1");
 DnsCacheManipulator.setDnsCache("www.world.com", "1234:5678:0:0:0:0:0:200e"); // 支持IPv6地址
 
-// 之后Java代码中的域名解析都会是上面设定的IP。
+// 上面设置全局生效，之后Java中的所有的域名解析逻辑都会是上面设定的IP。
 // 下面用一个简单获取域名对应的IP，来演示一下：
 
 String ip = InetAddress.getByName("www.hello.com").getHostAddress();
@@ -198,8 +224,8 @@ content = m2.getResponseBodyAsString();
 
 可以在[search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.alibaba%22%20AND%20a%3A%22dns-cache-manipulator%22)查看最新的版本。
 
-经过测试的`JDK`
-----------------------------------
+:eyeglasses: 经过测试的`JDK`
+==================================
 
 JDK | 系统 | On | 备注
 --- | --- | --- | ----

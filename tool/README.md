@@ -11,6 +11,21 @@ Java Dns Cache Manipulator Tool
 
 :point_right: 修改/查看 运行中`JVM`进程的`DNS Cache`，支持`IPv6`。
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [:wrench: 功能](#wrench-%E5%8A%9F%E8%83%BD)
+- [:busts_in_silhouette: User Guide](#busts_in_silhouette-user-guide)
+  - [下载](#%E4%B8%8B%E8%BD%BD)
+  - [设置/重置`DNS`](#%E8%AE%BE%E7%BD%AE%E9%87%8D%E7%BD%AEdns)
+  - [查看`DNS Cache`内容](#%E6%9F%A5%E7%9C%8Bdns-cache%E5%86%85%E5%AE%B9)
+  - [删除/清空`DNS Cache`](#%E5%88%A0%E9%99%A4%E6%B8%85%E7%A9%BAdns-cache)
+  - [修改/查看`JVM`缺省的`DNS`的缓存时间](#%E4%BF%AE%E6%94%B9%E6%9F%A5%E7%9C%8Bjvm%E7%BC%BA%E7%9C%81%E7%9A%84dns%E7%9A%84%E7%BC%93%E5%AD%98%E6%97%B6%E9%97%B4)
+- [:books: 相关资料](#books-%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 :wrench: 功能
 =================================
 
