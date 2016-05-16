@@ -44,9 +44,9 @@
 			<plugin>
 				<groupId>com.versioneye</groupId>
 				<artifactId>versioneye-maven-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>3.9.2</version>
 				<configuration>
-					<propertiesPath>${basedir}/versioneye.properties</propertiesPath>
+					<projectId>55eb1377a65c8c000e044a1c</projectId>
 				</configuration>
 			</plugin>
 		</plugins>
