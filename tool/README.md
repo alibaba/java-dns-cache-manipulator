@@ -4,7 +4,7 @@ Java Dns Cache Manipulator Tool
 [![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/alibaba/java-dns-cache-manipulator)
 [![Windows Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=windows%20build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
 [![Coverage Status](https://coveralls.io/repos/github/alibaba/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)  
-[![GitHub release (by Asset)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.5.1/dcm-1.5.1.tar.gz.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.5.1/dcm-1.5.1.tar.gz)
+[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.5.1/dcm-1.5.1.tar.gz.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.5.1/dcm-1.5.1.tar.gz)
 [![GitHub release](https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases)
 [![Dependency Status](https://www.versioneye.com/user/projects/55eb1374a65c8c000e0449fb/badge.svg)](https://www.versioneye.com/user/projects/55eb1374a65c8c000e0449fb)  
 [![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
@@ -42,7 +42,7 @@ Java Dns Cache Manipulator Tool
 下载
 ----------
 
-在[项目Release页面](https://github.com/alibaba/java-dns-cache-manipulator/releases)下载文件`dcm-x.x.x.tar.gz`。
+[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.5.1/dcm-1.5.1.tar.gz.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.5.1/dcm-1.5.1.tar.gz) 下载文件`dcm-x.x.x.tar.gz`。
 
 解压后，运行`bin`目录下的`dcm`脚本（`Shell脚本`）。
 
