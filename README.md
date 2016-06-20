@@ -14,8 +14,8 @@ Java Dns Cache Manipulator(DCM)
 包含子工程：
 
 - [Java Dns Cache Manipulator Library](library)  
-    通过代码直接设置`Java`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`，支持`IPv6`。
+    用编码的方式设置/查看`JVM`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`，支持`IPv6`。
 - [Java Dns Cache Manipulator Tool](tool)  
-    用于修改/查看 运行中`JVM`进程的`DNS Cache`。
+    用于设置/查看 运行中`JVM`进程的`DNS Cache`。
 
-使用文档参见子工程文档。
+使用文档进入上面的子工程查看。
