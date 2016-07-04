@@ -1,6 +1,8 @@
 Java Dns Cache Manipulator(DCM)
 =======================================
 
+[![Join the chat at https://gitter.im/alibaba/java-dns-cache-manipulator](https://badges.gitter.im/alibaba/java-dns-cache-manipulator.svg)](https://gitter.im/alibaba/java-dns-cache-manipulator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/alibaba/java-dns-cache-manipulator)
 [![Windows Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=windows%20build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
 [![Coverage Status](https://coveralls.io/repos/github/alibaba/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)  
