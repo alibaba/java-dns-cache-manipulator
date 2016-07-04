@@ -8,6 +8,7 @@ Java Dns Cache Manipulator(DCM)
 [![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.5.1/dcm-1.5.1.tar.gz.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.5.1/dcm-1.5.1.tar.gz)
 [![GitHub release](https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases)
 [![Dependency Status](https://www.versioneye.com/user/projects/55eb1377a65c8c000e044a1c/badge.svg)](https://www.versioneye.com/user/projects/55eb1377a65c8c000e044a1c)  
+[![Join the chat at https://gitter.im/alibaba/java-dns-cache-manipulator](https://badges.gitter.im/alibaba/java-dns-cache-manipulator.svg)](https://gitter.im/alibaba/java-dns-cache-manipulator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
