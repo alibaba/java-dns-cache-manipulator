@@ -1,6 +1,5 @@
 package com.alibaba.dcm;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,19 +13,24 @@ import java.util.Set;
 
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class DnsCacheManipulatorTest {
-    static final String DOMAIN1 = "www.hello1.com";
-    static final String IP1 = "42.42.41.41";
-    static final String DOMAIN2 = "www.hello2.com";
-    static final String IP2 = "42.42.41.42";
-    public static final String IP3 = "42.42.43.43";
+    private static final String DOMAIN1 = "www.hello1.com";
+    private static final String IP1 = "42.42.41.41";
+    private static final String DOMAIN2 = "www.hello2.com";
+    private static final String IP2 = "42.42.41.42";
+    private static final String IP3 = "42.42.43.43";
 
-    static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-7352jt-12559-AZ-7524087.com";
+    private static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-7352jt-12559-AZ-7524087.com";
 
     @Before
     public void before() throws Exception {
@@ -98,7 +102,7 @@ public class DnsCacheManipulatorTest {
         assertEquals(expected, getAllHostAddresses(domain));
     }
 
-    static Set<String> getAllHostAddresses(String domain) throws Exception {
+    private static Set<String> getAllHostAddresses(String domain) throws Exception {
         final InetAddress[] allByName = InetAddress.getAllByName(domain);
         Set<String> all = new HashSet<String>();
         for (InetAddress inetAddress : allByName) {
@@ -120,13 +124,7 @@ public class DnsCacheManipulatorTest {
 
         DnsCacheManipulator.removeDnsCache(DOMAIN_NOT_EXISTED);
 
-        try {
-            InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
-            fail();
-        } catch (UnknownHostException expected) {
-            System.out.println(expected.toString());
-            assertTrue(true);
-        }
+        assertDomainNotExisted();
 
 
         System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s\n",
@@ -137,6 +135,16 @@ public class DnsCacheManipulatorTest {
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
         assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost());
+    }
+
+    private static void assertDomainNotExisted() {
+        try {
+            InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
+            fail();
+        } catch (UnknownHostException expected) {
+            System.out.println(expected.toString());
+            assertTrue(true);
+        }
     }
 
     @Test
@@ -152,13 +160,7 @@ public class DnsCacheManipulatorTest {
 
         sleep(100);
 
-        try {
-            InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
-            fail();
-        } catch (UnknownHostException expected) {
-            System.out.println(expected.toString());
-            assertTrue(true);
-        }
+        assertDomainNotExisted();
 
         System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s\n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());

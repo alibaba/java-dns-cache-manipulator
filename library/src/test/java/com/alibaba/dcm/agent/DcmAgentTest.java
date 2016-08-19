@@ -21,8 +21,8 @@ import static org.junit.Assert.assertTrue;
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class DcmAgentTest {
-    File outputFile;
-    String outputFilePath;
+    private File outputFile;
+    private String outputFilePath;
 
     @Before
     public void setUp() throws Exception {

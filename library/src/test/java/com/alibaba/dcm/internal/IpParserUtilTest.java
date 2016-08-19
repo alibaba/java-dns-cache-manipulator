@@ -88,7 +88,7 @@ public class IpParserUtilTest {
         }
     }
 
-    static InetAddress getInetAddressByGetAllByName(String ip) throws Exception {
+    private static InetAddress getInetAddressByGetAllByName(String ip) throws Exception {
         final InetAddress[] addresses = InetAddress.getAllByName(ip);
         assertEquals(1, addresses.length);
         return addresses[0];
