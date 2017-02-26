@@ -30,6 +30,8 @@ public class DnsCacheManipulatorTest {
     private static final String DOMAIN2 = "www.hello2.com";
     private static final String IP2 = "42.42.41.42";
     private static final String IP3 = "42.42.43.43";
+    private static final String DOMAIN_CUSTOMIZED = "www.customized.com";
+    private static final String IP_CUSTOMIZED = "42.42.42.42";
 
     private static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-7352jt-12559-AZ-7524087.com";
 
@@ -56,6 +58,16 @@ public class DnsCacheManipulatorTest {
         DnsCacheManipulator.loadDnsCacheConfig();
         final String ip = InetAddress.getByName(DOMAIN1).getHostAddress();
         assertEquals(IP1, ip);
+    }
+
+    @Test
+    public void test_loadDnsCacheConfig_from_D_Option() throws Exception {
+        final String key = "dcm.config.filename";
+        System.setProperty(key, "customized-dns-cache.properties");
+        DnsCacheManipulator.loadDnsCacheConfig();
+        final String ip = InetAddress.getByName(DOMAIN_CUSTOMIZED).getHostAddress();
+        assertEquals(IP_CUSTOMIZED, ip);
+        System.clearProperty(key);
     }
 
     @Test
