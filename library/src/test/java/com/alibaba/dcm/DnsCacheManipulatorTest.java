@@ -1,6 +1,7 @@
 package com.alibaba.dcm;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.net.InetAddress;
@@ -31,6 +32,17 @@ public class DnsCacheManipulatorTest {
     private static final String IP3 = "42.42.43.43";
 
     private static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-7352jt-12559-AZ-7524087.com";
+
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        // System Properties
+        // https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.printf("Env info:\njava home: %s\njdk version: %s\n",
+                System.getProperty("java.home"),
+                System.getProperty("java.version"));
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    }
 
     @Before
     public void before() throws Exception {
