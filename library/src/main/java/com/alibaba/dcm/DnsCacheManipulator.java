@@ -2,8 +2,11 @@ package com.alibaba.dcm;
 
 import com.alibaba.dcm.internal.InetAddressCacheUtil;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -104,12 +107,31 @@ public class DnsCacheManipulator {
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      */
     public static void loadDnsCacheConfig(String propertiesFileName) {
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertiesFileName);
-        if (inputStream == null) {
-            inputStream = DnsCacheManipulator.class.getClassLoader().getResourceAsStream(propertiesFileName);
+        try {
+            final Enumeration<URL> urls = getClassLoader().getResources(propertiesFileName);
+            if (urls == null || !urls.hasMoreElements()) {
+                throw new DnsCacheManipulatorException("Fail to find " + propertiesFileName + " on classpath!");
+            }
+
+            while (urls.hasMoreElements()) {
+                URL url = urls.nextElement();
+                loadDnsCacheConfig0(url);
+            }
+        } catch (DnsCacheManipulatorException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DnsCacheManipulatorException("Fail to loadDnsCacheConfig from " + propertiesFileName, e);
         }
+    }
+
+    private static void loadDnsCacheConfig0(URL url) throws IOException {
+        if (url == null) {
+            // ignore!
+            return;
+        }
+        InputStream inputStream = url.openStream();
         if (inputStream == null) {
-            throw new DnsCacheManipulatorException("Fail to find " + propertiesFileName + " on classpath!");
+            throw new DnsCacheManipulatorException("Fail to load " + url + " on classpath!");
         }
 
         try {
@@ -119,8 +141,21 @@ public class DnsCacheManipulator {
             setDnsCache(properties);
         } catch (Exception e) {
             final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
-                    propertiesFileName, e.toString());
+                    url, e.toString());
             throw new DnsCacheManipulatorException(message, e);
+        }
+    }
+
+    private static ClassLoader getClassLoader() {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader != null) {
+            return classLoader;
+        }
+        classLoader = DnsCacheManipulator.class.getClassLoader();
+        if (classLoader != null) {
+            return classLoader;
+        } else {
+            throw new DnsCacheManipulatorException("Fail to get app class loader!");
         }
     }
 
