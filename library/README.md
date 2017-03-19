@@ -116,8 +116,15 @@ DnsCacheManipulator.setDnsCache(3600 * 1000, "www.hello-hell.com", "192.168.1.1"
 # 配置格式：
 # <host> = <ip>
 www.hello-world.com=192.168.1.1
-www.foo.com=192.168.1.2
+# 支持设置多个IP，用逗号分隔
+www.foo.com=192.168.1.2,192.168.1.3
+# 支持IPv6
+www.bar.com=1234:5678:0:0:0:0:0:200e
 ```
+
+> 注：  
+> `dns-cache.properties`是缺省文件名，可以通过`JVM`的`-D`选项`dcm.config.filename`修改使用的配置文件名，如  
+> `-Ddcm.config.filename=my-dns-cache.properties`。
 
 然后通过下面的一行代码完成批量设置：
 
