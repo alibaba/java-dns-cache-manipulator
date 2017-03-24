@@ -235,21 +235,21 @@ content = m2.getResponseBodyAsString();
 :eyeglasses: 经过测试的`JDK`
 ==================================
 
-JDK | 系统 | On | 备注
---- | --- | --- | ----
-openjdk6 64-Bit | Linux | travis-ci |
-oraclejdk7 64-Bit | Linux | travis-ci |
-openjdk7 64-Bit | Linux | travis-ci |
-oraclejdk8 64-Bit | Linux | travis-ci |
-applejdk6 64-Bit | Mac | 个人Mac | jdk6由Apple[提供](https://java.com/zh_CN/download/faq/java_mac.xml)，[下载地址](https://support.apple.com/kb/DL1572?locale=zh_CN)。
-oraclejdk7 64-Bit | Mac | 个人Mac | 从jdk7开始，Mac jdk直接在`Oracle`下载。
-oraclejdk8 64-Bit | Mac | 个人Mac |
-oraclejdk6 64-Bit | windows server 2012 r2 | appveyor |
-oraclejdk6 32-Bit | windows server 2012 r2 | appveyor |
-oraclejdk7 64-Bit | windows server 2012 r2 | appveyor |
-oraclejdk7 32-Bit | windows server 2012 r2 | appveyor |
-oraclejdk8 64-Bit | windows server 2012 r2 | appveyor |
-oraclejdk8 32-Bit | windows server 2012 r2 | appveyor |
+JDK               | 系统                   | On        | 备注
+---               | ---                    | ---       | ----
+openjdk6 64-Bit   | Linux                  | travis-ci |
+oraclejdk7 64-Bit | Linux                  | travis-ci |
+openjdk7 64-Bit   | Linux                  | travis-ci |
+oraclejdk8 64-Bit | Linux                  | travis-ci |
+applejdk6 64-Bit  | Mac                    | 个人Mac   | jdk6由Apple[提供](https://java.com/zh_CN/download/faq/java_mac.xml)，[下载地址](https://support.apple.com/kb/DL1572?locale=zh_CN)。
+oraclejdk7 64-Bit | Mac                    | 个人Mac   | 从jdk7开始，Mac jdk直接在`Oracle`下载。
+oraclejdk8 64-Bit | Mac                    | 个人Mac   |
+oraclejdk6 64-Bit | windows server 2012 r2 | appveyor  |
+oraclejdk6 32-Bit | windows server 2012 r2 | appveyor  |
+oraclejdk7 64-Bit | windows server 2012 r2 | appveyor  |
+oraclejdk7 32-Bit | windows server 2012 r2 | appveyor  |
+oraclejdk8 64-Bit | windows server 2012 r2 | appveyor  |
+oraclejdk8 32-Bit | windows server 2012 r2 | appveyor  |
 
 PS：  
 感谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供了持续集成环境。
