@@ -44,7 +44,7 @@
 			<plugin>
 				<groupId>com.versioneye</groupId>
 				<artifactId>versioneye-maven-plugin</artifactId>
-				<version>3.11.1</version>
+				<version>3.11.2</version>
 				<configuration>
 					<projectId>55eb1377a65c8c000e044a1c</projectId>
 				</configuration>

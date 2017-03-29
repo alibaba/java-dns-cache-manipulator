@@ -122,7 +122,7 @@
 			<plugin>
 				<groupId>com.versioneye</groupId>
 				<artifactId>versioneye-maven-plugin</artifactId>
-				<version>3.11.1</version>
+				<version>3.11.2</version>
 				<configuration>
 					<projectId>55eb1371a65c8c000e0449d3</projectId>
 				</configuration>
