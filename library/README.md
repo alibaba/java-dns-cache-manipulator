@@ -66,9 +66,9 @@ Java Dns Cache Manipulator(DCM) Library
 1. 打开`Java`中的`SecurityManager`时（如在`Web`容器`Tomcat`中的`Web`应用），`Java`的`DNS`缺省是不会失效的。
     如果域名绑定的`IP`变了，可以通过这个库重置`DNS`。
     - 通过[`Java Dns Cache Manipulator Tool`](../tool)设置运行中`JVM DNS Cache`。  
-        **无需**应用包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
+        **无需** 应用包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
     - 或通过执行入口调用`Java Dns Cache Manipulator Library`的方法，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。  
-        ***需要***应用已经包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
+        ***需要*** 应用已经包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
 
 :busts_in_silhouette: User Guide
 =====================================
