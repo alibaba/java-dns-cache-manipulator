@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
-			<version>3.0.1</version>
+			<version>3.0.2</version>
 			<optional>true</optional>
 		</dependency>
 		<!-- Testing libs -->
@@ -83,7 +83,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.1</version>
+                <version>3.6.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -122,7 +122,7 @@
 			<plugin>
 				<groupId>com.versioneye</groupId>
 				<artifactId>versioneye-maven-plugin</artifactId>
-				<version>3.11.2</version>
+				<version>3.11.4</version>
 				<configuration>
 					<projectId>55eb1371a65c8c000e0449d3</projectId>
 				</configuration>
