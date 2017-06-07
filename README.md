@@ -10,6 +10,7 @@ Java Dns Cache Manipulator(DCM)
 [![Dependency Status](https://www.versioneye.com/user/projects/55eb1377a65c8c000e044a1c/badge.svg)](https://www.versioneye.com/user/projects/55eb1377a65c8c000e044a1c?child=summary)  
 [![Join the chat at https://gitter.im/alibaba/java-dns-cache-manipulator](https://badges.gitter.im/alibaba/java-dns-cache-manipulator.svg)](https://gitter.im/alibaba/java-dns-cache-manipulator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/alibaba/java-dns-cache-manipulator.svg)](http://isitmaintained.com/project/alibaba/java-dns-cache-manipulator "Average time to resolve an issue")
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 包含子工程：
