@@ -9,6 +9,13 @@ branches:
   except:
     - appveyor
 
+before_install:
+  # output env info
+  - ls -l /usr/lib/jvm
+  - echo "JAVA_HOME=$JAVA_HOME"
+  - echo "PATH=$PATH"
+  - mvn --version
+
 after_success:
   - mvn clean cobertura:cobertura coveralls:report
 
