@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.alibaba</groupId>
@@ -32,13 +33,6 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.5</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun</groupId>
-			<artifactId>tools</artifactId>
-			<version>${java.version}</version>
-			<scope>system</scope>
-			<systemPath>${tools-jar-path}</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -113,6 +107,45 @@
 
 	<profiles>
 		<profile>
+			<id>tools-dependency-for-below-jdk9-standard-jdk</id>
+			<activation>
+				<!-- Only add tools.jar dependency for jdk 1.8-! -->
+				<jdk>(,1.9)</jdk>
+				<file>
+					<exists>${java.home}/../lib/tools.jar</exists>
+				</file>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.sun</groupId>
+					<artifactId>tools</artifactId>
+					<version>${java.version}</version>
+					<scope>system</scope>
+					<systemPath>${java.home}/../lib/tools.jar</systemPath>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>tools-dependency-for-below-jdk9-apple-jdk</id>
+			<activation>
+				<!-- Only add tools.jar dependency for jdk 1.8-! -->
+				<jdk>(,1.9)</jdk>
+				<file>
+					<!-- Only for apple brewed jdk, tools.jar is put at ${java.home}/../Classes/classes.jar. -->
+					<exists>${java.home}/../Classes/classes.jar</exists>
+				</file>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.sun</groupId>
+					<artifactId>tools</artifactId>
+					<version>${java.version}</version>
+					<scope>system</scope>
+					<systemPath>${java.home}/../Classes/classes.jar</systemPath>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
 			<id>travis</id>
 			<activation>
 				<property>
@@ -139,29 +172,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-		<profile>
-			<id>standard-jdk</id>
-			<activation>
-				<file>
-					<exists>${java.home}/../lib/tools.jar</exists>
-				</file>
-			</activation>
-			<properties>
-				<tools-jar-path>${java.home}/../lib/tools.jar</tools-jar-path>
-			</properties>
-		</profile>
-		<profile>
-			<!-- Only for apple brewed jdk, tools.jar is put at ${java.home}/../Classes/classes.jar. -->
-			<id>apple-jdk</id>
-			<activation>
-				<file>
-					<exists>${java.home}/../Classes/classes.jar</exists>
-				</file>
-			</activation>
-			<properties>
-				<tools-jar-path>${java.home}/../Classes/classes.jar</tools-jar-path>
-			</properties>
 		</profile>
 	</profiles>
 </project>
