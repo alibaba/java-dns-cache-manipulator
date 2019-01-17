@@ -314,7 +314,7 @@ private static void cacheAddresses(String hostname,
 - [`java dns`解析缓存之源码解析](http://rongmayisheng.com/?p=1006)，写得很完整，源码解析。给出值得注意的结论：
     - 打开`Java`中的`SecurityManager`，`DNS`缓存将不会失效。
     - 否则，可访问的`DNS`解析缺省缓存30秒，不可访问的`DNS`解析缺省缓存10秒。
-- [关于`jvm dns cache`(域名缓存时间)](http://www.piao2010.com/%E5%85%B3%E4%BA%8Ejvm-dns-cache-%E5%9F%9F%E5%90%8D%E7%BC%93%E5%AD%98%E6%97%B6%E9%97%B4)，给出“对于多条A记录是采用什么策略返回`IP`”的结论：  
+- [关于`jvm dns cache`(域名缓存时间)](https://nigelzeng.iteye.com/blog/1704052)，给出“对于多条A记录是采用什么策略返回`IP`”的结论：
     - 在缓存有效期内，取到的`IP`永远是缓存中全部A记录的第一条，并没有轮循之类的策略。
     - 缓存失效之后重新进行DNS解析，因为每次域名解析返回的A记录顺序会发生变化(`dig www.google.com`测试可见)，所以缓存中的数据顺序也变了，取到的`IP`也变化。
 - [通过`JAVA`反射修改`JDK 1.6`当中`DNS`缓存内容](http://www.tuicool.com/articles/auYzui)，给出了设置`DNS`缓存在性能测试下使用的场景。
