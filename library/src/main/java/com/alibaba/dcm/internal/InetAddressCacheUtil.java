@@ -21,7 +21,7 @@ import sun.net.InetAddressCachePolicy;
 
 /**
  * Util class to manipulate dns cache {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}.
- * <p/>
+ * <p>
  * <b>Caution</b>: <br>
  * Manipulation on {@link InetAddress#addressCache} <strong>MUST</strong>
  * be guarded by {@link InetAddress#addressCache} to avoid multithreaded problem,
