@@ -72,11 +72,11 @@ public class InetAddressCacheUtil {
         // - for jdk 6, constructor signature is CacheEntry(Object address, long expiration)
         // - for jdk 7+, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
         // code in jdk 6:
-        //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b27/java/net/InetAddress.java#InetAddress.CacheEntry
+        //   http://hg.openjdk.java.net/jdk6/jdk6/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l739
         // code in jdk 7:
-        //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/7-b147/java/net/InetAddress.java#InetAddress.CacheEntry
+        //   http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l742
         // code in jdk 8:
-        //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8-b132/java/net/InetAddress.java#InetAddress.CacheEntry
+        //   http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l748
         Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
         return constructor.newInstance(toInetAddressArray(host, ips), expiration);
@@ -224,11 +224,11 @@ public class InetAddressCacheUtil {
                     // - for jdk 6, address and expiration
                     // - for jdk 7+, addresses(*renamed* from 6!) and expiration
                     // code in jdk 6:
-                    //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b27/java/net/InetAddress.java#InetAddress.CacheEntry
+                    //   http://hg.openjdk.java.net/jdk6/jdk6/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l739
                     // code in jdk 7:
-                    //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/7-b147/java/net/InetAddress.java#InetAddress.CacheEntry
+                    //   http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l742
                     // code in jdk 8:
-                    //   http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8-b132/java/net/InetAddress.java#InetAddress.CacheEntry
+                    //   http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l748
                     final Field[] fields = cacheEntryClass.getDeclaredFields();
                     for (Field field : fields) {
                         final String name = field.getName();
