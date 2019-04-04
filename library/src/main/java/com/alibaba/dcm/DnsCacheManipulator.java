@@ -1,6 +1,9 @@
 package com.alibaba.dcm;
 
 import com.alibaba.dcm.internal.InetAddressCacheUtil;
+import com.alibaba.dcm.internal.InetAddressJdk9PlusCacheUtil;
+import com.alibaba.dcm.internal.JavaVersion;
+import com.alibaba.dcm.internal.JavaVersionuUtil;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -34,7 +37,11 @@ public class DnsCacheManipulator {
      */
     public static void setDnsCache(String host, String... ips) {
         try {
-            InetAddressCacheUtil.setInetAddressCache(host, ips, NEVER_EXPIRATION);
+            if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
+                InetAddressCacheUtil.setInetAddressCache(host, ips, NEVER_EXPIRATION);
+            } else {
+                InetAddressJdk9PlusCacheUtil.setInetAddressCache(host, ips, NEVER_EXPIRATION);
+            }
         } catch (Exception e) {
             final String message = String.format("Fail to setDnsCache for host %s ip %s, cause: %s",
                     host, Arrays.toString(ips), e.toString());
@@ -52,7 +59,11 @@ public class DnsCacheManipulator {
      */
     public static void setDnsCache(long expireMillis, String host, String... ips) {
         try {
-            InetAddressCacheUtil.setInetAddressCache(host, ips, System.currentTimeMillis() + expireMillis);
+            if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
+                InetAddressCacheUtil.setInetAddressCache(host, ips, System.currentTimeMillis() + expireMillis);
+            } else {
+                InetAddressJdk9PlusCacheUtil.setInetAddressCache(host, ips, System.currentTimeMillis() + expireMillis);
+            }
         } catch (Exception e) {
             final String message = String.format("Fail to setDnsCache for host %s ip %s expireMillis %s, cause: %s",
                     host, Arrays.toString(ips), expireMillis, e.toString());
@@ -133,7 +144,11 @@ public class DnsCacheManipulator {
     @Nullable
     public static DnsCacheEntry getDnsCache(String host) {
         try {
-            return InetAddressCacheUtil.getInetAddressCache(host);
+            if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
+                return InetAddressCacheUtil.getInetAddressCache(host);
+            } else {
+                return InetAddressJdk9PlusCacheUtil.getInetAddressCache(host);
+            }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to getDnsCache, cause: " + e.toString(), e);
         }
@@ -161,7 +176,11 @@ public class DnsCacheManipulator {
      */
     public static List<DnsCacheEntry> listDnsCache() {
         try {
-            return InetAddressCacheUtil.listInetAddressCache().getCache();
+            if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
+                return InetAddressCacheUtil.listInetAddressCache().getCache();
+            } else {
+                return InetAddressJdk9PlusCacheUtil.listInetAddressCache().getCache();
+            }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to listDnsCache, cause: " + e.toString(), e);
         }
@@ -176,7 +195,11 @@ public class DnsCacheManipulator {
      */
     public static DnsCache getWholeDnsCache() {
         try {
-            return InetAddressCacheUtil.listInetAddressCache();
+            if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
+                return InetAddressCacheUtil.listInetAddressCache();
+            } else {
+                return InetAddressJdk9PlusCacheUtil.listInetAddressCache();
+            }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to getWholeDnsCache, cause: " + e.toString(), e);
         }
@@ -191,7 +214,11 @@ public class DnsCacheManipulator {
      */
     public static void removeDnsCache(String host) {
         try {
-            InetAddressCacheUtil.removeInetAddressCache(host);
+            if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
+                InetAddressCacheUtil.removeInetAddressCache(host);
+            } else {
+                InetAddressJdk9PlusCacheUtil.removeInetAddressCache(host);
+            }
         } catch (Exception e) {
             final String message = String.format("Fail to removeDnsCache for host %s, cause: %s", host, e.toString());
             throw new DnsCacheManipulatorException(message, e);
@@ -205,7 +232,11 @@ public class DnsCacheManipulator {
      */
     public static void clearDnsCache() {
         try {
-            InetAddressCacheUtil.clearInetAddressCache();
+            if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
+                InetAddressCacheUtil.clearInetAddressCache();
+            } else {
+                InetAddressJdk9PlusCacheUtil.clearInetAddressCache();
+            }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to clearDnsCache, cause: " + e.toString(), e);
         }

@@ -21,6 +21,10 @@ public enum JavaVersion {
         this.versionNum = versionNum;
     }
 
+    public double getVersionNum() {
+        return versionNum;
+    }
+
     public boolean isLessThenOrEqual(double otherVersionNum) {
         return this.versionNum <= otherVersionNum;
     }
