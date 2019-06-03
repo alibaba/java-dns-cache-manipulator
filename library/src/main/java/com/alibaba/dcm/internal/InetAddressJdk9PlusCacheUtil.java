@@ -21,13 +21,12 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtil.toInetAddressArray;
  */
 public class InetAddressJdk9PlusCacheUtil {
     /**
-     * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
+     * At jdk 9+,need't convert host to lowercase, see {@link InetAddress#cache}.
      */
     public static void setInetAddressCache(String host, String[] ips, long expiration)
             throws NoSuchMethodException, UnknownHostException,
             IllegalAccessException, InstantiationException, InvocationTargetException,
             ClassNotFoundException, NoSuchFieldException {
-        host = host.toLowerCase();
         Object entry = newCachedAddresses(host, ips, expiration);
 
         synchronized (getCacheAndExpirySetFieldOfInetAddress0()) {
@@ -233,10 +232,16 @@ public class InetAddressJdk9PlusCacheUtil {
             addresses = (InetAddress[]) reqAddrFieldOfInetAddress$CacheAddress.get(cacheAddress);
             expiration = NEVER_EXPIRY;
         }
-        String[] ips = new String[addresses.length];
-        for (int i = 0; i < addresses.length; i++) {
-            ips[i] = addresses[i].getHostAddress();
+        String[] ips;
+        if (addresses != null) {
+            ips = new String[addresses.length];
+            for (int i = 0; i < addresses.length; i++) {
+                ips[i] = addresses[i].getHostAddress();
+            }
+        } else {
+            ips = new String[0];
         }
+
         return new DnsCacheEntry(host, ips, new Date(expiration));
     }
 
