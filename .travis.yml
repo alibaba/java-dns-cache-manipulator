@@ -1,4 +1,5 @@
 language: java
+dist: trusty
 jdk:
 #  - openjdk6
 #  - oraclejdk7
@@ -14,10 +15,10 @@ before_install:
   - ls -l /usr/lib/jvm
   - echo "JAVA_HOME=$JAVA_HOME"
   - echo "PATH=$PATH"
-  - mvn --version
+  - ./mvnw --version
 
 after_success:
-  - mvn clean cobertura:cobertura coveralls:report
+  - ./mvnw clean cobertura:cobertura coveralls:report
 
 # cache between builds
 cache:
