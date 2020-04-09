@@ -108,7 +108,13 @@ public class DnsCacheManipulatorTest {
         final List<DnsCacheEntry> expected = Arrays.asList(
                 new DnsCacheEntry(host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE)));
 
-        assertEquals(expected, allDnsCacheEntries);
+        assertEquals(expected.size(), allDnsCacheEntries.size());
+        DnsCacheEntry expectedDnsCacheEntry = expected.get(0);
+        DnsCacheEntry dnsCacheEntry = allDnsCacheEntries.get(0);
+        assertEquals(expectedDnsCacheEntry.getHost().toLowerCase(), dnsCacheEntry.getHost().toLowerCase());
+        assertEquals(expectedDnsCacheEntry.getIp(), dnsCacheEntry.getIp());
+        long now = currentTimeMillis();
+        assertEquals(expectedDnsCacheEntry.getExpiration().getTime() - now > 315360000000L, dnsCacheEntry.getExpiration().getTime() - now > 315360000000L);
         assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
     }
 
@@ -158,7 +164,7 @@ public class DnsCacheManipulatorTest {
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
-        assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost());
+        assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost().toLowerCase());
     }
 
     private static void assertDomainNotExisted() {
@@ -193,22 +199,31 @@ public class DnsCacheManipulatorTest {
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
-        assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost());
+        assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost().toLowerCase());
     }
 
     @Test
     public void test_multi_ips_in_config_file() throws Exception {
+        long now = currentTimeMillis();
         DnsCacheManipulator.loadDnsCacheConfig("dns-cache-multi-ips.properties");
 
         final String host = "www.hello-multi-ips.com";
         DnsCacheEntry entry = new DnsCacheEntry(host,
                 new String[]{"42.42.41.1", "42.42.41.2"}, new Date(Long.MAX_VALUE));
-        assertEquals(entry, DnsCacheManipulator.getDnsCache(host));
+        DnsCacheEntry dnsCache = DnsCacheManipulator.getDnsCache(host);
+        assertEquals(entry.getHost(), dnsCache.getHost());
+        assertEquals(entry.getIp(), dnsCache.getIp());
+        assertEquals(entry.getExpiration().getTime() - now > 315360000000L, dnsCache.getExpiration().getTime() - now > 315360000000L);
+
 
         final String hostLoose = "www.hello-multi-ips-loose.com";
         DnsCacheEntry entryLoose = new DnsCacheEntry(hostLoose,
                 new String[]{"42.42.41.1", "42.42.41.2", "42.42.41.3", "42.42.41.4"}, new Date(Long.MAX_VALUE));
-        assertEquals(entryLoose, DnsCacheManipulator.getDnsCache(hostLoose));
+        DnsCacheEntry dnsCacheLoose = DnsCacheManipulator.getDnsCache(hostLoose);
+        assertEquals(entryLoose.getHost(), dnsCacheLoose.getHost());
+        assertEquals(entryLoose.getIp(), dnsCacheLoose.getIp());
+        assertEquals(entryLoose.getExpiration().getTime() - now > 315360000000L, dnsCacheLoose.getExpiration().getTime() - now > 315360000000L);
+
     }
 
     @Test
