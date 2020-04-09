@@ -14,7 +14,12 @@ public enum JavaVersion {
     JDK9(9.0D),
     JDK10(10.0D),
     JDK11(11.0D),
-    JDK12(12.0D);
+    JDK12(12.0D),
+    JDK13(13.0D),
+    JDK14(14.0D),
+    JDK15(15.0D),
+    JDK16(16.0D),
+    JDK17(17.0D);
     private final double versionNum;
 
     JavaVersion(double versionNum) {
