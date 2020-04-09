@@ -24,9 +24,13 @@ public final class DnsCacheEntry implements Serializable {
     }
 
     public String[] getIps() {
-        String[] copy = new String[ips.length];
-        System.arraycopy(ips, 0, copy, 0, ips.length); // defensive copy
-        return copy;
+        if (ips != null) {
+            String[] copy = new String[ips.length];
+            System.arraycopy(ips, 0, copy, 0, ips.length); // defensive copy
+            return copy;
+        } else {
+            return null;
+        }
     }
 
     public String getIp() {
