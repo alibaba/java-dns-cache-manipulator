@@ -97,7 +97,7 @@ public class DcmToolTest {
         System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE, outputFilePath);
         System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR, agentFilePath);
 
-        DcmTool.main(new String[]{"-p", pid(), "getPolicy"});
+        DcmTool.main(new String[]{"-p", DcmTool.pid(), "getPolicy"});
     }
 
     @Test
@@ -105,14 +105,8 @@ public class DcmToolTest {
         System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE, outputFilePath);
         System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR, agentFilePath);
 
-        DcmTool.main(new String[]{"-p", pid(), "set", "baidu.com", "1.1.2.2"});
+        DcmTool.main(new String[]{"-p", DcmTool.pid(), "set", "baidu.com", "1.1.2.2"});
 
         assertEquals("1.1.2.2", InetAddress.getByName("baidu.com").getHostAddress());
-    }
-
-    static String pid() {
-        final String name = ManagementFactory.getRuntimeMXBean().getName();
-        final int idx = name.indexOf("@");
-        return name.substring(0, idx);
     }
 }
