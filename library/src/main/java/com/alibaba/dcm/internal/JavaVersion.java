@@ -1,8 +1,7 @@
 package com.alibaba.dcm.internal;
 
 /**
- * @author dzg
- * @since 2020/4/9
+ * @author antfling (ding_zhengang at hithinksoft dot com)
  */
 public enum JavaVersion {
     /**
@@ -19,7 +18,9 @@ public enum JavaVersion {
     JDK14(14.0D),
     JDK15(15.0D),
     JDK16(16.0D),
-    JDK17(17.0D);
+    JDK17(17.0D),
+    ;
+
     private final double versionNum;
 
     JavaVersion(double versionNum) {

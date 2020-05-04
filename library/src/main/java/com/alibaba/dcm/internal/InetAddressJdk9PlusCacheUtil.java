@@ -17,8 +17,7 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtil.isDnsCacheEntryExpir
 import static com.alibaba.dcm.internal.InetAddressCacheUtil.toInetAddressArray;
 
 /**
- * @author dzg
- * @since 2020/4/9
+ * @author antfling (ding_zhengang at hithinksoft dot com)
  */
 public class InetAddressJdk9PlusCacheUtil {
     /**
