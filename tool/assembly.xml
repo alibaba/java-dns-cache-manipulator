@@ -13,7 +13,7 @@
 	</dependencySets>
 	<fileSets>
 		<fileSet>
-			<directory>scripts</directory>
+			<directory>src/bin</directory>
 			<includes>
 				<include>**/**</include>
 			</includes>
