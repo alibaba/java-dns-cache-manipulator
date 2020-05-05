@@ -163,7 +163,7 @@
 	</build>
 	<profiles>
 		<profile>
-			<id>travis</id>
+			<id>gen-code-cov</id>
 			<activation>
 				<property>
 					<name>env.TRAVIS</name>
@@ -191,7 +191,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>srcDoc</id>
+			<id>gen-src+doc</id>
 			<activation>
 				<property>
 					<name>performRelease</name>
@@ -241,7 +241,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>sign</id>
+			<id>gen-sign</id>
 			<activation>
 				<property>
 					<name>performRelease</name>
