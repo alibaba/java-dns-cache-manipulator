@@ -1,10 +1,9 @@
 language: java
 dist: trusty
-jdk:
-#  - openjdk6
-#  - oraclejdk7
-  - openjdk7
-  - oraclejdk8
+addons:
+  apt:
+    packages:
+      - openjdk-6-jdk
 
 branches:
   except:
@@ -12,16 +11,24 @@ branches:
 
 before_install:
   # output env info
-  - ls -l /usr/lib/jvm
-  - echo "JAVA_HOME=$JAVA_HOME"
-  - echo "PATH=$PATH"
-  - ./mvnw --version
+  - ls -la
+  - ls -l /usr/lib/jvm && ls /usr/lib/jvm/*
+  - echo -e "JAVA_HOME=$JAVA_HOME\nPATH=$PATH\nSHELL=$SHELL"
+
+script:
+  - ./scripts/integration-test.sh
 
 after_success:
-  - ./mvnw clean cobertura:cobertura coveralls:report
+  # codecov
+  - ./scripts/codecov.sh
+  - git status --ignored
 
 # cache between builds
 cache:
   directories:
     - $HOME/.m2
+    - $HOME/.sdkman
     - $HOME/.cache/pip
+before_cache:
+  # clear maven self install
+  - rm -rf $HOME/.m2/repository/com/alibaba/dns-cache-manipulator*
