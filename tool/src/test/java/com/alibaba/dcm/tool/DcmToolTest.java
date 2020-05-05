@@ -45,9 +45,12 @@ public class DcmToolTest {
 
     public void setAgentFilePath() throws Exception {
         // find agent jar file from dcm lib project
-        File dcmLibProjectDir = new File("../library");
+        File dcmLibProjectDir = new File("library");
         if (!dcmLibProjectDir.exists()) {
-            dcmLibProjectDir = new File("library");
+            dcmLibProjectDir = new File("../library");
+        }
+        if (!dcmLibProjectDir.exists()) {
+            dcmLibProjectDir = new File("../../library");
         }
         if (dcmLibProjectDir.exists()) {
             File dcmLibProjectTargetDir = new File(dcmLibProjectDir, "target");
