@@ -1,11 +1,13 @@
 package com.alibaba.dcm.tool;
 
+import com.alibaba.support.junit.conditional.AboveJava8;
+import com.alibaba.support.junit.conditional.ConditionalIgnoreRule;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
-import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +20,9 @@ import static org.junit.Assert.*;
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class DcmToolTest {
+    @Rule
+    public final ConditionalIgnoreRule rule = new ConditionalIgnoreRule();
+
     File outputFile;
     String outputFilePath;
 
@@ -93,6 +98,9 @@ public class DcmToolTest {
     }
 
     @Test
+    // Ignore "attach to current VM" test for jdk 9+, since java 9+ does not support
+    //   "java.io.IOException: Can not attach to current VM"
+    @ConditionalIgnoreRule.ConditionalIgnore(condition = AboveJava8.class)
     public void test_main_getPolicy() throws Exception {
         System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE, outputFilePath);
         System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR, agentFilePath);
@@ -101,6 +109,9 @@ public class DcmToolTest {
     }
 
     @Test
+    // Ignore "attach to current VM" test for jdk 9+, since java 9+ does not support
+    //   "java.io.IOException: Can not attach to current VM"
+    @ConditionalIgnoreRule.ConditionalIgnore(condition = AboveJava8.class)
     public void test_main_set() throws Exception {
         System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE, outputFilePath);
         System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR, agentFilePath);
