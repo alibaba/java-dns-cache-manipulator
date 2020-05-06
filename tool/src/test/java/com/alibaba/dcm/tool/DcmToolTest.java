@@ -33,7 +33,7 @@ public class DcmToolTest {
         outputFile = new File("target/output.log");
         FileUtils.deleteQuietly(outputFile);
         FileUtils.touch(outputFile);
-        assertTrue(outputFile.length() == 0);
+        assertEquals(0, outputFile.length());
 
         outputFilePath = outputFile.getCanonicalPath();
         System.out.println("Prepared output file: " + outputFilePath);
@@ -55,7 +55,7 @@ public class DcmToolTest {
         if (dcmLibProjectDir.exists()) {
             File dcmLibProjectTargetDir = new File(dcmLibProjectDir, "target");
             if (dcmLibProjectTargetDir.exists()) {
-                System.out.println("Found target dir: " + dcmLibProjectTargetDir);
+                System.out.println("Found target dir: " + dcmLibProjectTargetDir + " " + dcmLibProjectDir.getCanonicalPath());
             }
 
             final Iterator<File> fileIterator = FileUtils.iterateFiles(dcmLibProjectTargetDir, new String[]{"jar"}, false);
@@ -63,11 +63,13 @@ public class DcmToolTest {
                 final File next = fileIterator.next();
                 final String fileName = next.getName();
                 final String agentJarPath = next.getCanonicalPath();
+                System.out.println("List Agent jar from target: " + agentJarPath);
 
                 if (fileName.startsWith("dns-cache-manipulator")) {
                     final String replaced = fileName.replace("dns-cache-manipulator-", "").replace("-SNAPSHOT", "");
-                    if (!replaced.contains("-"))
+                    if (!replaced.contains("-")) {
                         agentFilePath = agentJarPath;
+                    }
                 }
             }
         }

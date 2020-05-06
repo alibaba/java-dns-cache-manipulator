@@ -2,9 +2,10 @@
 set -eEuo pipefail
 cd "$(dirname "$(readlink -f "$0")")"
 
-source ./common_build.sh
+source ./common_build.sh skipClean
 source ./prepare-jdk.sh
 
 switch_to_jdk 8
 
-runCmd ./mvnw clean cobertura:cobertura coveralls:report
+cd "$ROOT_PROJECT_DIR"
+runCmd ./mvnw -Pgen-code-cov clean package cobertura:cobertura coveralls:report
