@@ -62,10 +62,14 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.13</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<!--
+				DO NOT upgrade commons-io version!
+				v2.5 is the last version support Java 6
+			-->
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.5</version>
@@ -83,7 +87,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.2</version>
+				<version>3.8.1</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -92,7 +96,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
+				<version>3.2.0</version>
 				<configuration>
 					<archive>
 						<manifestEntries>
@@ -115,40 +119,44 @@
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
+			<plugin>
+				<!--
+					config example: https://github.com/mojohaus/versions-maven-plugin/issues/157#issuecomment-306041074
+				-->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<rulesUri>file://${maven.multiModuleProjectDirectory}/library/src/versions-rules.xml</rulesUri>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<!--
-						DO NOT upgrade maven-clean-plugin version!
-						v3.0.0 is the last version support Java 6
-					-->
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
-					<!--
-						DO NOT upgrade maven-resources-plugin version!
-						v3.0.2 is the last version support Java 6
-					-->
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.0.2</version>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>3.0.1</version>
+					<version>3.2.1</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.0.1</version>
+					<version>3.2.0</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.1</version>
+					<version>2.22.2</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.7.1</version>
+					<version>3.9.0</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-install-plugin</artifactId>
@@ -224,6 +232,7 @@
 								<link>http://docs.oracle.com/javase/7/docs/api</link>
 							</links>
 							<overview>src/api/overview.html</overview>
+							<doclint>none</doclint>
 							<additionalJOptions>
 								<additionalJOption>-J-Duser.language=en -J-Duser.country=US</additionalJOption>
 							</additionalJOptions>
@@ -260,6 +269,45 @@
 								<goals>
 									<goal>sign</goal>
 								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>enforcer-when-do-release</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!--
+						add maven-enforce-plugin to make sure the right jdk is used
+						https://stackoverflow.com/a/18420462/922688
+					-->
+					<plugin>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<version>3.0.0-M3</version>
+						<executions>
+							<execution>
+								<id>enforce-jdk-versions</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireJavaVersion>
+											<version>[1.8,)</version>
+										</requireJavaVersion>
+										<requireMavenVersion>
+											<version>3.3.9</version>
+										</requireMavenVersion>
+									</rules>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>

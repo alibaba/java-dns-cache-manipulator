@@ -48,6 +48,18 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
+			<plugin>
+				<!--
+					config example: https://github.com/mojohaus/versions-maven-plugin/issues/157#issuecomment-306041074
+				-->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<rulesUri>file://${maven.multiModuleProjectDirectory}/library/src/versions-rules.xml</rulesUri>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -76,6 +88,45 @@
 						<groupId>org.eluder.coveralls</groupId>
 						<artifactId>coveralls-maven-plugin</artifactId>
 						<version>4.3.0</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>enforcer-when-do-release</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!--
+						add maven-enforce-plugin to make sure the right jdk is used
+						https://stackoverflow.com/a/18420462/922688
+					-->
+					<plugin>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<version>3.0.0-M3</version>
+						<executions>
+							<execution>
+								<id>enforce-jdk-versions</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireJavaVersion>
+											<version>[1.8,)</version>
+										</requireJavaVersion>
+										<requireMavenVersion>
+											<version>3.3.9</version>
+										</requireMavenVersion>
+									</rules>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
