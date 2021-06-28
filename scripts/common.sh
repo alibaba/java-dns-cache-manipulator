@@ -29,7 +29,7 @@ __error_trap_handler_() {
     local file_line_info="$1"
     local code="$2"
     local commands="$3"
-    echo "Trap error! Exit status: $code${nl}File/(near) line info:$nl  $file_line_info${nl}Error code line:$nl  $commands"
+    echo "Trap error! Exit status: $code${nl}File/(near) line info:$nl  $file_line_info${nl}Error code line:$nl  $commands" >&2
 }
 trap '__error_trap_handler_ "${BASH_SOURCE[*]} / $LINENO ${BASH_LINENO[*]}" "$?" "$BASH_COMMAND"' ERR
 
