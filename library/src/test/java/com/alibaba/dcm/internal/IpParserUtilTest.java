@@ -1,6 +1,8 @@
 package com.alibaba.dcm.internal;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.net.InetAddress;
 
@@ -12,6 +14,10 @@ import static org.junit.Assert.fail;
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class IpParserUtilTest {
+
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void test_ip2ByteArray() throws Exception {
         assertArrayEquals(new byte[]{10, 1, 1, 1},
@@ -27,65 +33,53 @@ public class IpParserUtilTest {
     }
 
     @Test
-    public void test_ip2ByteArray_ipv4_exception() throws Exception {
-        // ipv4 with char
-        try {
-            IpParserUtil.ip2ByteArray("a.1.1.1");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            expected.printStackTrace();
-        }
-        
-        // ipv4_minus
-        try {
-            IpParserUtil.ip2ByteArray("-2.168.0.13");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            expected.printStackTrace();
-        }
+    public void test_ip2ByteArray_ipv4_with_char_exception(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("a.1.1.1: invalid IP address");
+        IpParserUtil.ip2ByteArray("a.1.1.1");
 
-        // ipv4 overflow
-        try {
-            IpParserUtil.ip2ByteArray("1.1.1.256");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            expected.printStackTrace();
-        }
-
-        // ipv4 too long
-        try {
-            IpParserUtil.ip2ByteArray("192.168.0.13.1");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            expected.printStackTrace();
-        }
     }
 
     @Test
-    public void test_ip2ByteArray_ipv6_exception() throws Exception {
-        // ipv6 with char
-        try {
-            IpParserUtil.ip2ByteArray("2404:6800:4005:80a:0:0:0:200z");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            expected.printStackTrace();
-        }
-        
-        // ipv6 minus
-        try {
-            IpParserUtil.ip2ByteArray("-2404:6800:4005:80a:0:0:0:200e");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            expected.printStackTrace();
-        }
+    public void test_ip2ByteArray_ipv4_minus_exception(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("-2.168.0.13: invalid IP address");
+        IpParserUtil.ip2ByteArray("-2.168.0.13");
+    }
 
-        // ipv6 too long
-        try {
-            IpParserUtil.ip2ByteArray("2404:6800:4005:80a:0:0:0:200:123");
-            fail();
-        } catch (IllegalArgumentException expected) {
-            expected.printStackTrace();
-        }
+    @Test
+    public void test_ip2ByteArray_ipv4_overflow_exception(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("1.1.1.256: invalid IP address");
+        IpParserUtil.ip2ByteArray("1.1.1.256");
+    }
+
+    @Test
+    public void test_ip2ByteArray_ipv4_too_long_exception(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("192.168.0.13.1: invalid IP address");
+        IpParserUtil.ip2ByteArray("192.168.0.13.1");
+    }
+
+    @Test
+    public void test_ip2ByteArray_ipv6_with_char_exception(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("2404:6800:4005:80a:0:0:0:200z: invalid IP address");
+        IpParserUtil.ip2ByteArray("2404:6800:4005:80a:0:0:0:200z");
+    }
+
+    @Test
+    public void test_ip2ByteArray_ipv6_minus_exception(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("-2404:6800:4005:80a:0:0:0:200e: invalid IP address");
+        IpParserUtil.ip2ByteArray("-2404:6800:4005:80a:0:0:0:200e");
+    }
+
+    @Test
+    public void test_ip2ByteArray_ipv6_too_long_exception(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("2404:6800:4005:80a:0:0:0:200:123: invalid IP address");
+        IpParserUtil.ip2ByteArray("2404:6800:4005:80a:0:0:0:200:123");
     }
 
     private static InetAddress getInetAddressByGetAllByName(String ip) throws Exception {
