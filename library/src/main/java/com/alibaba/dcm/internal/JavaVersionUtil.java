@@ -2,35 +2,35 @@ package com.alibaba.dcm.internal;
 
 /**
  * @author antfling (ding_zhengang at hithinksoft dot com)
+ * @author Jerry Lee (oldratlee at gmail dot com)
+ * @since 1.6.0
  */
 public class JavaVersionUtil {
-
-    public static final JavaVersion CURRENT_JAVA_VERSION;
-
-    static {
-        CURRENT_JAVA_VERSION = parseCurrentJavaVersion();
+    public static boolean isJdkAtMost8() {
+        return JAVA_SPECIFICATION_VERSION_AS_ENUM.atMost(JavaVersion.JAVA_1_8);
     }
 
-    private static JavaVersion parseCurrentJavaVersion() {
-        final String javaVersionTmp = System.getProperty("java.version");
-        final String[] split = javaVersionTmp.split("\\.", 3);
-        final String javaVersion;
-        if (split.length <= 0) {
-            throw new IllegalStateException("get current java version failed");
-        } else if (split.length == 1) {
-            javaVersion = split[0];
-        } else {
-            javaVersion = split[0] + '.' + split[1];
-        }
-        double javaVersionNum = Double.parseDouble(javaVersion);
-        JavaVersion currentVersion = JavaVersion.JDK6;
-        JavaVersion[] javaVersions = JavaVersion.values();
-        for (JavaVersion version : javaVersions) {
-            if (version.isLessThenOrEqual(javaVersionNum)) {
-                currentVersion = version;
-            }
-        }
-        return currentVersion;
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // blow source code is copied from commons-lang-3.12.0:
+    //
+    // https://github.com/apache/commons-lang/blob/rel/commons-lang-3.12.0/src/main/java/org/apache/commons/lang3/SystemUtils.java
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private static final String JAVA_SPECIFICATION_VERSION = getSystemProperty("java.specification.version");
+    private static final JavaVersion JAVA_SPECIFICATION_VERSION_AS_ENUM = JavaVersion.get(JAVA_SPECIFICATION_VERSION);
+
+    @SuppressWarnings({"CommentedOutCode", "SameParameterValue"})
+    private static String getSystemProperty(final String property) {
+        try {
+            return System.getProperty(property);
+        } catch (final SecurityException ex) {
+            // we are not allowed to look at this property
+            // System.err.println("Caught a SecurityException reading the system property '" + property
+            //   + "'; the SystemUtils property value will default to null.");
+            return null;
+
+        }
+    }
 }
