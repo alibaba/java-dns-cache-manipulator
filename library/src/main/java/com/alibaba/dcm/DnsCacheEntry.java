@@ -1,11 +1,11 @@
 package com.alibaba.dcm;
 
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-
-import javax.annotation.concurrent.Immutable;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -23,14 +23,11 @@ public final class DnsCacheEntry implements Serializable {
         return host;
     }
 
+    @Nonnull
     public String[] getIps() {
-        if (ips != null) {
-            String[] copy = new String[ips.length];
-            System.arraycopy(ips, 0, copy, 0, ips.length); // defensive copy
-            return copy;
-        } else {
-            return null;
-        }
+        String[] copy = new String[ips.length];
+        System.arraycopy(ips, 0, copy, 0, ips.length); // defensive copy
+        return copy;
     }
 
     public String getIp() {
@@ -41,7 +38,7 @@ public final class DnsCacheEntry implements Serializable {
         return expiration;
     }
 
-    public DnsCacheEntry(String host, String[] ips, Date expiration) {
+    public DnsCacheEntry(String host, @Nonnull String[] ips, Date expiration) {
         this.host = host;
         this.ips = ips;
         this.expiration = expiration;
@@ -74,7 +71,7 @@ public final class DnsCacheEntry implements Serializable {
     @Override
     public int hashCode() {
         int result = host != null ? host.hashCode() : 0;
-        result = 31 * result + (ips != null ? Arrays.hashCode(ips) : 0);
+        result = 31 * result + Arrays.hashCode(ips);
         result = 31 * result + (expiration != null ? expiration.hashCode() : 0);
         return result;
     }

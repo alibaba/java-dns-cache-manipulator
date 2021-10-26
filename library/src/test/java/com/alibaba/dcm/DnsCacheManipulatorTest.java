@@ -109,10 +109,12 @@ public class DnsCacheManipulatorTest {
                 new DnsCacheEntry(host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE)));
 
         assertEquals(expected.size(), allDnsCacheEntries.size());
+
         DnsCacheEntry expectedDnsCacheEntry = expected.get(0);
         DnsCacheEntry dnsCacheEntry = allDnsCacheEntries.get(0);
         assertEquals(expectedDnsCacheEntry.getHost().toLowerCase(), dnsCacheEntry.getHost().toLowerCase());
         assertEquals(expectedDnsCacheEntry.getIp(), dnsCacheEntry.getIp());
+
         long now = currentTimeMillis();
         assertEquals(expectedDnsCacheEntry.getExpiration().getTime() - now > 315360000000L, dnsCacheEntry.getExpiration().getTime() - now > 315360000000L);
         assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());

@@ -43,7 +43,7 @@ public class InetAddressJdk9PlusCacheUtil {
     }
 
     public static void removeInetAddressCache(String host)
-            throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+        throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
 
         synchronized (getCacheAndExpirySetFieldOfInetAddress0()) {
             getCacheFieldOfInetAddress().remove(host);
@@ -70,7 +70,7 @@ public class InetAddressJdk9PlusCacheUtil {
     /**
      * @param entry add to expirySet
      */
-    static void addExpirySetFieldOfInetAddressByHost(Object entry) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+    static void addExpirySetFieldOfInetAddressByHost(Object entry) throws NoSuchFieldException, IllegalAccessException {
         NavigableSet<Object> expirySetFieldOfInetAddress = getExpirySetFieldOfInetAddress();
         expirySetFieldOfInetAddress.add(entry);
     }
@@ -135,8 +135,8 @@ public class InetAddressJdk9PlusCacheUtil {
                     expirySetField.setAccessible(true);
 
                     ADDRESS_CACHE_AND_EXPIRY_SET = new Object[]{
-                            cacheField.get(InetAddress.class),
-                            expirySetField.get(InetAddress.class)
+                        cacheField.get(InetAddress.class),
+                        expirySetField.get(InetAddress.class)
                     };
                 }
             }
@@ -153,7 +153,7 @@ public class InetAddressJdk9PlusCacheUtil {
 
     @Nullable
     public static DnsCacheEntry getInetAddressCache(String host)
-            throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         final Object cacheAddress;
         synchronized (getCacheAndExpirySetFieldOfInetAddress0()) {
@@ -165,14 +165,14 @@ public class InetAddressJdk9PlusCacheUtil {
         }
 
         final DnsCacheEntry dnsCacheEntry = inetAddress$CacheAddress2DnsCacheEntry(host, cacheAddress);
-        if (dnsCacheEntry.getIps() != null && isDnsCacheEntryExpired(dnsCacheEntry.getHost())) {
+        if (isDnsCacheEntryExpired(dnsCacheEntry.getHost())) {
             return null;
         }
         return dnsCacheEntry;
     }
 
     public static DnsCache listInetAddressCache()
-            throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
+        throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
 
         final Map<String, Object> cache;
         final NavigableSet<Object> negativeCache;
@@ -189,15 +189,16 @@ public class InetAddressJdk9PlusCacheUtil {
                 continue;
             }
             DnsCacheEntry dnsCacheEntry = inetAddress$CacheAddress2DnsCacheEntry(host, entry.getValue());
-            if (dnsCacheEntry.getIps() != null) {
+            if (dnsCacheEntry.getIps().length == 0) {
                 retCache.add(dnsCacheEntry);
             }
         }
+
         List<DnsCacheEntry> retNegativeCache = new ArrayList<DnsCacheEntry>();
         for (Object entry : negativeCache) {
             final String host = (String) getHostFieldOfInetAddress$CacheAddress().get(entry);
             DnsCacheEntry dnsCacheEntry = inetAddress$CacheAddress2DnsCacheEntry(host, entry);
-            if (dnsCacheEntry.getIps() == null) {
+            if (dnsCacheEntry.getIps().length == 0) {
                 retNegativeCache.add(dnsCacheEntry);
             }
         }
@@ -234,7 +235,7 @@ public class InetAddressJdk9PlusCacheUtil {
                     }
                 } else {
                     throw new IllegalStateException("JDK add new child class " + addressClass.getName() +
-                            " for class InetAddress.Addresses, report bug for dns-cache-manipulator lib!");
+                        " for class InetAddress.Addresses, report bug for dns-cache-manipulator lib!");
                 }
 
             }
@@ -255,13 +256,17 @@ public class InetAddressJdk9PlusCacheUtil {
             addresses = (InetAddress[]) reqAddrFieldOfInetAddress$CacheAddress.invoke(cacheAddress);
             expiration = NEVER_EXPIRY;
         }
-        String[] ips = null;
-        if (addresses != null) {
+
+        final String[] ips;
+        if (addresses == null) {
+            ips = new String[0];
+        } else {
             ips = new String[addresses.length];
             for (int i = 0; i < addresses.length; i++) {
                 ips[i] = addresses[i].getHostAddress();
             }
         }
+
         return new DnsCacheEntry(host, ips, new Date(expiration));
     }
 
