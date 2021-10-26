@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
@@ -35,7 +36,7 @@ public class DnsCacheManipulator {
      * @throws DnsCacheManipulatorException Operation fail
      * @see DnsCacheManipulator#setDnsCache(long, java.lang.String, java.lang.String...)
      */
-    public static void setDnsCache(String host, String... ips) {
+    public static void setDnsCache(@Nonnull String host, @Nonnull String... ips) {
         try {
             if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
                 InetAddressCacheUtil.setInetAddressCache(host, ips, NEVER_EXPIRATION);
@@ -57,7 +58,7 @@ public class DnsCacheManipulator {
      * @param ips          ips
      * @throws DnsCacheManipulatorException Operation fail
      */
-    public static void setDnsCache(long expireMillis, String host, String... ips) {
+    public static void setDnsCache(long expireMillis, @Nonnull String host, @Nonnull String... ips) {
         try {
             if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
                 InetAddressCacheUtil.setInetAddressCache(host, ips, System.currentTimeMillis() + expireMillis);
@@ -72,7 +73,7 @@ public class DnsCacheManipulator {
         }
     }
 
-    private static Pattern COMMA_SEPARATOR = Pattern.compile("\\s*,\\s*");
+    private static final Pattern COMMA_SEPARATOR = Pattern.compile("\\s*,\\s*");
 
     /**
      * Set dns cache entries by properties
@@ -80,7 +81,7 @@ public class DnsCacheManipulator {
      * @param properties input properties. eg. {@code www.example.com=42.42.42.42}, or {@code www.example.com=42.42.42.42,43.43.43.43}
      * @throws DnsCacheManipulatorException Operation fail
      */
-    public static void setDnsCache(Properties properties) {
+    public static void setDnsCache(@Nonnull Properties properties) {
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
             final String host = (String) entry.getKey();
             String ipList = (String) entry.getValue();
@@ -115,7 +116,7 @@ public class DnsCacheManipulator {
      * @throws DnsCacheManipulatorException Operation fail
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      */
-    public static void loadDnsCacheConfig(String propertiesFileName) {
+    public static void loadDnsCacheConfig(@Nonnull String propertiesFileName) {
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertiesFileName);
         if (inputStream == null) {
             inputStream = DnsCacheManipulator.class.getClassLoader().getResourceAsStream(propertiesFileName);
@@ -143,7 +144,7 @@ public class DnsCacheManipulator {
      * @throws DnsCacheManipulatorException Operation fail
      */
     @Nullable
-    public static DnsCacheEntry getDnsCache(String host) {
+    public static DnsCacheEntry getDnsCache(@Nonnull String host) {
         try {
             if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
                 return InetAddressCacheUtil.getInetAddressCache(host);
@@ -163,6 +164,7 @@ public class DnsCacheManipulator {
      * @deprecated use {@link #listDnsCache} instead.
      */
     @Deprecated
+    @Nonnull
     public static List<DnsCacheEntry> getAllDnsCache() {
         return listDnsCache();
     }
@@ -175,6 +177,7 @@ public class DnsCacheManipulator {
      * @see #getWholeDnsCache()
      * @since 1.2.0
      */
+    @Nonnull
     public static List<DnsCacheEntry> listDnsCache() {
         try {
             if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
@@ -194,6 +197,7 @@ public class DnsCacheManipulator {
      * @throws DnsCacheManipulatorException Operation fail
      * @since 1.2.0
      */
+    @Nonnull
     public static DnsCache getWholeDnsCache() {
         try {
             if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
@@ -213,7 +217,7 @@ public class DnsCacheManipulator {
      * @throws DnsCacheManipulatorException Operation fail
      * @see DnsCacheManipulator#clearDnsCache
      */
-    public static void removeDnsCache(String host) {
+    public static void removeDnsCache(@Nonnull String host) {
         try {
             if (JavaVersionuUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
                 InetAddressCacheUtil.removeInetAddressCache(host);

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -20,7 +21,7 @@ public class DnsCache implements Serializable {
     private final List<DnsCacheEntry> cache;
     private final List<DnsCacheEntry> negativeCache;
 
-    public DnsCache(List<DnsCacheEntry> cache, List<DnsCacheEntry> negativeCache) {
+    public DnsCache(@Nonnull List<DnsCacheEntry> cache, @Nonnull List<DnsCacheEntry> negativeCache) {
         this.cache = cache;
         this.negativeCache = negativeCache;
     }
@@ -50,15 +51,15 @@ public class DnsCache implements Serializable {
 
         DnsCache dnsCache = (DnsCache) o;
 
-        if (cache != null ? !cache.equals(dnsCache.cache) : dnsCache.cache != null)
+        if (!cache.equals(dnsCache.cache))
             return false;
-        return !(negativeCache != null ? !negativeCache.equals(dnsCache.negativeCache) : dnsCache.negativeCache != null);
+        return negativeCache.equals(dnsCache.negativeCache);
     }
 
     @Override
     public int hashCode() {
-        int result = cache != null ? cache.hashCode() : 0;
-        result = 31 * result + (negativeCache != null ? negativeCache.hashCode() : 0);
+        int result = cache.hashCode();
+        result = 31 * result + negativeCache.hashCode();
         return result;
     }
 }
