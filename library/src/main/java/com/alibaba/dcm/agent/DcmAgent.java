@@ -182,7 +182,7 @@ public class DcmAgent {
             } else if (parameterType.equals(int.class)) {
                 methodArgs[i] = Integer.parseInt(argument);
             } else {
-                final String message = String.format("Unexpected method type %s! Bug!!", parameterType.getName());
+                final String message = String.format("Unexpected method type %s! Misused or Bug!!", parameterType.getName());
                 throw new IllegalStateException(message);
             }
         }

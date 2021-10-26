@@ -255,7 +255,7 @@ public class InetAddressCacheUtilForJdk9Plus {
             expiration = NEVER_EXPIRY;
         } else {
             throw new IllegalStateException("JDK add new child class " + addressesClassName +
-                    " for class InetAddress.Addresses, report bug for dns-cache-manipulator lib!");
+                    " for class InetAddress.Addresses, report issue for dns-cache-manipulator lib!");
         }
 
         final String[] ips;

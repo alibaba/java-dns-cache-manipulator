@@ -231,7 +231,7 @@ public class InetAddressCacheUtilForJdk8Minus {
                             addressesFieldOfInetAddress$CacheEntry = field;
                         } else {
                             throw new IllegalStateException("JDK add new Field " + name +
-                                    " for class InetAddress.CacheEntry, report bug for dns-cache-manipulator lib!");
+                                    " for class InetAddress.CacheEntry, report issue for dns-cache-manipulator lib!");
                         }
                     }
                 }
