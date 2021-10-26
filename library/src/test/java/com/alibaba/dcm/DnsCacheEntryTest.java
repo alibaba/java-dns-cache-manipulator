@@ -17,7 +17,7 @@ import static org.junit.Assert.assertSame;
  */
 public class DnsCacheEntryTest {
     @Test
-    public void test_equals() throws Exception {
+    public void test_equals() {
         Date date = new Date(System.currentTimeMillis() + 1000 * 60);
         DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, date);
         DnsCacheEntry entry2 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, date);
@@ -29,7 +29,7 @@ public class DnsCacheEntryTest {
     }
 
     @Test
-    public void test_notEquals() throws Exception {
+    public void test_notEquals() {
         Date date = new Date(System.currentTimeMillis() + 1000 * 60);
 
         DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, date);
@@ -48,7 +48,7 @@ public class DnsCacheEntryTest {
     }
 
     @Test
-    public void test_getter() throws Exception {
+    public void test_getter() {
         final Date expiration = new Date();
         DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);
         assertEquals("a.com", entry1.getHost());
@@ -66,7 +66,7 @@ public class DnsCacheEntryTest {
     }
 
     @Test
-    public void test_toString() throws Exception {
+    public void test_toString() {
         final Date expiration = new Date();
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         final String date = dateFormat.format(expiration);

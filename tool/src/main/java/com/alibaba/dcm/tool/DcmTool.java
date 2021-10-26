@@ -27,7 +27,7 @@ public class DcmTool {
     static final String DCM_TOOLS_TMP_FILE = "DCM_TOOLS_TMP_FILE";
     static final String DCM_TOOLS_AGENT_JAR = "DCM_TOOLS_AGENT_JAR";
 
-    static List<String> actionList = new ArrayList<String>();
+    final static List<String> actionList = new ArrayList<String>();
 
     static {
         actionList.add("set");

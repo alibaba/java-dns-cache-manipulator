@@ -10,17 +10,15 @@ import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class DcmAgentTest {
+    private static final String UTF8 = "UTF-8";
+
     private File outputFile;
     private String outputFilePath;
 
@@ -29,7 +27,7 @@ public class DcmAgentTest {
         outputFile = new File("target/output.log");
         FileUtils.deleteQuietly(outputFile);
         FileUtils.touch(outputFile);
-        assertTrue(outputFile.length() == 0);
+        assertEquals(0, outputFile.length());
         System.out.println("Prepared output file: " + outputFile.getAbsolutePath());
 
         outputFilePath = outputFile.getAbsolutePath();
@@ -42,7 +40,7 @@ public class DcmAgentTest {
         System.out.println("============================================");
         System.out.println("Agent Output File Content");
         System.out.println("============================================");
-        final String text = FileUtils.readFileToString(outputFile);
+        final String text = FileUtils.readFileToString(outputFile, UTF8);
         System.out.println(text);
     }
 
@@ -55,7 +53,7 @@ public class DcmAgentTest {
     public void test_agentmain_file() throws Exception {
         DcmAgent.agentmain("file " + outputFilePath);
 
-        final List<String> content = FileUtils.readLines(outputFile);
+        final List<String> content = FileUtils.readLines(outputFile, UTF8);
         assertThat(content.get(0), containsString("No action in agent argument, do nothing!"));
     }
 
@@ -70,7 +68,7 @@ public class DcmAgentTest {
         DcmAgent.agentmain("set baidu.com 1.2.3.4 file " + outputFilePath);
         assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("baidu.com").getIp());
 
-        final List<String> content = FileUtils.readLines(outputFile);
+        final List<String> content = FileUtils.readLines(outputFile, UTF8);
         assertEquals(DcmAgent.DCM_AGENT_SUCCESS_MARK_LINE, content.get(content.size() - 1));
     }
 
@@ -90,7 +88,7 @@ public class DcmAgentTest {
     public void test_agentmain_rm() throws Exception {
         DnsCacheManipulator.setDnsCache("baidu.com", "3.3.3.3");
         DcmAgent.agentmain("rm baidu.com");
-        
+
         assertNull(DnsCacheManipulator.getDnsCache("baidu.com"));
     }
 
@@ -154,7 +152,7 @@ public class DcmAgentTest {
 
         assertEquals(1110, DnsCacheManipulator.getDnsNegativeCachePolicy());
 
-        final List<String> content = FileUtils.readLines(outputFile);
+        final List<String> content = FileUtils.readLines(outputFile, UTF8);
         assertThat(content.get(0), containsString("Error to do action setNegativePolicy"));
         assertThat(content.get(0), containsString("action setNegativePolicy need more argument!"));
     }
@@ -167,7 +165,7 @@ public class DcmAgentTest {
 
         assertEquals(1111, DnsCacheManipulator.getDnsNegativeCachePolicy());
 
-        final List<String> content = FileUtils.readLines(outputFile);
+        final List<String> content = FileUtils.readLines(outputFile, UTF8);
         assertThat(content.get(0), containsString("Error to do action setNegativePolicy 737 HaHa"));
         assertThat(content.get(0), containsString("Too more arguments for Action setNegativePolicy! arguments: [737, HaHa]"));
     }
@@ -176,7 +174,7 @@ public class DcmAgentTest {
     public void test_agentmain_unknownAction() throws Exception {
         DcmAgent.agentmain("  unknownAction  arg1  arg2   file " + outputFilePath);
 
-        final List<String> content = FileUtils.readLines(outputFile);
+        final List<String> content = FileUtils.readLines(outputFile, UTF8);
         assertThat(content.get(0), containsString("No action in agent argument, do nothing!"));
     }
 }

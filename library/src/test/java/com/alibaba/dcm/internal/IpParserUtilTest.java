@@ -8,7 +8,6 @@ import java.net.InetAddress;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -16,6 +15,7 @@ import static org.junit.Assert.fail;
 public class IpParserUtilTest {
 
     @Rule
+    @SuppressWarnings("deprecation")
     public final ExpectedException thrown = ExpectedException.none();
 
     @Test

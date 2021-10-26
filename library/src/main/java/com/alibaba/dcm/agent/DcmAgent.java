@@ -218,7 +218,7 @@ public class DcmAgent {
                 writer.printf("    %s %s %s\n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
             }
         } else {
-            writer.println(result.toString());
+            writer.println(result);
         }
     }
 

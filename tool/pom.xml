@@ -13,7 +13,7 @@
 	<licenses>
 		<license>
 			<name>Apache 2</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 			<comments>A business-friendly OSS license</comments>
 		</license>
@@ -36,6 +36,7 @@
 			-->
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+			<!--suppress MavenPackageUpdate -->
 			<version>2.5</version>
 		</dependency>
 		<dependency>
@@ -247,7 +248,7 @@
 							<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/examples/exclude-package-names.html -->
 							<excludePackageNames>*.internal.*</excludePackageNames>
 							<links>
-								<link>http://docs.oracle.com/javase/7/docs/api</link>
+								<link>https://docs.oracle.com/javase/7/docs/api</link>
 							</links>
 							<overview>src/api/overview.html</overview>
 							<doclint>none</doclint>

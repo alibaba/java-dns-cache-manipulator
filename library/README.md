@@ -190,7 +190,7 @@ DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 
 ```java
 HttpClient client = new HttpClient();
-GetMethod m1 = new GetMethod("http://www.aliyun.com");
+GetMethod m1 = new GetMethod("https://www.aliyun.com");
 client.executeMethod(m1);
 String content = m1.getResponseBodyAsString();
 
@@ -202,7 +202,7 @@ client.executeMethod(m1);
 String content = m1.getResponseBodyAsString();
 
 // 重新创建GetMethod，才能得到自己机器上的结果
-GetMethod m2 = new GetMethod("http://www.aliyun.com");
+GetMethod m2 = new GetMethod("https://www.aliyun.com");
 client.executeMethod(m2);
 content = m2.getResponseBodyAsString();
 ```

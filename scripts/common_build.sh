@@ -50,7 +50,7 @@ mvnBuildJar() {
         cd "$ROOT_PROJECT_DIR"
         if [ -n "${CI_TEST_MODE+YES}" ]; then
             # Build jar action should have used package instead of install
-            # here use install intendedly to check release operations.
+            # here use install intended to check release operations.
             #
             # De-activate a maven profile from command line
             # https://stackoverflow.com/questions/25201430

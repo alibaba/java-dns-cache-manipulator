@@ -131,6 +131,7 @@ public class InetAddressCacheUtilForJdk8Minus {
     /**
      * @return {@link InetAddress#addressCache} and {@link InetAddress#negativeCache}
      */
+    @SuppressWarnings("JavaReflectionMemberAccess")
     private static Object[] getAddressCacheFieldsOfInetAddress0()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {

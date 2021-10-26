@@ -66,6 +66,7 @@ public class InetAddressCacheUtilCommons {
     private static volatile Field setFiled$InetAddressCachePolicy = null;
     private static volatile Field negativeSet$InetAddressCachePolicy = null;
 
+    @SuppressWarnings("JavaReflectionMemberAccess")
     private static void setCachePolicy0(boolean isNegative, int seconds)
             throws NoSuchFieldException, IllegalAccessException {
         if (seconds < 0) {

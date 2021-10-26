@@ -36,7 +36,7 @@ public class DnsCacheManipulatorTest {
     private static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-7352jt-12559-AZ-7524087.com";
 
     @BeforeClass
-    public static void beforeClass() throws Exception {
+    public static void beforeClass() {
         // System Properties
         // https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -47,7 +47,8 @@ public class DnsCacheManipulatorTest {
     }
 
     @Before
-    public void before() throws Exception {
+    @SuppressWarnings("deprecation")
+    public void before() {
         DnsCacheManipulator.clearDnsCache();
         assertTrue(DnsCacheManipulator.getAllDnsCache().isEmpty());
         assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
@@ -90,7 +91,7 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
-    public void test_configNotFound() throws Exception {
+    public void test_configNotFound() {
         try {
             DnsCacheManipulator.loadDnsCacheConfig("not-existed.properties");
             fail();
@@ -100,11 +101,13 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
-    public void test_setDnsCache_getAllDnsCache() throws Exception {
+    @SuppressWarnings("deprecation")
+    public void test_setDnsCache_getAllDnsCache() {
         final String host = "www.test_setDnsCache_getAllDnsCache.com";
         DnsCacheManipulator.setDnsCache(host, IP3);
 
         final List<DnsCacheEntry> allDnsCacheEntries = DnsCacheManipulator.getAllDnsCache();
+        @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
         final List<DnsCacheEntry> expected = Arrays.asList(
                 new DnsCacheEntry(host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE)));
 
@@ -169,12 +172,13 @@ public class DnsCacheManipulatorTest {
         assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost().toLowerCase());
     }
 
+    @SuppressWarnings("ThrowablePrintedToSystemOut")
     private static void assertDomainNotExisted() {
         try {
             InetAddress.getByName(DOMAIN_NOT_EXISTED).getHostAddress();
             fail();
         } catch (UnknownHostException expected) {
-            System.out.println(expected.toString());
+            System.out.println(expected);
             assertTrue(true);
         }
     }
@@ -205,7 +209,7 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
-    public void test_multi_ips_in_config_file() throws Exception {
+    public void test_multi_ips_in_config_file() {
         long now = currentTimeMillis();
         DnsCacheManipulator.loadDnsCacheConfig("dns-cache-multi-ips.properties");
 
@@ -229,7 +233,7 @@ public class DnsCacheManipulatorTest {
     }
 
     @Test
-    public void test_nullSafeForGetDnsCache() throws Exception {
+    public void test_nullSafeForGetDnsCache() {
         final DnsCacheEntry dnsCache = DnsCacheManipulator.getDnsCache(DOMAIN_NOT_EXISTED);
         assertNull(dnsCache);
     }

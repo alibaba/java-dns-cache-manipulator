@@ -13,7 +13,8 @@ import static org.junit.Assert.*;
  */
 public class DnsCacheTest {
     @Test
-    public void test_equals() throws Exception {
+    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
+    public void test_equals() {
         final Date expiration = new Date();
         DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);
         DnsCacheEntry entry2 = new DnsCacheEntry("b.com", new String[]{"1.1.1.2"}, expiration);
@@ -31,7 +32,8 @@ public class DnsCacheTest {
     }
 
     @Test
-    public void test_toString() throws Exception {
+    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
+    public void test_toString() {
         final Date expiration = new Date();
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         final String date = dateFormat.format(expiration);

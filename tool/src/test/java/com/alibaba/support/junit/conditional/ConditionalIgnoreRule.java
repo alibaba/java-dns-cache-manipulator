@@ -82,7 +82,7 @@ public class ConditionalIgnoreRule implements MethodRule {
         private IgnoreCondition createCondition() throws Exception {
             IgnoreCondition result;
             if (isConditionTypeStandalone()) {
-                result = conditionType.newInstance();
+                result = conditionType.getDeclaredConstructor().newInstance();
             } else {
                 result = conditionType.getDeclaredConstructor(target.getClass()).newInstance(target);
             }

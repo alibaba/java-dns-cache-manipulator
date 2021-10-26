@@ -3,7 +3,7 @@ package com.alibaba.dcm.internal;
 /**
  * @author antfling (ding_zhengang at hithinksoft dot com)
  */
-public class JavaVersionuUtil {
+public class JavaVersionUtil {
 
     public static final JavaVersion CURRENT_JAVA_VERSION;
 
@@ -12,9 +12,9 @@ public class JavaVersionuUtil {
     }
 
     private static JavaVersion parseCurrentJavaVersion() {
-        String javaVersionTmp = System.getProperty("java.version");
-        String[] split = javaVersionTmp.split("\\.", 3);
-        String javaVersion = "0";
+        final String javaVersionTmp = System.getProperty("java.version");
+        final String[] split = javaVersionTmp.split("\\.", 3);
+        final String javaVersion;
         if (split.length <= 0) {
             throw new IllegalStateException("get current java version failed");
         } else if (split.length == 1) {

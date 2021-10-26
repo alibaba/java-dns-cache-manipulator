@@ -14,7 +14,7 @@
 	<licenses>
 		<license>
 			<name>Apache 2</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 			<comments>A business-friendly OSS license</comments>
 		</license>
@@ -30,7 +30,7 @@
 	</issueManagement>
 	<organization>
 		<name>Alibaba</name>
-		<url>http://www.alibaba.com</url>
+		<url>https://www.alibaba.com</url>
 	</organization>
 	<developers>
 		<developer>
@@ -38,12 +38,12 @@
 			<id>oldratlee</id>
 			<email>oldratlee(AT)gmail(DOT)com</email>
 			<timezone>+8</timezone>
-			<url>http://oldratlee.com/</url>
+			<url>https://oldratlee.com/</url>
 			<roles>
 				<role>developer</role>
 			</roles>
 			<organization>Alibaba</organization>
-			<organizationUrl>http://www.alibaba.com</organizationUrl>
+			<organizationUrl>https://www.alibaba.com</organizationUrl>
 		</developer>
 	</developers>
 
@@ -72,6 +72,7 @@
 			-->
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+			<!--suppress MavenPackageUpdate -->
 			<version>2.5</version>
 			<scope>test</scope>
 		</dependency>
@@ -229,7 +230,7 @@
 							<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/examples/exclude-package-names.html -->
 							<excludePackageNames>*.internal.*</excludePackageNames>
 							<links>
-								<link>http://docs.oracle.com/javase/7/docs/api</link>
+								<link>https://docs.oracle.com/javase/7/docs/api</link>
 							</links>
 							<overview>src/api/overview.html</overview>
 							<doclint>none</doclint>
