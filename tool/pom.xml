@@ -241,6 +241,7 @@
 					<plugin>
 						<artifactId>maven-javadoc-plugin</artifactId>
 						<configuration>
+							<source>8</source>
 							<show>public</show>
 							<charset>UTF-8</charset>
 							<encoding>UTF-8</encoding>
