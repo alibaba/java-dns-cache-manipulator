@@ -13,7 +13,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isDnsCacheEntryExpired;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
 
 /**
@@ -154,11 +153,7 @@ public class InetAddressCacheUtilForJdk9Plus {
             return null;
         }
 
-        final DnsCacheEntry dnsCacheEntry = inetAddress$Addresses2DnsCacheEntry(host, addresses);
-        if (isDnsCacheEntryExpired(dnsCacheEntry.getHost())) {
-            return null;
-        }
-        return dnsCacheEntry;
+        return inetAddress$Addresses2DnsCacheEntry(host, addresses);
     }
 
     public static DnsCache listInetAddressCache()
@@ -170,9 +165,6 @@ public class InetAddressCacheUtilForJdk9Plus {
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
 
-            if (isDnsCacheEntryExpired(host)) { // exclude expired entries!
-                continue;
-            }
             DnsCacheEntry dnsCacheEntry = inetAddress$Addresses2DnsCacheEntry(host, entry.getValue());
             if (dnsCacheEntry.getIps().length == 0) {
                 retNegativeCache.add(dnsCacheEntry);

@@ -23,10 +23,6 @@ public class InetAddressCacheUtilCommons {
         return addresses;
     }
 
-    static boolean isDnsCacheEntryExpired(String host) {
-        return null == host || "0.0.0.0".equals(host);
-    }
-
     /**
      * Set JVM DNS cache policy
      *

@@ -17,7 +17,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
-import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isDnsCacheEntryExpired;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
 
 /**
@@ -169,6 +168,10 @@ public class InetAddressCacheUtilForJdk8Minus {
         if (isDnsCacheEntryExpired(dnsCacheEntry.getHost())) return null;
 
         return dnsCacheEntry;
+    }
+
+    private static boolean isDnsCacheEntryExpired(String host) {
+        return null == host || "0.0.0.0".equals(host);
     }
 
     public static DnsCache listInetAddressCache()
