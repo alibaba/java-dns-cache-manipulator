@@ -15,6 +15,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
+import static com.alibaba.dcm.internal.TimeUtil.convertNanoTimeToTimeMillis;
+import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
 
 /**
  * Util class to manipulate dns cache for {@code JDK 9+}.
@@ -39,7 +41,7 @@ public class InetAddressCacheUtilForJdk9Plus {
      */
     public static void setInetAddressCache(String host, String[] ips, long expireMillis)
             throws UnknownHostException, IllegalAccessException, InstantiationException, InvocationTargetException, ClassNotFoundException, NoSuchFieldException {
-        long expiration = expireMillis == NEVER_EXPIRATION ? NEVER_EXPIRATION : System.nanoTime() + expireMillis * 1000000;
+        long expiration = expireMillis == NEVER_EXPIRATION ? NEVER_EXPIRATION : getNanoTimeAfterMs(expireMillis);
         Object cachedAddresses = newCachedAddresses(host, ips, expiration);
 
         getCacheFieldOfInetAddress().put(host, cachedAddresses);
@@ -178,12 +180,6 @@ public class InetAddressCacheUtilForJdk9Plus {
         return new DnsCache(retCache, retNegativeCache);
     }
 
-    /**
-     * recorder jvm start timestamp point
-     */
-    private static final long JVM_START_NANO_SECONDS = System.nanoTime();
-    private static final long JVM_START_MILL_SECONDS = System.currentTimeMillis();
-
     private static final String inetAddress$CachedAddresses_ClassName = "java.net.InetAddress$CachedAddresses";
     private static final String inetAddress$NameServiceAddresses_ClassName = "java.net.InetAddress$NameServiceAddresses";
 
@@ -245,9 +241,8 @@ public class InetAddressCacheUtilForJdk9Plus {
         if (addressesClassName.equals(inetAddress$CachedAddresses_ClassName)) {
             inetAddressArray = (InetAddress[]) inetAddressesFieldOfInetAddress$CacheAddress.get(addresses);
 
-            long expirationNanos = (Long) expiryTimeFieldOfInetAddress$CacheAddress.get(addresses);
-            // expiration timestamp convert
-            expiration = (expirationNanos - JVM_START_NANO_SECONDS) / 1000000 + JVM_START_MILL_SECONDS;
+            long expiryTimeNanos = (Long) expiryTimeFieldOfInetAddress$CacheAddress.get(addresses);
+            expiration = convertNanoTimeToTimeMillis(expiryTimeNanos);
         } else if (addressesClassName.equals(inetAddress$NameServiceAddresses_ClassName)) {
             InetAddress inetAddress = (InetAddress) reqAddrFieldOfInetAddress$NameServiceAddress.get(addresses);
             inetAddressArray = new InetAddress[]{inetAddress};
