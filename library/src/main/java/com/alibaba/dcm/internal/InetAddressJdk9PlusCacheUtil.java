@@ -43,6 +43,26 @@ public class InetAddressJdk9PlusCacheUtil {
         addToExpirySetFieldOfInetAddress(cachedAddresses);
     }
 
+    static Object newCachedAddresses(String host, String[] ips, long expiration)
+            throws ClassNotFoundException, UnknownHostException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<?> clazz = Class.forName(inetAddress$CachedAddresses_ClassName);
+        // InetAddress.CachedAddresses has only a constructor:
+        // - for jdk 9-jdk12, constructor signature is  CachedAddresses(String host, InetAddress[] inetAddresses, long expiryTime)
+        // code in jdk 9-jdk12:
+        //  http://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#783
+        Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
+        constructor.setAccessible(true);
+        return constructor.newInstance(host, toInetAddressArray(host, ips), expiration);
+    }
+
+    /**
+     * @param cachedAddresses add to expirySet
+     */
+    static void addToExpirySetFieldOfInetAddress(Object cachedAddresses) throws NoSuchFieldException, IllegalAccessException {
+        NavigableSet<Object> expirySetFieldOfInetAddress = getExpirySetFieldOfInetAddress();
+        expirySetFieldOfInetAddress.add(cachedAddresses);
+    }
+
     public static void removeInetAddressCache(String host) throws NoSuchFieldException, IllegalAccessException {
         getCacheFieldOfInetAddress().remove(host);
         removeExpirySetFieldOfInetAddressByHost(host);
@@ -61,14 +81,6 @@ public class InetAddressJdk9PlusCacheUtil {
         }
     }
 
-    /**
-     * @param cachedAddresses add to expirySet
-     */
-    static void addToExpirySetFieldOfInetAddress(Object cachedAddresses) throws NoSuchFieldException, IllegalAccessException {
-        NavigableSet<Object> expirySetFieldOfInetAddress = getExpirySetFieldOfInetAddress();
-        expirySetFieldOfInetAddress.add(cachedAddresses);
-    }
-
     static volatile Field hostFieldOfInetAddress$CacheAddress = null;
 
     /**
@@ -85,18 +97,6 @@ public class InetAddressJdk9PlusCacheUtil {
             }
         }
         return (String) hostFieldOfInetAddress$CacheAddress.get(cachedAddresses);
-    }
-
-    static Object newCachedAddresses(String host, String[] ips, long expiration)
-            throws ClassNotFoundException, UnknownHostException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Class<?> clazz = Class.forName(inetAddress$CachedAddresses_ClassName);
-        // InetAddress.CachedAddresses has only a constructor:
-        // - for jdk 9-jdk12, constructor signature is  CachedAddresses(String host, InetAddress[] inetAddresses, long expiryTime)
-        // code in jdk 9-jdk12:
-        //  http://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#783
-        Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
-        constructor.setAccessible(true);
-        return constructor.newInstance(host, toInetAddressArray(host, ips), expiration);
     }
 
     /**
@@ -142,11 +142,6 @@ public class InetAddressJdk9PlusCacheUtil {
             }
         }
         return ADDRESS_CACHE_AND_EXPIRY_SET;
-    }
-
-    public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {
-        getCacheFieldOfInetAddress().clear();
-        getExpirySetFieldOfInetAddress().clear();
     }
 
     @Nullable
@@ -286,6 +281,11 @@ public class InetAddressJdk9PlusCacheUtil {
         }
 
         return new DnsCacheEntry(host, ips, new Date(expiration));
+    }
+
+    public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {
+        getCacheFieldOfInetAddress().clear();
+        getExpirySetFieldOfInetAddress().clear();
     }
 
     private InetAddressJdk9PlusCacheUtil() {

@@ -39,8 +39,7 @@ public class InetAddressCacheUtil {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
      */
-    public static void setInetAddressCache(String host, String[] ips, long expiration)
-            throws NoSuchMethodException, UnknownHostException,
+    public static void setInetAddressCache(String host, String[] ips, long expiration) throws UnknownHostException,
             IllegalAccessException, InstantiationException, InvocationTargetException,
             ClassNotFoundException, NoSuchFieldException {
         host = host.toLowerCase();
@@ -52,19 +51,8 @@ public class InetAddressCacheUtil {
         }
     }
 
-    public static void removeInetAddressCache(String host)
-            throws NoSuchFieldException, IllegalAccessException {
-        host = host.toLowerCase();
-
-        synchronized (getAddressCacheFieldOfInetAddress()) {
-            getCacheFiledOfAddressCacheFiledOfInetAddress().remove(host);
-            getCacheFiledOfNegativeCacheFiledOfInetAddress().remove(host);
-        }
-    }
-
     static Object newCacheEntry(String host, String[] ips, long expiration)
-            throws UnknownHostException, ClassNotFoundException, NoSuchMethodException,
-            IllegalAccessException, InvocationTargetException, InstantiationException {
+            throws UnknownHostException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
         String className = "java.net.InetAddress$CacheEntry";
         Class<?> clazz = Class.forName(className);
 
@@ -80,6 +68,16 @@ public class InetAddressCacheUtil {
         Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
         return constructor.newInstance(toInetAddressArray(host, ips), expiration);
+    }
+
+    public static void removeInetAddressCache(String host)
+            throws NoSuchFieldException, IllegalAccessException {
+        host = host.toLowerCase();
+
+        synchronized (getAddressCacheFieldOfInetAddress()) {
+            getCacheFiledOfAddressCacheFiledOfInetAddress().remove(host);
+            getCacheFiledOfNegativeCacheFiledOfInetAddress().remove(host);
+        }
     }
 
     /**
@@ -103,7 +101,7 @@ public class InetAddressCacheUtil {
     @SuppressWarnings("unchecked")
     static Map<String, Object> getCacheFiledOfInetAddress$Cache0(Object inetAddressCache)
             throws NoSuchFieldException, IllegalAccessException {
-        Class clazz = inetAddressCache.getClass();
+        Class<?> clazz = inetAddressCache.getClass();
 
         final Field cacheMapField = clazz.getDeclaredField("cache");
         cacheMapField.setAccessible(true);
@@ -214,8 +212,7 @@ public class InetAddressCacheUtil {
     static volatile Field expirationFieldOfInetAddress$CacheEntry = null;
     static volatile Field addressesFieldOfInetAddress$CacheEntry = null;
 
-    static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry)
-            throws NoSuchFieldException, IllegalAccessException {
+    static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry) throws IllegalAccessException {
         if (expirationFieldOfInetAddress$CacheEntry == null || addressesFieldOfInetAddress$CacheEntry == null) {
             synchronized (InetAddressCacheUtil.class) {
                 if (expirationFieldOfInetAddress$CacheEntry == null) { // double check
@@ -280,8 +277,7 @@ public class InetAddressCacheUtil {
         setCachePolicy0(false, cacheSeconds);
     }
 
-    public static int getDnsCachePolicy()
-            throws NoSuchFieldException, IllegalAccessException {
+    public static int getDnsCachePolicy() {
         return InetAddressCachePolicy.get();
     }
 
@@ -301,8 +297,7 @@ public class InetAddressCacheUtil {
         setCachePolicy0(true, negativeCacheSeconds);
     }
 
-    public static int getDnsNegativeCachePolicy()
-            throws NoSuchFieldException, IllegalAccessException {
+    public static int getDnsNegativeCachePolicy() {
         return InetAddressCachePolicy.getNegative();
     }
 
