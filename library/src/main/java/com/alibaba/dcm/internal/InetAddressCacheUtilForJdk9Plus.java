@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
 
 /**
@@ -36,8 +37,9 @@ public class InetAddressCacheUtilForJdk9Plus {
      *     see {@link InetAddress.CachedAddresses#expiryTime}.
      * </ul>
      */
-    public static void setInetAddressCache(String host, String[] ips, long expiration)
+    public static void setInetAddressCache(String host, String[] ips, long expireMillis)
             throws UnknownHostException, IllegalAccessException, InstantiationException, InvocationTargetException, ClassNotFoundException, NoSuchFieldException {
+        long expiration = expireMillis == NEVER_EXPIRATION ? NEVER_EXPIRATION : System.nanoTime() + expireMillis * 1000000;
         Object cachedAddresses = newCachedAddresses(host, ips, expiration);
 
         getCacheFieldOfInetAddress().put(host, cachedAddresses);
@@ -182,8 +184,6 @@ public class InetAddressCacheUtilForJdk9Plus {
     private static final long JVM_START_NANO_SECONDS = System.nanoTime();
     private static final long JVM_START_MILL_SECONDS = System.currentTimeMillis();
 
-    private static final Long NEVER_EXPIRY = Long.MAX_VALUE;
-
     private static final String inetAddress$CachedAddresses_ClassName = "java.net.InetAddress$CachedAddresses";
     private static final String inetAddress$NameServiceAddresses_ClassName = "java.net.InetAddress$NameServiceAddresses";
 
@@ -252,7 +252,7 @@ public class InetAddressCacheUtilForJdk9Plus {
             InetAddress inetAddress = (InetAddress) reqAddrFieldOfInetAddress$NameServiceAddress.get(addresses);
             inetAddressArray = new InetAddress[]{inetAddress};
 
-            expiration = NEVER_EXPIRY;
+            expiration = NEVER_EXPIRATION;
         } else {
             throw new IllegalStateException("JDK add new child class " + addressesClassName +
                     " for class InetAddress.Addresses, report issue for dns-cache-manipulator lib!");

@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
  * @since 1.6.0
  */
 public class InetAddressCacheUtilCommons {
+    public static final long NEVER_EXPIRATION = Long.MAX_VALUE;
 
     static InetAddress[] toInetAddressArray(String host, String[] ips) throws UnknownHostException {
         InetAddress[] addresses = new InetAddress[ips.length];

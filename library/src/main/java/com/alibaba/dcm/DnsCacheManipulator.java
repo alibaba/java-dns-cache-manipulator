@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
+
 
 /**
  * Setting dns (in fact dns cache).
@@ -23,8 +25,6 @@ import javax.annotation.Nullable;
  * @see DnsCacheManipulatorException
  */
 public class DnsCacheManipulator {
-    private static final long NEVER_EXPIRATION = Long.MAX_VALUE;
-
     /**
      * Set a <b>never expired</b> dns cache entry
      *
@@ -58,10 +58,10 @@ public class DnsCacheManipulator {
     public static void setDnsCache(long expireMillis, @Nonnull String host, @Nonnull String... ips) {
         try {
             if (JavaVersionUtil.CURRENT_JAVA_VERSION.isLessThenOrEqual(JavaVersion.JDK8.getVersionNum())) {
-                InetAddressCacheUtilForJdk8Minus.setInetAddressCache(host, ips, System.currentTimeMillis() + expireMillis);
+                InetAddressCacheUtilForJdk8Minus.setInetAddressCache(host, ips, expireMillis);
             } else {
                 //need nanos to mills
-                InetAddressCacheUtilForJdk9Plus.setInetAddressCache(host, ips, System.nanoTime() + expireMillis * 1000000);
+                InetAddressCacheUtilForJdk9Plus.setInetAddressCache(host, ips, expireMillis);
             }
         } catch (Exception e) {
             final String message = String.format("Fail to setDnsCache for host %s ip %s expireMillis %s, cause: %s",

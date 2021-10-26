@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
 
 /**
@@ -41,10 +42,11 @@ public class InetAddressCacheUtilForJdk8Minus {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
      */
-    public static void setInetAddressCache(String host, String[] ips, long expiration) throws UnknownHostException,
+    public static void setInetAddressCache(String host, String[] ips, long expireMillis) throws UnknownHostException,
             IllegalAccessException, InstantiationException, InvocationTargetException,
             ClassNotFoundException, NoSuchFieldException {
         host = host.toLowerCase();
+        long expiration = expireMillis == NEVER_EXPIRATION ? NEVER_EXPIRATION : System.currentTimeMillis() + expireMillis;
         Object entry = newCacheEntry(host, ips, expiration);
 
         synchronized (getAddressCacheFieldOfInetAddress()) {
