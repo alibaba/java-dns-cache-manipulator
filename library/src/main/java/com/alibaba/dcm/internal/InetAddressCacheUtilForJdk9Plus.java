@@ -163,9 +163,10 @@ public class InetAddressCacheUtilForJdk9Plus {
 
     public static DnsCache listInetAddressCache()
             throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+        final List<DnsCacheEntry> retCache = new ArrayList<DnsCacheEntry>();
+        final List<DnsCacheEntry> retNegativeCache = new ArrayList<DnsCacheEntry>();
 
         final ConcurrentMap<String, Object> cache = getCacheFieldOfInetAddress();
-        final List<DnsCacheEntry> retCache = new ArrayList<DnsCacheEntry>();
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
 
@@ -174,19 +175,12 @@ public class InetAddressCacheUtilForJdk9Plus {
             }
             DnsCacheEntry dnsCacheEntry = inetAddress$Addresses2DnsCacheEntry(host, entry.getValue());
             if (dnsCacheEntry.getIps().length == 0) {
+                retNegativeCache.add(dnsCacheEntry);
+            } else {
                 retCache.add(dnsCacheEntry);
             }
         }
 
-        final NavigableSet<Object> expirySet = getExpirySetFieldOfInetAddress();
-        final List<DnsCacheEntry> retNegativeCache = new ArrayList<DnsCacheEntry>();
-        for (Object addresses : expirySet) {
-            final String host = getHostOfInetAddress$CacheAddress(addresses);
-            DnsCacheEntry dnsCacheEntry = inetAddress$Addresses2DnsCacheEntry(host, addresses);
-            if (dnsCacheEntry.getIps().length == 0) {
-                retNegativeCache.add(dnsCacheEntry);
-            }
-        }
         return new DnsCache(retCache, retNegativeCache);
     }
 
