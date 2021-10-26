@@ -5,9 +5,9 @@ import sun.net.util.IPAddressUtil;
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
-public class IpParserUtil {
+class IpParserUtil {
     /**
-     * dig from InetAddress#getAllByName(java.lang.String, java.net.InetAddress)
+     * source code is dug from {@link java.net.InetAddress#getAllByName(java.lang.String, java.net.InetAddress)}
      */
     static byte[] ip2ByteArray(String ip) {
         boolean ipv6Expected = false;
