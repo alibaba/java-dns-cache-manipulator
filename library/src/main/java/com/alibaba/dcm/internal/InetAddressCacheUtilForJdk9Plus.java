@@ -13,17 +13,19 @@ import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import static com.alibaba.dcm.internal.InetAddressCacheUtil.isDnsCacheEntryExpired;
-import static com.alibaba.dcm.internal.InetAddressCacheUtil.toInetAddressArray;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilForJdk8Minus.isDnsCacheEntryExpired;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilForJdk8Minus.toInetAddressArray;
 
 /**
- * Util class to manipulate dns cache {@link InetAddress#cache}.
+ * Util class to manipulate dns cache for {@code JDK 9+}.
+ * <p>
+ * dns cache is {@link InetAddress#cache}.
  *
  * @author antfling (ding_zhengang at hithinksoft dot com)
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
-public class InetAddressJdk9PlusCacheUtil {
+public class InetAddressCacheUtilForJdk9Plus {
     /**
      * {@link InetAddress.CachedAddresses}
      * <p>
@@ -88,7 +90,7 @@ public class InetAddressJdk9PlusCacheUtil {
      */
     static String getHostOfInetAddress$CacheAddress(Object cachedAddresses) throws NoSuchFieldException, IllegalAccessException {
         if (hostFieldOfInetAddress$CacheAddress == null) {
-            synchronized (InetAddressJdk9PlusCacheUtil.class) {
+            synchronized (InetAddressCacheUtilForJdk9Plus.class) {
                 if (hostFieldOfInetAddress$CacheAddress == null) {
                     Class<?> clazz = cachedAddresses.getClass();
                     hostFieldOfInetAddress$CacheAddress = clazz.getDeclaredField("host");
@@ -126,7 +128,7 @@ public class InetAddressJdk9PlusCacheUtil {
      */
     static Object[] getCacheAndExpirySetFieldOfInetAddress0() throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_EXPIRY_SET == null) {
-            synchronized (InetAddressJdk9PlusCacheUtil.class) {
+            synchronized (InetAddressCacheUtilForJdk9Plus.class) {
                 if (ADDRESS_CACHE_AND_EXPIRY_SET == null) {
                     final Field cacheField = InetAddress.class.getDeclaredField("cache");
                     cacheField.setAccessible(true);
@@ -227,7 +229,7 @@ public class InetAddressJdk9PlusCacheUtil {
         final String addressesClassName = addresses.getClass().getName();
 
         if (reqAddrFieldOfInetAddress$NameServiceAddress == null) {
-            synchronized (InetAddressJdk9PlusCacheUtil.class) {
+            synchronized (InetAddressCacheUtilForJdk9Plus.class) {
                 ///////////////////////////////////////////////
                 // Fields of InetAddress$CachedAddresses
                 ///////////////////////////////////////////////
@@ -288,6 +290,6 @@ public class InetAddressJdk9PlusCacheUtil {
         getExpirySetFieldOfInetAddress().clear();
     }
 
-    private InetAddressJdk9PlusCacheUtil() {
+    private InetAddressCacheUtilForJdk9Plus() {
     }
 }

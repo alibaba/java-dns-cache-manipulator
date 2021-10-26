@@ -20,11 +20,13 @@ import javax.annotation.concurrent.GuardedBy;
 import sun.net.InetAddressCachePolicy;
 
 /**
- * Util class to manipulate dns cache {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}.
+ * Util class to manipulate dns cache for {@code JDK 8-}.
+ * <p>
+ * dns cache is {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}.
  * <p>
  * <b>Caution</b>: <br>
  * Manipulation on {@link InetAddress#addressCache} <strong>MUST</strong>
- * be guarded by {@link InetAddress#addressCache} to avoid multithreaded problem,
+ * be guarded by {@link InetAddress#addressCache} to avoid multithreading problem,
  * you can see the implementation of {@link InetAddress} to confirm this
  * (<b><i>See Also</i></b> lists key code of {@link InetAddress} related to this point).
  *
@@ -35,7 +37,7 @@ import sun.net.InetAddressCachePolicy;
  * @see InetAddress#cacheInitIfNeeded()
  * @see InetAddress#cacheAddresses(String, InetAddress[], boolean)
  */
-public class InetAddressCacheUtil {
+public class InetAddressCacheUtilForJdk8Minus {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
      */
@@ -132,7 +134,7 @@ public class InetAddressCacheUtil {
     static Object[] getAddressCacheFieldsOfInetAddress0()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {
-            synchronized (InetAddressCacheUtil.class) {
+            synchronized (InetAddressCacheUtilForJdk8Minus.class) {
                 if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {  // double check
                     final Field cacheField = InetAddress.class.getDeclaredField("addressCache");
                     cacheField.setAccessible(true);
@@ -214,7 +216,7 @@ public class InetAddressCacheUtil {
 
     static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry) throws IllegalAccessException {
         if (expirationFieldOfInetAddress$CacheEntry == null || addressesFieldOfInetAddress$CacheEntry == null) {
-            synchronized (InetAddressCacheUtil.class) {
+            synchronized (InetAddressCacheUtilForJdk8Minus.class) {
                 if (expirationFieldOfInetAddress$CacheEntry == null) { // double check
                     Class<?> cacheEntryClass = entry.getClass();
                     // InetAddress.CacheEntry has 2 filed:
@@ -319,7 +321,7 @@ public class InetAddressCacheUtil {
         final Field setField;
         if (isNegative) {
             if (negativeSet$InetAddressCachePolicy == null) {
-                synchronized (InetAddressCacheUtil.class) {
+                synchronized (InetAddressCacheUtilForJdk8Minus.class) {
                     if (negativeSet$InetAddressCachePolicy == null) {
                         try {
                             negativeSet$InetAddressCachePolicy = clazz.getDeclaredField("propertyNegativeSet");
@@ -333,7 +335,7 @@ public class InetAddressCacheUtil {
             setField = negativeSet$InetAddressCachePolicy;
         } else {
             if (setFiled$InetAddressCachePolicy == null) {
-                synchronized (InetAddressCacheUtil.class) {
+                synchronized (InetAddressCacheUtilForJdk8Minus.class) {
                     if (setFiled$InetAddressCachePolicy == null) {
                         try {
                             setFiled$InetAddressCachePolicy = clazz.getDeclaredField("propertySet");
@@ -353,6 +355,6 @@ public class InetAddressCacheUtil {
         }
     }
 
-    private InetAddressCacheUtil() {
+    private InetAddressCacheUtilForJdk8Minus() {
     }
 }
