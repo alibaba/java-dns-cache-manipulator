@@ -17,7 +17,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
-import sun.net.InetAddressCachePolicy;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isDnsCacheEntryExpired;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
 
 /**
  * Util class to manipulate dns cache for {@code JDK 8-}.
@@ -53,7 +54,7 @@ public class InetAddressCacheUtilForJdk8Minus {
         }
     }
 
-    static Object newCacheEntry(String host, String[] ips, long expiration)
+    private static Object newCacheEntry(String host, String[] ips, long expiration)
             throws UnknownHostException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
         String className = "java.net.InetAddress$CacheEntry";
         Class<?> clazz = Class.forName(className);
@@ -86,7 +87,7 @@ public class InetAddressCacheUtilForJdk8Minus {
      * @return {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}
      */
     @GuardedBy("getAddressCacheFieldOfInetAddress()")
-    static Map<String, Object> getCacheFiledOfAddressCacheFiledOfInetAddress()
+    private static Map<String, Object> getCacheFiledOfAddressCacheFiledOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
         return getCacheFiledOfInetAddress$Cache0(getAddressCacheFieldOfInetAddress());
     }
@@ -95,13 +96,13 @@ public class InetAddressCacheUtilForJdk8Minus {
      * @return {@link InetAddress.Cache#cache} in {@link InetAddress#negativeCache}
      */
     @GuardedBy("getAddressCacheFieldOfInetAddress()")
-    static Map<String, Object> getCacheFiledOfNegativeCacheFiledOfInetAddress()
+    private static Map<String, Object> getCacheFiledOfNegativeCacheFiledOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
         return getCacheFiledOfInetAddress$Cache0(getNegativeCacheFieldOfInetAddress());
     }
 
     @SuppressWarnings("unchecked")
-    static Map<String, Object> getCacheFiledOfInetAddress$Cache0(Object inetAddressCache)
+    private static Map<String, Object> getCacheFiledOfInetAddress$Cache0(Object inetAddressCache)
             throws NoSuchFieldException, IllegalAccessException {
         Class<?> clazz = inetAddressCache.getClass();
 
@@ -113,7 +114,7 @@ public class InetAddressCacheUtilForJdk8Minus {
     /**
      * @return {@link InetAddress#addressCache}
      */
-    static Object getAddressCacheFieldOfInetAddress()
+    private static Object getAddressCacheFieldOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
         return getAddressCacheFieldsOfInetAddress0()[0];
     }
@@ -121,17 +122,17 @@ public class InetAddressCacheUtilForJdk8Minus {
     /**
      * @return {@link InetAddress#negativeCache}
      */
-    static Object getNegativeCacheFieldOfInetAddress()
+    private static Object getNegativeCacheFieldOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
         return getAddressCacheFieldsOfInetAddress0()[1];
     }
 
-    static volatile Object[] ADDRESS_CACHE_AND_NEGATIVE_CACHE = null;
+    private static volatile Object[] ADDRESS_CACHE_AND_NEGATIVE_CACHE = null;
 
     /**
      * @return {@link InetAddress#addressCache} and {@link InetAddress#negativeCache}
      */
-    static Object[] getAddressCacheFieldsOfInetAddress0()
+    private static Object[] getAddressCacheFieldsOfInetAddress0()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {
             synchronized (InetAddressCacheUtilForJdk8Minus.class) {
@@ -152,15 +153,6 @@ public class InetAddressCacheUtilForJdk8Minus {
         return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
     }
 
-    static InetAddress[] toInetAddressArray(String host, String[] ips) throws UnknownHostException {
-        InetAddress[] addresses = new InetAddress[ips.length];
-        for (int i = 0; i < addresses.length; i++) {
-            addresses[i] = InetAddress.getByAddress(host, IpParserUtil.ip2ByteArray(ips[i]));
-        }
-
-        return addresses;
-    }
-
     @Nullable
     public static DnsCacheEntry getInetAddressCache(String host)
             throws NoSuchFieldException, IllegalAccessException {
@@ -177,10 +169,6 @@ public class InetAddressCacheUtilForJdk8Minus {
         if (isDnsCacheEntryExpired(dnsCacheEntry.getHost())) return null;
 
         return dnsCacheEntry;
-    }
-
-    static boolean isDnsCacheEntryExpired(String host) {
-        return null == host || "0.0.0.0".equals(host);
     }
 
     public static DnsCache listInetAddressCache()
@@ -211,10 +199,10 @@ public class InetAddressCacheUtilForJdk8Minus {
     }
 
 
-    static volatile Field expirationFieldOfInetAddress$CacheEntry = null;
-    static volatile Field addressesFieldOfInetAddress$CacheEntry = null;
+    private static volatile Field expirationFieldOfInetAddress$CacheEntry = null;
+    private static volatile Field addressesFieldOfInetAddress$CacheEntry = null;
 
-    static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry) throws IllegalAccessException {
+    private static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry) throws IllegalAccessException {
         if (expirationFieldOfInetAddress$CacheEntry == null || addressesFieldOfInetAddress$CacheEntry == null) {
             synchronized (InetAddressCacheUtilForJdk8Minus.class) {
                 if (expirationFieldOfInetAddress$CacheEntry == null) { // double check
@@ -260,98 +248,6 @@ public class InetAddressCacheUtilForJdk8Minus {
         synchronized (getAddressCacheFieldOfInetAddress()) {
             getCacheFiledOfAddressCacheFiledOfInetAddress().clear();
             getCacheFiledOfNegativeCacheFiledOfInetAddress().clear();
-        }
-    }
-
-    /**
-     * Set JVM DNS cache policy
-     *
-     * @param cacheSeconds set default dns cache time. Special input case:
-     *                     <ul>
-     *                     <li> {@code -1} means never expired.(In effect, all negative value)</li>
-     *                     <li> {@code 0} never cached.</li>
-     *                     </ul>
-     * @see InetAddressCachePolicy
-     * @see InetAddressCachePolicy#cachePolicy
-     */
-    public static void setDnsCachePolicy(int cacheSeconds)
-            throws NoSuchFieldException, IllegalAccessException {
-        setCachePolicy0(false, cacheSeconds);
-    }
-
-    public static int getDnsCachePolicy() {
-        return InetAddressCachePolicy.get();
-    }
-
-    /**
-     * Set JVM DNS negative cache policy
-     *
-     * @param negativeCacheSeconds set default dns cache time. Special input case:
-     *                             <ul>
-     *                             <li> {@code -1} means never expired.(In effect, all negative value)</li>
-     *                             <li> {@code 0} never cached.</li>
-     *                             </ul>
-     * @see InetAddressCachePolicy
-     * @see InetAddressCachePolicy#negativeCachePolicy
-     */
-    public static void setDnsNegativeCachePolicy(int negativeCacheSeconds)
-            throws NoSuchFieldException, IllegalAccessException {
-        setCachePolicy0(true, negativeCacheSeconds);
-    }
-
-    public static int getDnsNegativeCachePolicy() {
-        return InetAddressCachePolicy.getNegative();
-    }
-
-
-    static volatile Field setFiled$InetAddressCachePolicy = null;
-    static volatile Field negativeSet$InetAddressCachePolicy = null;
-
-    static void setCachePolicy0(boolean isNegative, int seconds)
-            throws NoSuchFieldException, IllegalAccessException {
-        if (seconds < 0) {
-            seconds = -1;
-        }
-
-        final Class<?> clazz = InetAddressCachePolicy.class;
-        final Field cachePolicyFiled = clazz.getDeclaredField(
-                isNegative ? "negativeCachePolicy" : "cachePolicy");
-        cachePolicyFiled.setAccessible(true);
-
-        final Field setField;
-        if (isNegative) {
-            if (negativeSet$InetAddressCachePolicy == null) {
-                synchronized (InetAddressCacheUtilForJdk8Minus.class) {
-                    if (negativeSet$InetAddressCachePolicy == null) {
-                        try {
-                            negativeSet$InetAddressCachePolicy = clazz.getDeclaredField("propertyNegativeSet");
-                        } catch (NoSuchFieldException e) {
-                            negativeSet$InetAddressCachePolicy = clazz.getDeclaredField("negativeSet");
-                        }
-                        negativeSet$InetAddressCachePolicy.setAccessible(true);
-                    }
-                }
-            }
-            setField = negativeSet$InetAddressCachePolicy;
-        } else {
-            if (setFiled$InetAddressCachePolicy == null) {
-                synchronized (InetAddressCacheUtilForJdk8Minus.class) {
-                    if (setFiled$InetAddressCachePolicy == null) {
-                        try {
-                            setFiled$InetAddressCachePolicy = clazz.getDeclaredField("propertySet");
-                        } catch (NoSuchFieldException e) {
-                            setFiled$InetAddressCachePolicy = clazz.getDeclaredField("set");
-                        }
-                        setFiled$InetAddressCachePolicy.setAccessible(true);
-                    }
-                }
-            }
-            setField = setFiled$InetAddressCachePolicy;
-        }
-
-        synchronized (InetAddressCachePolicy.class) { // static synchronized method! 
-            cachePolicyFiled.set(null, seconds);
-            setField.set(null, true);
         }
     }
 

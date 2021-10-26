@@ -1,9 +1,6 @@
 package com.alibaba.dcm;
 
-import com.alibaba.dcm.internal.InetAddressCacheUtilForJdk8Minus;
-import com.alibaba.dcm.internal.InetAddressCacheUtilForJdk9Plus;
-import com.alibaba.dcm.internal.JavaVersion;
-import com.alibaba.dcm.internal.JavaVersionuUtil;
+import com.alibaba.dcm.internal.*;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -261,7 +258,7 @@ public class DnsCacheManipulator {
      */
     public static int getDnsCachePolicy() {
         try {
-            return InetAddressCacheUtilForJdk8Minus.getDnsCachePolicy();
+            return InetAddressCacheUtilCommons.getDnsCachePolicy();
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to getDnsCachePolicy, cause: " + e.toString(), e);
         }
@@ -282,7 +279,7 @@ public class DnsCacheManipulator {
      */
     public static void setDnsCachePolicy(int cacheSeconds) {
         try {
-            InetAddressCacheUtilForJdk8Minus.setDnsCachePolicy(cacheSeconds);
+            InetAddressCacheUtilCommons.setDnsCachePolicy(cacheSeconds);
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to setDnsCachePolicy, cause: " + e.toString(), e);
         }
@@ -302,7 +299,7 @@ public class DnsCacheManipulator {
      */
     public static int getDnsNegativeCachePolicy() {
         try {
-            return InetAddressCacheUtilForJdk8Minus.getDnsNegativeCachePolicy();
+            return InetAddressCacheUtilCommons.getDnsNegativeCachePolicy();
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to getDnsNegativeCachePolicy, cause: " + e.toString(), e);
         }
@@ -321,7 +318,7 @@ public class DnsCacheManipulator {
      */
     public static void setDnsNegativeCachePolicy(int negativeCacheSeconds) {
         try {
-            InetAddressCacheUtilForJdk8Minus.setDnsNegativeCachePolicy(negativeCacheSeconds);
+            InetAddressCacheUtilCommons.setDnsNegativeCachePolicy(negativeCacheSeconds);
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to setDnsNegativeCachePolicy, cause: " + e.toString(), e);
         }
