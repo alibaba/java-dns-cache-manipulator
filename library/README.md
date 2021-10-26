@@ -1,9 +1,9 @@
 Java Dns Cache Manipulator(DCM) Library
 =======================================
 
-[![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/alibaba/java-dns-cache-manipulator)
-[![Windows Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=windows%20build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
-[![Coverage Status](https://coveralls.io/repos/github/alibaba/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)  
+[![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=v1.6.0-RC1)](https://travis-ci.org/alibaba/java-dns-cache-manipulator)
+[![Windows Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/v1.6.0-RC1.svg?label=windows%20build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
+[![Coverage Status](https://coveralls.io/repos/github/alibaba/java-dns-cache-manipulator/badge.svg?branch=v1.6.0-RC1)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=v1.6.0-RC1)  
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/)
 [![GitHub release](https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases)  
 [![Join the chat at https://gitter.im/alibaba/java-dns-cache-manipulator](https://badges.gitter.im/alibaba/java-dns-cache-manipulator.svg)](https://gitter.im/alibaba/java-dns-cache-manipulator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
