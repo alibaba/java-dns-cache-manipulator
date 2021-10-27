@@ -1,15 +1,19 @@
 Java Dns Cache Manipulator(DCM) Library
 =======================================
 
-[![Build Status](https://travis-ci.org/alibaba/java-dns-cache-manipulator.svg?branch=master)](https://travis-ci.org/alibaba/java-dns-cache-manipulator)
-[![Windows Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=windows%20build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
-[![Coverage Status](https://coveralls.io/repos/github/alibaba/java-dns-cache-manipulator/badge.svg?branch=master)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)  
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.alibaba/dns-cache-manipulator/)
+[![Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
+[![Coveralls branch](https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/master)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)
+[![JDK support](https://img.shields.io/badge/JDK-6+-green?logo=java&logoColor=white)](https://openjdk.java.net/)  
+[![License](https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Javadocs](https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator?label=javadoc&color=3d7c47&logo=microsoft-academic&logoColor=white)](https://alibaba.github.io/java-dns-cache-manipulator/apidocs/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?color=2d545e&logo=apache-maven&logoColor=white)](https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator)
 [![GitHub release](https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases)  
-[![Join the chat at https://gitter.im/alibaba/java-dns-cache-manipulator](https://badges.gitter.im/alibaba/java-dns-cache-manipulator.svg)](https://gitter.im/alibaba/java-dns-cache-manipulator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator.svg)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/alibaba/java-dns-cache-manipulator.svg)](http://isitmaintained.com/project/alibaba/java-dns-cache-manipulator "Average time to resolve an issue")
-[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Chat at gitter.im](https://img.shields.io/gitter/room/alibaba/java-dns-cache-manipulator?color=46BC99&logo=gitter&logoColor=white)](https://gitter.im/alibaba/java-dns-cache-manipulator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![GitHub Stars](https://img.shields.io/github/stars/alibaba/java-dns-cache-manipulator)](https://github.com/alibaba/java-dns-cache-manipulator/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/alibaba/java-dns-cache-manipulator)](https://github.com/alibaba/java-dns-cache-manipulator/fork)
+[![user repos](https://badgen.net/github/dependents-repo/alibaba/java-dns-cache-manipulator?label=user%20repos)](https://github.com/alibaba/java-dns-cache-manipulator/network/dependents)
+[![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
+[![GitHub Contributors](https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator)](https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors)
 
 :point_right: 用编码的方式设置/查看`JVM`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`，支持`IPv6`。
 
@@ -226,11 +230,11 @@ content = m2.getResponseBodyAsString();
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.0-RC1</version>
 </dependency>
 ```
 
-可以在[search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.alibaba%22%20AND%20a%3A%22dns-cache-manipulator%22)查看最新的版本。
+可以在[search.maven.org](https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator)查看最新的版本。
 
 :eyeglasses: 经过测试的`JDK`
 ==================================
@@ -260,17 +264,20 @@ PS：
 如何设置`JVM`的`DNS Cache`
 ----------------------------------
 
-`JVM`的`DNS Cache`维护在类`InetAddress`的`addressCache`私有字段中，通过反射来设置，
-具体参见[`InetAddressCacheUtil`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtil.java)。
+`JVM`的`DNS Cache`维护在类`InetAddress`的私有字段中，通过反射来设置，具体实现参见
+
+- [`InetAddressCacheUtilCommons.java`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilCommons.java)
+- [`InetAddressCacheUtilForJdk8Minus.java`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJdk8Minus.java)
+- [`InetAddressCacheUtilForJdk9Plus.java`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJdk9Plus.java)
 
 注意设置`JVM`的`DNS Cache`的线程安全问题
 ----------------------------------
 
-`JVM`的`DNS Cache`显然是全局共用的，所以设置需要同步以保证没有并发问题。
+`JVM`的`DNS Cache`显然是全局共用的，所以设置保证是线程安全的没有并发问题。
 
-通过查看类`InetAddress`的实现可以确定：通过以`addressCache`字段为锁的`synchronized`块来保证线程安全。
+以`JDK 8`为例，通过查看类`InetAddress`的实现可以确定：通过以`addressCache`字段为锁的`synchronized`块来保证线程安全。
 
-其中关键代码（`JDK 7`）如下：
+其中关键代码如下：
 
 ```java
 /*
@@ -291,7 +298,7 @@ private static void cacheAddresses(String hostname,
 }
 ```
 
-[`InetAddressCacheUtil`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtil.java)类中对`DNS Cache`的读写也一致地加了以`addressCache`为锁的`synchronized`块，以保证线程安全。
+[`InetAddressCacheUtilForJdk8Minus`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJdk8Minus.java)类中对`DNS Cache`的读写也一致地加了以`addressCache`为锁的`synchronized`块，以保证线程安全。
 
 需要测试不同版本`JDK`
 ----------------------------------
@@ -310,6 +317,7 @@ private static void cacheAddresses(String hostname,
     - `JDK 6`的[`InetAddress`](http://hg.openjdk.java.net/jdk6/jdk6/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l739)
     - `JDK 7`的[`InetAddress`](http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l742)
     - `JDK 8`的[`InetAddress`](http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l748)
+    - `JDK 9`的[`InetAddress`](http://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#783)
 - [`JVM Networking Properties` - `java docs`](http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html)
 - [`java dns`解析缓存之源码解析](http://rongmayisheng.com/?p=1006)，写得很完整，源码解析。给出值得注意的结论：
     - 打开`Java`中的`SecurityManager`，`DNS`缓存将不会失效。
