@@ -1,5 +1,4 @@
-Java Dns Cache Manipulator(DCM)
-=======================================
+# [![🌏 Java Dns Cache Manipulator(DCM)](docs/logo-red.png)](#dummy)
 
 [![Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
 [![Coveralls branch](https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/master)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)
@@ -16,7 +15,7 @@ Java Dns Cache Manipulator(DCM)
 [![GitHub issues](https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator)](https://github.com/alibaba/java-dns-cache-manipulator/issues)
 [![GitHub Contributors](https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator)](https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors)
 
-包含子工程：
+Java Dns Cache Manipulator(`DCM`) 包含子工程：
 
 - [Java Dns Cache Manipulator Library](library)  
     用编码的方式设置/查看`JVM`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`，支持`IPv6`。

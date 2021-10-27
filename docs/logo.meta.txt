@@ -1,0 +1,4 @@
+font: Acme
+
+logo.fond-size: 48
+logo-social.fond-size: 56
