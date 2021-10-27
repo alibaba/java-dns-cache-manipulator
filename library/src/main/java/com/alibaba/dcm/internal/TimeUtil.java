@@ -17,13 +17,17 @@ class TimeUtil {
      */
     private static final long NANO_TIME_CHECK_POINT = System.nanoTime();
 
-    private static final long MS_TO_NS = 1000000;
+    private static final long NS_PER_MS = 1000000;
 
+    /**
+     * @see <a href="https://newbedev.com/how-can-i-convert-the-result-of-system-nanotime-to-a-date-in-java">
+     * How can I convert the result of System.nanoTime to a date in Java?</a>
+     */
     public static long convertNanoTimeToTimeMillis(long nanoTime) {
-        return (nanoTime - NANO_TIME_CHECK_POINT) / MS_TO_NS + TIME_MILLIS_CHECK_POINT;
+        return (nanoTime - NANO_TIME_CHECK_POINT) / NS_PER_MS + TIME_MILLIS_CHECK_POINT;
     }
 
     public static long getNanoTimeAfterMs(long millSeconds) {
-        return System.nanoTime() + millSeconds * MS_TO_NS;
+        return System.nanoTime() + millSeconds * NS_PER_MS;
     }
 }
