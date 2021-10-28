@@ -48,6 +48,8 @@
 	</developers>
 
 	<properties>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -84,17 +86,9 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+
 	<build>
 		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.2.0</version>
@@ -119,6 +113,31 @@
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
+			</plugin>
+			<!--
+				official docs: https://maven.apache.org/enforcer/enforcer-rules/requireMavenVersion.html
+
+				add maven-enforce-plugin to make sure the right jdk is used
+				https://stackoverflow.com/a/18420462/922688
+			-->
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.3.9</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<!--
@@ -148,6 +167,10 @@
 					<version>3.2.1</version>
 				</plugin>
 				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+				</plugin>
+				<plugin>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>3.3.1</version>
 				</plugin>
@@ -172,35 +195,7 @@
 	</build>
 	<profiles>
 		<profile>
-			<id>gen-code-cov</id>
-			<activation>
-				<property>
-					<name>env.TRAVIS</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>cobertura-maven-plugin</artifactId>
-						<version>2.7</version>
-						<configuration>
-							<format>xml</format>
-							<maxmem>256m</maxmem>
-							<aggregate>true</aggregate>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.eluder.coveralls</groupId>
-						<artifactId>coveralls-maven-plugin</artifactId>
-						<version>4.3.0</version>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>gen-src+doc</id>
+			<id>gen-src</id>
 			<activation>
 				<property>
 					<name>performRelease</name>
@@ -220,11 +215,24 @@
 							</execution>
 						</executions>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>gen-javadoc</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
 					<plugin>
 						<artifactId>maven-javadoc-plugin</artifactId>
 						<configuration>
 							<source>8</source>
-							<show>public</show>
+							<show>protected</show>
 							<charset>UTF-8</charset>
 							<encoding>UTF-8</encoding>
 							<docencoding>UTF-8</docencoding>
@@ -278,6 +286,83 @@
 			</build>
 		</profile>
 		<profile>
+			<id>gen-git-properties</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!--
+						Maven plugin which includes build-time git repository information into an POJO / *.properties).
+						Make your apps tell you which version exactly they were built from! Priceless in large distributed deployments.
+							https://github.com/git-commit-id/git-commit-id-maven-plugin
+					-->
+					<plugin>
+						<groupId>io.github.git-commit-id</groupId>
+						<artifactId>git-commit-id-maven-plugin</artifactId>
+						<version>5.0.0</version>
+						<executions>
+							<execution>
+								<id>get-the-git-infos</id>
+								<goals>
+									<goal>revision</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>validate-the-git-infos</id>
+								<goals>
+									<goal>validateRevision</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<validationProperties>
+								<!-- verify that the current repository is not dirty -->
+								<validationProperty>
+									<name>validating git dirty</name>
+									<value>${git.dirty}</value>
+									<shouldMatchTo>false</shouldMatchTo>
+								</validationProperty>
+							</validationProperties>
+							<generateGitPropertiesFile>true</generateGitPropertiesFile>
+							<generateGitPropertiesFilename>${project.build.outputDirectory}/META-INF/scm/${project.groupId}/${project.artifactId}/git.properties</generateGitPropertiesFilename>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>gen-code-cov</id>
+			<activation>
+				<property>
+					<name>env.TRAVIS</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+						<version>2.7</version>
+						<configuration>
+							<format>xml</format>
+							<maxmem>256m</maxmem>
+							<aggregate>true</aggregate>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.eluder.coveralls</groupId>
+						<artifactId>coveralls-maven-plugin</artifactId>
+						<version>4.3.0</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>enforcer-when-do-release</id>
 			<activation>
 				<property>
@@ -305,9 +390,6 @@
 										<requireJavaVersion>
 											<version>[1.8,)</version>
 										</requireJavaVersion>
-										<requireMavenVersion>
-											<version>3.3.9</version>
-										</requireMavenVersion>
 									</rules>
 								</configuration>
 							</execution>
