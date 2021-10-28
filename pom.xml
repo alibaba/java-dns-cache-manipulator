@@ -7,6 +7,8 @@
 	<version>1.6.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
+	<description>A lib/tool for setting dns programmatically without touching host file.</description>
+	<url>https://github.com/alibaba/java-dns-cache-manipulator</url>
 	<inceptionYear>2015</inceptionYear>
 
 	<licenses>
