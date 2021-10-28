@@ -240,7 +240,7 @@ public class DnsCacheManipulatorTest {
 
     @Test
     public void test_setDnsCachePolicy() throws Exception {
-        final String host = "baidu.com";
+        final String host = "bing.com";
         DnsCacheManipulator.setDnsCachePolicy(2);
         assertEquals(2, DnsCacheManipulator.getDnsCachePolicy());
 
@@ -251,9 +251,9 @@ public class DnsCacheManipulatorTest {
         InetAddress.getByName(host).getHostAddress();
 
         final DnsCacheEntry dnsCache = DnsCacheManipulator.getDnsCache(host);
-        assertBetween(dnsCache.getExpiration().getTime(), tick, tick + 2001);
+        assertBetween(dnsCache.getExpiration().getTime(), tick, tick + 2020);
 
-        sleep(1001);
+        sleep(1020);
 
         // return expired entry, because of no dns cache touch by external related operation!
         final DnsCacheEntry next = DnsCacheManipulator.getDnsCache(host);
@@ -261,14 +261,14 @@ public class DnsCacheManipulatorTest {
         assertEquals(dnsCache, next);
 
         // touch dns cache with external other host operation
-        InetAddress.getByName("www.baidu.com").getHostAddress();
+        InetAddress.getByName("www.bing.com").getHostAddress();
         assertNull(DnsCacheManipulator.getDnsCache(host));
 
         // relookup
         InetAddress.getByName(host).getHostAddress();
         final DnsCacheEntry relookup = DnsCacheManipulator.getDnsCache(host);
         final long relookupTick = currentTimeMillis();
-        assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2001);
+        assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2020);
     }
 
     @Test
@@ -287,7 +287,7 @@ public class DnsCacheManipulatorTest {
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
         final DnsCacheEntry dnsCache = negativeCache.get(0);
-        assertBetween(dnsCache.getExpiration().getTime(), tick, tick + 2001);
+        assertBetween(dnsCache.getExpiration().getTime(), tick, tick + 2020);
 
         sleep(1000);
         try {
@@ -309,7 +309,7 @@ public class DnsCacheManipulatorTest {
         final List<DnsCacheEntry> relookupNegativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, relookupNegativeCache.size());
         final DnsCacheEntry relookup = relookupNegativeCache.get(0);
-        assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2001);
+        assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2020);
     }
 
     static void assertBetween(long actual, long start, long end) {

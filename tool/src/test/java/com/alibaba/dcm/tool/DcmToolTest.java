@@ -121,8 +121,8 @@ public class DcmToolTest {
         System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE, outputFilePath);
         System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR, agentFilePath);
 
-        DcmTool.main(new String[]{"-p", DcmTool.pid(), "set", "baidu.com", "1.1.2.2"});
+        DcmTool.main(new String[]{"-p", DcmTool.pid(), "set", "bing.com", "1.1.2.2"});
 
-        assertEquals("1.1.2.2", InetAddress.getByName("baidu.com").getHostAddress());
+        assertEquals("1.1.2.2", InetAddress.getByName("bing.com").getHostAddress());
     }
 }

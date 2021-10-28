@@ -10,8 +10,8 @@ public class MainForAgentInject {
     @SuppressWarnings({"InfiniteLoopStatement", "BusyWait"})
     public static void main(String[] args) throws Exception {
         while (true) {
-            System.out.printf("%s: baidu.com: %s\n", new Date(),
-                    InetAddress.getByName("baidu.com").getHostAddress());
+            System.out.printf("%s: bing.com: %s\n", new Date(),
+                    InetAddress.getByName("bing.com").getHostAddress());
 
             Thread.sleep(1000);
         }

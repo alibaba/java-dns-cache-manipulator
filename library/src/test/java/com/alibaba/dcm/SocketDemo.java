@@ -12,8 +12,7 @@ public class SocketDemo {
     private static final Charset encoding = Charset.forName("UTF-8");
 
     public static void main(String[] args) throws Exception {
-        new Socket("www.qq.com", 80);
-        Socket client = new Socket("www.baidu.com", 80);
+        Socket client = new Socket("www.bing.com", 80);
 
         client.setSoTimeout(30 * 1000);
 

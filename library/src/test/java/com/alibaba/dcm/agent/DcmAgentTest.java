@@ -59,14 +59,14 @@ public class DcmAgentTest {
 
     @Test
     public void test_agentmain_set() throws Exception {
-        DcmAgent.agentmain("set baidu.com 1.2.3.4");
-        assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("baidu.com").getIp());
+        DcmAgent.agentmain("set bing.com 1.2.3.4");
+        assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("bing.com").getIp());
     }
 
     @Test
     public void test_agentmain_set_toFile() throws Exception {
-        DcmAgent.agentmain("set baidu.com 1.2.3.4 file " + outputFilePath);
-        assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("baidu.com").getIp());
+        DcmAgent.agentmain("set bing.com 1.2.3.4 file " + outputFilePath);
+        assertEquals("1.2.3.4", DnsCacheManipulator.getDnsCache("bing.com").getIp());
 
         final List<String> content = FileUtils.readLines(outputFile, UTF8);
         assertEquals(DcmAgent.DCM_AGENT_SUCCESS_MARK_LINE, content.get(content.size() - 1));
@@ -74,31 +74,31 @@ public class DcmAgentTest {
 
     @Test
     public void test_agentmain_set_MultiIp() throws Exception {
-        DcmAgent.agentmain("set baidu.com 1.1.1.1 2.2.2.2");
-        assertArrayEquals(new String[]{"1.1.1.1", "2.2.2.2"}, DnsCacheManipulator.getDnsCache("baidu.com").getIps());
+        DcmAgent.agentmain("set bing.com 1.1.1.1 2.2.2.2");
+        assertArrayEquals(new String[]{"1.1.1.1", "2.2.2.2"}, DnsCacheManipulator.getDnsCache("bing.com").getIps());
     }
 
     @Test
     public void test_agentmain_get() throws Exception {
-        DnsCacheManipulator.setDnsCache("baidu.com", "3.3.3.3");
-        DcmAgent.agentmain("get baidu.com");
+        DnsCacheManipulator.setDnsCache("bing.com", "3.3.3.3");
+        DcmAgent.agentmain("get bing.com");
     }
 
     @Test
     public void test_agentmain_rm() throws Exception {
-        DnsCacheManipulator.setDnsCache("baidu.com", "3.3.3.3");
-        DcmAgent.agentmain("rm baidu.com");
+        DnsCacheManipulator.setDnsCache("bing.com", "3.3.3.3");
+        DcmAgent.agentmain("rm bing.com");
 
-        assertNull(DnsCacheManipulator.getDnsCache("baidu.com"));
+        assertNull(DnsCacheManipulator.getDnsCache("bing.com"));
     }
 
     @Test
     public void test_agentmain_rm_withFile() throws Exception {
-        DnsCacheManipulator.setDnsCache("baidu.com", "3.3.3.3");
-        assertNotNull(DnsCacheManipulator.getDnsCache("baidu.com"));
-        DcmAgent.agentmain("rm  baidu.com file " + outputFilePath);
+        DnsCacheManipulator.setDnsCache("bing.com", "3.3.3.3");
+        assertNotNull(DnsCacheManipulator.getDnsCache("bing.com"));
+        DcmAgent.agentmain("rm  bing.com file " + outputFilePath);
 
-        assertNull(DnsCacheManipulator.getDnsCache("baidu.com"));
+        assertNull(DnsCacheManipulator.getDnsCache("bing.com"));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class DcmAgentTest {
 
     @Test
     public void test_agentmain_clear() throws Exception {
-        DnsCacheManipulator.setDnsCache("baidu.com", "3.3.3.3");
+        DnsCacheManipulator.setDnsCache("bing.com", "3.3.3.3");
         DcmAgent.agentmain("   clear  ");
         assertEquals(0, DnsCacheManipulator.listDnsCache().size());
     }
