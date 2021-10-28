@@ -34,6 +34,9 @@ public final class DnsCacheEntry implements Serializable {
         return ips[0];
     }
 
+    /**
+     * return value {@link Long#MAX_VALUE} means "never expiration".
+     */
     public Date getExpiration() {
         return expiration;
     }

@@ -61,7 +61,6 @@ public class DnsCacheManipulator {
             if (isJdkAtMost8()) {
                 InetAddressCacheUtilForJdk8Minus.setInetAddressCache(host, ips, expireMillis);
             } else {
-                //need nanos to mills
                 InetAddressCacheUtilForJdk9Plus.setInetAddressCache(host, ips, expireMillis);
             }
         } catch (Exception e) {

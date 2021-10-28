@@ -13,6 +13,13 @@ import java.net.UnknownHostException;
  * @since 1.6.0
  */
 public class InetAddressCacheUtilCommons {
+    /**
+     * We never really have "never".
+     * <p>
+     * {@code Long.MAX_VALUE(~9e18)} nanoseconds is ~292 years.
+     * <p>
+     * {@code Long.MAX_VALUE / 1e9 / 3600 / 24 / 365 ~= 292.47}.
+     */
     public static final long NEVER_EXPIRATION = Long.MAX_VALUE;
 
     static InetAddress[] toInetAddressArray(String host, String[] ips) throws UnknownHostException {
