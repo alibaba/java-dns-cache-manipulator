@@ -20,6 +20,33 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
+	<scm>
+		<connection>scm:git:git@github.com:alibaba/java-dns-cache-manipulator.git</connection>
+		<developerConnection>scm:git:git@github.com:alibaba/java-dns-cache-manipulator.git</developerConnection>
+		<url>git@github.com:alibaba/java-dns-cache-manipulator.git</url>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/alibaba/java-dns-cache-manipulator/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+	<organization>
+		<name>Alibaba</name>
+		<url>https://www.alibaba.com</url>
+	</organization>
+	<developers>
+		<developer>
+			<name>Jerry Lee</name>
+			<id>oldratlee</id>
+			<email>oldratlee(AT)gmail(DOT)com</email>
+			<timezone>+8</timezone>
+			<url>https://github.com/oldratlee</url>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<organization>Alibaba</organization>
+			<organizationUrl>https://www.alibaba.com</organizationUrl>
+		</developer>
+	</developers>
 
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>
@@ -50,18 +77,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<developers>
-		<developer>
-			<name>Jerry Lee</name>
-			<id>oldratlee</id>
-			<email>oldratlee(AT)gmail(DOT)com</email>
-			<roles>
-				<role>Developer</role>
-			</roles>
-			<timezone>+8</timezone>
-		</developer>
-	</developers>
 
 	<build>
 		<plugins>
