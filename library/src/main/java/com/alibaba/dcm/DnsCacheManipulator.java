@@ -22,12 +22,13 @@ import static com.alibaba.dcm.internal.JavaVersionUtil.isJdkAtMost8;
  * Throw {@link DnsCacheManipulatorException} if operation fail for all methods.
  *
  * @author Jerry Lee (oldratlee at gmail dot com)
+ * @see DnsCache
  * @see DnsCacheEntry
  * @see DnsCacheManipulatorException
  */
 public class DnsCacheManipulator {
     /**
-     * Set a <b>never expired</b> dns cache entry
+     * Set a <b>never expired</b> dns cache entry.
      *
      * @param host host
      * @param ips  ips
@@ -73,9 +74,12 @@ public class DnsCacheManipulator {
     private static final Pattern COMMA_SEPARATOR = Pattern.compile("\\s*,\\s*");
 
     /**
-     * Set dns cache entries by properties
+     * Set dns cache entries by properties.
      *
-     * @param properties input properties. e.g. {@code www.example.com=42.42.42.42}, or {@code www.example.com=42.42.42.42,43.43.43.43}
+     * @param properties input properties.<br>
+     *                   e.g. {@code www.example.com=42.42.42.42}, <br>
+     *                   or value is multiply ips seperated by {@code comma}
+     *                   {@code www.example.com=42.42.42.42,43.43.43.43}
      * @throws DnsCacheManipulatorException Operation fail
      */
     public static void setDnsCache(@Nonnull Properties properties) {
@@ -135,7 +139,7 @@ public class DnsCacheManipulator {
     }
 
     /**
-     * Get dns cache.
+     * Get a dns cache entry by {@code host}.
      *
      * @return dns cache. return {@code null} if no entry for host or dns cache is expired.
      * @throws DnsCacheManipulatorException Operation fail
@@ -154,44 +158,13 @@ public class DnsCacheManipulator {
     }
 
     /**
-     * Get all dns cache entries.
+     * Get whole dns cache info {@link DnsCache} including cache and negative cache.
+     * <p>
+     * If you only need cache without negative cache use convenient method {@link #listDnsCache()}.
      *
      * @return dns cache entries
      * @throws DnsCacheManipulatorException Operation fail
-     * @deprecated use {@link #listDnsCache} instead.
-     */
-    @Deprecated
-    @Nonnull
-    public static List<DnsCacheEntry> getAllDnsCache() {
-        return listDnsCache();
-    }
-
-    /**
-     * Get all dns cache entries.
-     *
-     * @return dns cache entries
-     * @throws DnsCacheManipulatorException Operation fail
-     * @see #getWholeDnsCache()
-     * @since 1.2.0
-     */
-    @Nonnull
-    public static List<DnsCacheEntry> listDnsCache() {
-        try {
-            if (isJdkAtMost8()) {
-                return InetAddressCacheUtilForJdk8Minus.listInetAddressCache().getCache();
-            } else {
-                return InetAddressCacheUtilForJdk9Plus.listInetAddressCache().getCache();
-            }
-        } catch (Exception e) {
-            throw new DnsCacheManipulatorException("Fail to listDnsCache, cause: " + e, e);
-        }
-    }
-
-    /**
-     * Get whole dns cache info.
-     *
-     * @return dns cache entries
-     * @throws DnsCacheManipulatorException Operation fail
+     * @see #listDnsCache()
      * @since 1.2.0
      */
     @Nonnull
@@ -208,7 +181,36 @@ public class DnsCacheManipulator {
     }
 
     /**
-     * Remove dns cache entry, cause lookup dns server for host after.
+     * Get dns cache entries, without negative cache.
+     * <p>
+     * Same as {@code getWholeDnsCache().getCache()}
+     *
+     * @return dns cache entries
+     * @throws DnsCacheManipulatorException Operation fail
+     * @see #getWholeDnsCache()
+     * @since 1.2.0
+     */
+    @Nonnull
+    public static List<DnsCacheEntry> listDnsCache() {
+        return getWholeDnsCache().getCache();
+    }
+
+    /**
+     * Get dns cache entries, without negative cache.
+     *
+     * @return dns cache entries
+     * @throws DnsCacheManipulatorException Operation fail
+     * @deprecated this method name is confused: method name is "all" but without negative cache.
+     * use {@link #listDnsCache} instead.
+     */
+    @Deprecated
+    @Nonnull
+    public static List<DnsCacheEntry> getAllDnsCache() {
+        return listDnsCache();
+    }
+
+    /**
+     * Remove dns cache entry(including cache and negative cache), cause lookup dns server for host after.
      *
      * @param host host
      * @throws DnsCacheManipulatorException Operation fail
@@ -228,7 +230,7 @@ public class DnsCacheManipulator {
     }
 
     /**
-     * Clear all dns cache entries, cause lookup dns server for all host after.
+     * Clear whole dns cache entries(including cache and negative cache), cause lookup dns server for all host after.
      *
      * @throws DnsCacheManipulatorException Operation fail
      */
@@ -265,7 +267,7 @@ public class DnsCacheManipulator {
     }
 
     /**
-     * Set JVM DNS cache policy
+     * Set JVM DNS cache policy.
      * <p>
      * NOTE: if Security Manage is turn on, JVM DNS cache policy set will not take effective. You can check by method {@link #getDnsCachePolicy()}.
      *
@@ -286,7 +288,7 @@ public class DnsCacheManipulator {
     }
 
     /**
-     * JVM DNS negative cache policy
+     * JVM DNS negative cache policy.
      *
      * @return negative cache seconds.
      * <p>
@@ -306,7 +308,7 @@ public class DnsCacheManipulator {
     }
 
     /**
-     * Set JVM DNS negative cache policy
+     * Set JVM DNS negative cache policy.
      *
      * @param negativeCacheSeconds set default dns cache time. Special input case:
      *                             <ul>
