@@ -116,7 +116,7 @@ public class DnsCacheManipulatorTest {
 
         DnsCacheEntry expectedDnsCacheEntry = expected.get(0);
         DnsCacheEntry dnsCacheEntry = allDnsCacheEntries.get(0);
-        assertEquals(expectedDnsCacheEntry.getHost().toLowerCase(), dnsCacheEntry.getHost().toLowerCase());
+        assertEqualsIgnoreCase(expectedDnsCacheEntry.getHost(), dnsCacheEntry.getHost());
         assertEquals(expectedDnsCacheEntry.getIp(), dnsCacheEntry.getIp());
 
         long now = currentTimeMillis();
@@ -170,7 +170,7 @@ public class DnsCacheManipulatorTest {
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
-        assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost().toLowerCase());
+        assertEqualsIgnoreCase(DOMAIN_NOT_EXISTED, negativeCache.get(0).getHost());
     }
 
     @SuppressWarnings("ThrowablePrintedToSystemOut")
@@ -206,7 +206,7 @@ public class DnsCacheManipulatorTest {
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
-        assertEquals(DOMAIN_NOT_EXISTED.toLowerCase(), negativeCache.get(0).getHost().toLowerCase());
+        assertEqualsIgnoreCase(DOMAIN_NOT_EXISTED, negativeCache.get(0).getHost());
     }
 
     @Test
@@ -312,6 +312,10 @@ public class DnsCacheManipulatorTest {
         assertEquals(1, relookupNegativeCache.size());
         final DnsCacheEntry relookup = relookupNegativeCache.get(0);
         assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2020);
+    }
+
+    static void assertEqualsIgnoreCase(String expected, String  actual) {
+        assertEquals(expected.toLowerCase(), actual.toLowerCase());
     }
 
     static void assertBetween(long actual, long start, long end) {
