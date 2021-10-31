@@ -190,7 +190,7 @@ public class DnsCacheManipulatorTest {
     public void test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted() throws Exception {
         System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
-        DnsCacheManipulator.setDnsCache(100, DOMAIN_NOT_EXISTED, IP3);
+        DnsCacheManipulator.setDnsCache(50, DOMAIN_NOT_EXISTED, IP3);
 
         System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
@@ -198,7 +198,6 @@ public class DnsCacheManipulatorTest {
         assertEquals(IP3, ip);
 
         sleep(100);
-
         assertDomainNotExisted();
 
         System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
