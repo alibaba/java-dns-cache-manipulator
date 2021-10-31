@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 import static com.alibaba.dcm.Util.getIpByName;
+import static com.alibaba.dcm.internal.JavaVersionUtil.isJdkAtMost8;
 import static com.alibaba.dcm.internal.TestTimeUtil.NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
@@ -326,7 +327,11 @@ public class DnsCacheManipulatorTest {
         // 3. touch dns cache with external other host operation
         //////////////////////////////////////////////////
         getIpByName("bing.com");
-        assertEquals(0, DnsCacheManipulator.getWholeDnsCache().getNegativeCache().size());
+        if (isJdkAtMost8()) {
+            assertOnlyNegativeCache(tick, tick + 2020);
+        } else {
+            assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
+        }
 
         //////////////////////////////////////////////////
         // 4. relookup
@@ -358,9 +363,12 @@ public class DnsCacheManipulatorTest {
 
         final long expectedExpiration = expected.getExpiration().getTime();
         final long actualExpiration = actual.getExpiration().getTime();
+
         if (expectedExpiration == Long.MAX_VALUE) {
-            // hard code test logic for jdk 9+
-            if (actualExpiration != Long.MAX_VALUE) {
+            if (isJdkAtMost8()) {
+                assertEquals(expectedExpiration, actualExpiration);
+            } else {
+                // hard code test logic for jdk 9+
                 assertEqualsWithTolerance(NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS, actualExpiration, 5);
             }
         } else {

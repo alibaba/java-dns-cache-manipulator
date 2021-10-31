@@ -179,7 +179,6 @@ public class InetAddressCacheUtilForJdk8Minus {
 
     public static DnsCache listInetAddressCache()
             throws NoSuchFieldException, IllegalAccessException {
-
         final Map<String, Object> cache;
         final Map<String, Object> negativeCache;
         synchronized (getAddressCacheFieldOfInetAddress()) {
@@ -187,21 +186,20 @@ public class InetAddressCacheUtilForJdk8Minus {
             negativeCache = new HashMap<String, Object>(getCacheFiledOfNegativeCacheFiledOfInetAddress());
         }
 
-        List<DnsCacheEntry> retCache = new ArrayList<DnsCacheEntry>();
+        return new DnsCache(convert(cache), convert(negativeCache));
+    }
+
+    private static List<DnsCacheEntry> convert(Map<String, Object> cache) throws IllegalAccessException {
+        final List<DnsCacheEntry> ret = new ArrayList<DnsCacheEntry>();
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
-
             if (isDnsCacheEntryExpired(host)) { // exclude expired entries!
                 continue;
             }
-            retCache.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
+
+            ret.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
         }
-        List<DnsCacheEntry> retNegativeCache = new ArrayList<DnsCacheEntry>();
-        for (Map.Entry<String, Object> entry : negativeCache.entrySet()) {
-            final String host = entry.getKey();
-            retNegativeCache.add(inetAddress$CacheEntry2DnsCacheEntry(host, entry.getValue()));
-        }
-        return new DnsCache(retCache, retNegativeCache);
+        return ret;
     }
 
 
