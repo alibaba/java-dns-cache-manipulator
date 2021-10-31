@@ -263,7 +263,7 @@ public class InetAddressCacheUtilForJdk9Plus {
             }
         }
 
-        return new DnsCacheEntry(host, ips, new Date(expiration));
+        return new DnsCacheEntry(host, ips, expiration);
     }
 
     public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {

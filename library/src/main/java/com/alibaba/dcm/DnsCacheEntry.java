@@ -19,7 +19,7 @@ public final class DnsCacheEntry implements Serializable {
 
     private final String host;
     private final String[] ips;
-    private final Date expiration;
+    private final long expiration;
 
     public String getHost() {
         return host;
@@ -41,12 +41,27 @@ public final class DnsCacheEntry implements Serializable {
      */
     public Date getExpiration() {
         // defensive copy
-        return new Date(expiration.getTime());
+        return new Date(expiration);
     }
 
+    /**
+     * @deprecated use {@link #DnsCacheEntry(String, String[], long)} instead
+     */
+    @Deprecated
     public DnsCacheEntry(String host,
                          @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips,
-                         @SuppressFBWarnings("EI_EXPOSE_REP2") Date expiration) {
+                         @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP2") Date expiration) {
+        this.host = host;
+        this.ips = ips;
+        this.expiration = expiration.getTime();
+    }
+
+    /**
+     * @since 1.6.0
+     */
+    public DnsCacheEntry(String host,
+                         @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips,
+                         long expiration) {
         this.host = host;
         this.ips = ips;
         this.expiration = expiration;
@@ -70,17 +85,16 @@ public final class DnsCacheEntry implements Serializable {
 
         DnsCacheEntry that = (DnsCacheEntry) o;
 
-        if (host != null ? !host.equals(that.host) : that.host != null)
-            return false;
-        if (!Arrays.equals(ips, that.ips)) return false;
-        return !(expiration != null ? !expiration.equals(that.expiration) : that.expiration != null);
+        if (expiration != that.expiration) return false;
+        if (host != null ? !host.equals(that.host) : that.host != null) return false;
+        return Arrays.equals(ips, that.ips);
     }
 
     @Override
     public int hashCode() {
         int result = host != null ? host.hashCode() : 0;
         result = 31 * result + Arrays.hashCode(ips);
-        result = 31 * result + (expiration != null ? expiration.hashCode() : 0);
+        result = 31 * result + (int) (expiration ^ (expiration >>> 32));
         return result;
     }
 }

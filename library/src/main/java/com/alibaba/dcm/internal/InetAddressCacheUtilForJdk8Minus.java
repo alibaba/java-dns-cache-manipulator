@@ -245,7 +245,7 @@ public class InetAddressCacheUtilForJdk8Minus {
         for (int i = 0; i < addresses.length; i++) {
             ips[i] = addresses[i].getHostAddress();
         }
-        return new DnsCacheEntry(host, ips, new Date(expiration));
+        return new DnsCacheEntry(host, ips, expiration);
     }
 
     public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {

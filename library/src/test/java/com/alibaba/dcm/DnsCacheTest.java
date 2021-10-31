@@ -15,7 +15,7 @@ public class DnsCacheTest {
     @Test
     @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     public void test_equals() {
-        final Date expiration = new Date();
+        final long expiration = System.currentTimeMillis();
         DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);
         DnsCacheEntry entry2 = new DnsCacheEntry("b.com", new String[]{"1.1.1.2"}, expiration);
         DnsCacheEntry entry3 = new DnsCacheEntry("c.com", new String[]{"1.1.1.2"}, expiration);
@@ -34,10 +34,10 @@ public class DnsCacheTest {
     @Test
     @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     public void test_toString() {
-        final Date expiration = new Date();
+        final long expiration = System.currentTimeMillis();
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        final String date = dateFormat.format(expiration);
-        
+        final String date = dateFormat.format(new Date(expiration));
+
         DnsCacheEntry entry1 = new DnsCacheEntry("a.com", new String[]{"1.1.1.1"}, expiration);
         DnsCacheEntry entry2 = new DnsCacheEntry("b.com", new String[]{"1.1.1.2"}, expiration);
         DnsCacheEntry entry3 = new DnsCacheEntry("c.com", new String[]{"1.1.1.2"}, expiration);

@@ -109,7 +109,7 @@ public class DnsCacheManipulatorTest {
         assertEquals(1, allDnsCacheEntries.size());
 
         final DnsCacheEntry expected = new DnsCacheEntry(
-                host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE));
+                host.toLowerCase(), new String[]{IP3}, Long.MAX_VALUE);
         DnsCacheEntry actual = allDnsCacheEntries.get(0);
 
         assertEqualsIgnoreHostCase(expected, actual);
@@ -217,14 +217,14 @@ public class DnsCacheManipulatorTest {
 
         final String host = "www.hello-multi-ips.com";
         DnsCacheEntry expected = new DnsCacheEntry(host,
-                new String[]{"42.42.41.1", "42.42.41.2"}, new Date(Long.MAX_VALUE));
+                new String[]{"42.42.41.1", "42.42.41.2"}, Long.MAX_VALUE);
 
         final DnsCacheEntry actual = DnsCacheManipulator.getDnsCache(host);
         assertEqualsIgnoreHostCase(expected, actual);
 
         final String hostLoose = "www.hello-multi-ips-loose.com";
         DnsCacheEntry expectedLoose = new DnsCacheEntry(hostLoose,
-                new String[]{"42.42.41.1", "42.42.41.2", "42.42.41.3", "42.42.41.4"}, new Date(Long.MAX_VALUE));
+                new String[]{"42.42.41.1", "42.42.41.2", "42.42.41.3", "42.42.41.4"}, Long.MAX_VALUE);
 
         DnsCacheEntry actualLoose = DnsCacheManipulator.getDnsCache(hostLoose);
         assertEqualsIgnoreHostCase(expectedLoose, actualLoose);
