@@ -12,12 +12,7 @@ import static com.alibaba.dcm.Util.getIpByName;
 import static com.alibaba.dcm.internal.TestTimeUtil.NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -111,8 +106,17 @@ public class DnsCacheManipulatorTest {
 
         final DnsCacheEntry expected = new DnsCacheEntry(
                 host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE));
+        DnsCacheEntry actual = allDnsCacheEntries.get(0);
 
-        assertEqualsIgnoreHostCase(expected, allDnsCacheEntries.get(0));
+        assertEqualsIgnoreHostCase(expected, actual);
+
+        DnsCacheEntry another = DnsCacheManipulator.getDnsCache(host);
+        DnsCacheEntry another2 = DnsCacheManipulator.getDnsCache(host);
+        // instance equals but NOT same
+        assertEquals(actual, another);
+        assertNotSame(actual, another);
+        assertEquals(another, another2);
+        assertNotSame(another, another2);
 
         // Check NegativeCache
         assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
@@ -231,34 +235,64 @@ public class DnsCacheManipulatorTest {
     @Test
     public void test_setDnsCachePolicy() throws Exception {
         final String host = "bing.com";
+        String host2 = "www.bing.com";
+        // trigger dns cache by lookup and clear, skip OS lookup time after,
+        // otherwise the lookup operation time may take seconds.
+        //
+        // so reduce the lookup operation time,
+        // make below time-tracking test code more stability
+        skipOSLookupTimeAfterThenClear(host, host2);
+
         DnsCacheManipulator.setDnsCachePolicy(2);
         assertEquals(2, DnsCacheManipulator.getDnsCachePolicy());
 
+        //////////////////////////////////////////////////
+        // 0. trigger dns cache by lookup
+        //////////////////////////////////////////////////
         getIpByName(host);
         final long tick = currentTimeMillis();
+        DnsCacheEntry dnsCacheEntry = DnsCacheManipulator.getDnsCache(host);
+        assertBetween(dnsCacheEntry.getExpiration().getTime(),
+                tick, tick + 2020);
 
+        //////////////////////////////////////////////////
+        // 1. lookup before expire
+        //////////////////////////////////////////////////
         sleep(1000);
         getIpByName(host);
+        // get dns cache before expire
+        assertEquals(dnsCacheEntry, DnsCacheManipulator.getDnsCache(host));
 
-        final DnsCacheEntry dnsCache = DnsCacheManipulator.getDnsCache(host);
-        assertBetween(dnsCache.getExpiration().getTime(), tick, tick + 2020);
-
+        //////////////////////////////////////////////////
+        // 2. get dns cache after expire
+        //////////////////////////////////////////////////
         sleep(1020);
-
         // return expired entry, because of no dns cache touch by external related operation!
-        final DnsCacheEntry next = DnsCacheManipulator.getDnsCache(host);
-        assertNotSame(dnsCache, next);
-        assertEquals(dnsCache, next);
+        assertEquals(dnsCacheEntry, DnsCacheManipulator.getDnsCache(host));
 
-        // touch dns cache with external other host operation
-        getIpByName("www.bing.com");
+        //////////////////////////////////////////////////
+        // 3. touch dns cache with external other host operation
+        //////////////////////////////////////////////////
+        getIpByName(host2);
         assertNull(DnsCacheManipulator.getDnsCache(host));
 
-        // relookup
+        //////////////////////////////////////////////////
+        // 4. relookup
+        //////////////////////////////////////////////////
         getIpByName(host);
-        final DnsCacheEntry relookup = DnsCacheManipulator.getDnsCache(host);
         final long relookupTick = currentTimeMillis();
-        assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2020);
+        // get dns cache after expire
+        final DnsCacheEntry relookup = DnsCacheManipulator.getDnsCache(host);
+        assertBetween(relookup.getExpiration().getTime(),
+                relookupTick, relookupTick + 2020);
+    }
+
+    static void skipOSLookupTimeAfterThenClear(String... domains) throws UnknownHostException {
+        for (String domain : domains) {
+            // trigger dns cache by lookup and clear, skip OS lookup time after
+            getIpByName(domain);
+        }
+        DnsCacheManipulator.clearDnsCache();
     }
 
     @Test
@@ -266,41 +300,56 @@ public class DnsCacheManipulatorTest {
         DnsCacheManipulator.setDnsNegativeCachePolicy(2);
         assertEquals(2, DnsCacheManipulator.getDnsNegativeCachePolicy());
 
+        //////////////////////////////////////////////////
+        // 0. trigger dns cache by lookup
+        //////////////////////////////////////////////////
+        lookupNotExisted(DOMAIN_NOT_EXISTED);
+        final long tick = currentTimeMillis();
+        assertOnlyNegativeCache(tick, tick + 2020);
+
+        //////////////////////////////////////////////////
+        // 1. lookup before expire
+        //////////////////////////////////////////////////
+        sleep(1000);
+        lookupNotExisted(DOMAIN_NOT_EXISTED);
+        // get dns cache before expire
+        assertOnlyNegativeCache(tick, tick + 2020);
+
+        //////////////////////////////////////////////////
+        // 2. get dns cache after expire
+        //////////////////////////////////////////////////
+        sleep(1020);
+        // get dns cache before expire
+        assertOnlyNegativeCache(tick, tick + 2020);
+
+        //////////////////////////////////////////////////
+        // 3. touch dns cache with external other host operation
+        //////////////////////////////////////////////////
+        getIpByName("bing.com");
+        assertEquals(0, DnsCacheManipulator.getWholeDnsCache().getNegativeCache().size());
+
+        //////////////////////////////////////////////////
+        // 4. relookup
+        //////////////////////////////////////////////////
+        lookupNotExisted(DOMAIN_NOT_EXISTED);
+        final long relookupTick = currentTimeMillis();
+        assertOnlyNegativeCache(relookupTick, relookupTick + 2020);
+    }
+
+    static void lookupNotExisted(String domain) {
         try {
-            getIpByName(DOMAIN_NOT_EXISTED);
+            getIpByName(domain);
             fail();
         } catch (UnknownHostException expected) {
             assertTrue(true);
         }
-        final long tick = currentTimeMillis();
+    }
 
+    static void assertOnlyNegativeCache(long start, long end) {
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
         assertEquals(1, negativeCache.size());
-        final DnsCacheEntry dnsCache = negativeCache.get(0);
-        assertBetween(dnsCache.getExpiration().getTime(), tick, tick + 2020);
-
-        sleep(1000);
-        try {
-            getIpByName(DOMAIN_NOT_EXISTED);
-            fail();
-        } catch (UnknownHostException expected) {
-            assertTrue(true);
-        }
-        assertEquals(dnsCache, DnsCacheManipulator.getWholeDnsCache().getNegativeCache().get(0));
-
-        sleep(1001);
-        try {
-            getIpByName(DOMAIN_NOT_EXISTED);
-            fail();
-        } catch (UnknownHostException expected) {
-            assertTrue(true);
-        }
-
-        final long relookupTick = currentTimeMillis();
-        final List<DnsCacheEntry> relookupNegativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
-        assertEquals(1, relookupNegativeCache.size());
-        final DnsCacheEntry relookup = relookupNegativeCache.get(0);
-        assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2020);
+        final DnsCacheEntry first = negativeCache.get(0);
+        assertBetween(first.getExpiration().getTime(), start, end);
     }
 
     static void assertEqualsIgnoreHostCase(DnsCacheEntry expected, DnsCacheEntry actual) {
