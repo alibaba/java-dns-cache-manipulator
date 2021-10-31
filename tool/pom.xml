@@ -81,12 +81,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
+				<!--
+					https://maven.apache.org/plugins/maven-assembly-plugin/usage.html
+				-->
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.3.0</version>
 				<configuration>
@@ -95,14 +92,14 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>tgz-assembly</id>
+						<id>dcm-tool-assembly</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
 						<configuration>
 							<descriptors>
-								<descriptor>assembly.xml</descriptor>
+								<descriptor>src/assembly/assembly.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
