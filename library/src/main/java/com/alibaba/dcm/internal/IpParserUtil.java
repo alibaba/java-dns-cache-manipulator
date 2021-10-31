@@ -6,10 +6,14 @@ import sun.net.util.IPAddressUtil;
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 class IpParserUtil {
+    private static final String INVALID_IPV_6_ADDRESS = ": invalid IPv6 address";
+    private static final String INVALID_IP_ADDRESS = ": invalid IP address";
+
     /**
      * source code is dug from {@link java.net.InetAddress#getAllByName(java.lang.String, java.net.InetAddress)}
      */
     static byte[] ip2ByteArray(String ip) {
+
         boolean ipv6Expected = false;
         if (ip.charAt(0) == '[') {
             // This is supposed to be an IPv6 literal
@@ -18,7 +22,7 @@ class IpParserUtil {
                 ipv6Expected = true;
             } else {
                 // This was supposed to be a IPv6 address, but it's not!
-                throw new IllegalArgumentException(ip + ": invalid IPv6 address");
+                throw new IllegalArgumentException(ip + INVALID_IPV_6_ADDRESS);
             }
         }
 
@@ -34,12 +38,12 @@ class IpParserUtil {
 
 
             if (ipv6Expected) {
-                throw new IllegalArgumentException(ip + ": invalid IPv6 address");
+                throw new IllegalArgumentException(ip + INVALID_IPV_6_ADDRESS);
             } else {
-                throw new IllegalArgumentException(ip + ": invalid IP address");
+                throw new IllegalArgumentException(ip + INVALID_IP_ADDRESS);
             }
         } else {
-            throw new IllegalArgumentException(ip + ": invalid IP address");
+            throw new IllegalArgumentException(ip + INVALID_IP_ADDRESS);
         }
     }
 }
