@@ -161,12 +161,13 @@ concat_lines() {
 }
 
 
-export DCM_TOOLS_AGENT_JAR=$(echo "$BASE/dependencies"/dns-cache-manipulator-[0-9]*.jar)
-export DCM_TOOLS_TMP_FILE="/tmp/dcm_$(date +%s)_${$}_$RANDOM.log"
+export DCM_TOOLS_AGENT_JAR=${DCM_TOOLS_AGENT_JAR:-$(echo "$BASE/dependencies"/dns-cache-manipulator-[0-9]*.jar)}
 
+export DCM_TOOLS_TMP_FILE=${DCM_TOOLS_TMP_FILE:-"/tmp/dcm_$(date +%s)_${$}_$RANDOM.log"}
 cleanupWhenExit() {
     rm "$DCM_TOOLS_TMP_FILE" &> /dev/null
 }
 trap "cleanupWhenExit" EXIT
+
 
 "$JAVACMD" -Xmx128m $DCM_OPTS -classpath $CLASSPATH com.alibaba.dcm.tool.DcmTool "$@"

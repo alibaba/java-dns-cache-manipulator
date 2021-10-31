@@ -24,17 +24,14 @@ import static java.lang.System.exit;
  */
 public class DcmTool {
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
-    static final String DCM_TOOLS_TMP_FILE = "DCM_TOOLS_TMP_FILE";
-    static final String DCM_TOOLS_AGENT_JAR = "DCM_TOOLS_AGENT_JAR";
+    static final String DCM_TOOLS_TMP_FILE_KEY = "DCM_TOOLS_TMP_FILE";
+    static final String DCM_TOOLS_AGENT_JAR_KEY = "DCM_TOOLS_AGENT_JAR";
 
     final static List<String> actionList = DcmAgent.getActionList();
 
     public static void main(String[] args) throws Exception {
-        final String tmpFile = getConfig(DCM_TOOLS_TMP_FILE);
-        final String agentJar = getConfig(DCM_TOOLS_AGENT_JAR);
-        if (tmpFile == null || tmpFile.trim().isEmpty() || agentJar == null || agentJar.trim().isEmpty()) {
-            throw new IllegalStateException("blank tmp file " + tmpFile + ", or blank agent jar file " + agentJar);
-        }
+        final String tmpFile = getConfig(DCM_TOOLS_TMP_FILE_KEY);
+        final String agentJar = getConfig(DCM_TOOLS_AGENT_JAR_KEY);
 
         final Options options = new Options();
         options.addOption("p", "pid", true, "java process id to attach");
@@ -105,10 +102,14 @@ public class DcmTool {
     }
 
     static String getConfig(String name) {
-        String var = System.getProperty(name);
-        if (var == null) {
-            var = System.getenv(name);
+        String var = System.getenv(name);
+        if (var == null || var.trim().length() == 0) {
+            var = System.getProperty(name);
         }
+        if (var == null || var.trim().length() == 0) {
+            throw new IllegalStateException("fail to var " + name + ", is absent or blank string!");
+        }
+
         return var;
     }
 

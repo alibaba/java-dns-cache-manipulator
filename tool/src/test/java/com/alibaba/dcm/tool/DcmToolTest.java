@@ -107,8 +107,8 @@ public class DcmToolTest {
     //   "java.io.IOException: Can not attach to current VM"
     @ConditionalIgnoreRule.ConditionalIgnore(condition = AboveJava8.class)
     public void test_main_getPolicy() throws Exception {
-        System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE, outputFilePath);
-        System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR, agentFilePath);
+        System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE_KEY, outputFilePath);
+        System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR_KEY, agentFilePath);
 
         DcmTool.main(new String[]{"-p", DcmTool.pid(), "getPolicy"});
     }
@@ -118,8 +118,8 @@ public class DcmToolTest {
     //   "java.io.IOException: Can not attach to current VM"
     @ConditionalIgnoreRule.ConditionalIgnore(condition = AboveJava8.class)
     public void test_main_set() throws Exception {
-        System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE, outputFilePath);
-        System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR, agentFilePath);
+        System.setProperty(DcmTool.DCM_TOOLS_TMP_FILE_KEY, outputFilePath);
+        System.setProperty(DcmTool.DCM_TOOLS_AGENT_JAR_KEY, agentFilePath);
 
         final String ip = "1.1.2.2";
         final String host = "bing.com";
