@@ -10,11 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -161,7 +157,7 @@ public class DcmAgent {
 
         final int lastArgumentIdx = parameterTypes.length - 1;
         if (parameterTypes[(lastArgumentIdx)] == String[].class) {
-            // set all tail method argument of type String[] 
+            // set all tail method argument of type String[]
             String[] varArgs = new String[arguments.length - lastArgumentIdx];
             System.arraycopy(arguments, lastArgumentIdx, varArgs, 0, varArgs.length);
             methodArgs[(lastArgumentIdx)] = varArgs;
@@ -233,12 +229,13 @@ public class DcmAgent {
     static synchronized void initAction2Method() throws Exception {
         if (action2Method != null) return;
 
-        Map<String, Method> map = new HashMap<String, Method>();
+        Map<String, Method> map = new LinkedHashMap<String, Method>();
         map.put("set", DnsCacheManipulator.class.getMethod("setDnsCache", String.class, String[].class));
         map.put("get", DnsCacheManipulator.class.getMethod("getDnsCache", String.class));
         map.put("rm", DnsCacheManipulator.class.getMethod("removeDnsCache", String.class));
 
         map.put("list", DnsCacheManipulator.class.getMethod("getWholeDnsCache"));
+        map.put("ls", DnsCacheManipulator.class.getMethod("getWholeDnsCache"));
         map.put("clear", DnsCacheManipulator.class.getMethod("clearDnsCache"));
 
         map.put("setPolicy", DnsCacheManipulator.class.getMethod("setDnsCachePolicy", int.class));
@@ -249,5 +246,14 @@ public class DcmAgent {
         map.put(FILE, null); // FAKE KEY
 
         action2Method = map;
+    }
+
+    public static List<String> getActionList() {
+        try {
+            initAction2Method();
+            return new ArrayList<String>(action2Method.keySet());
+        } catch (Exception e) {
+            throw new RuntimeException("fail to getActionList, cause: " + e, e);
+        }
     }
 }

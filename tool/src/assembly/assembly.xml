@@ -22,10 +22,4 @@
 			<outputDirectory>bin</outputDirectory>
 		</fileSet>
 	</fileSets>
-	<files>
-		<file>
-			<source>../library/target/dns-cache-manipulator-${project.version}.jar</source>
-			<outputDirectory>agent-lib</outputDirectory>
-		</file>
-	</files>
 </assembly>

@@ -1,5 +1,6 @@
 package com.alibaba.dcm.tool;
 
+import com.alibaba.dcm.agent.DcmAgent;
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 import org.apache.commons.cli.CommandLine;
@@ -11,7 +12,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -27,21 +27,7 @@ public class DcmTool {
     static final String DCM_TOOLS_TMP_FILE = "DCM_TOOLS_TMP_FILE";
     static final String DCM_TOOLS_AGENT_JAR = "DCM_TOOLS_AGENT_JAR";
 
-    final static List<String> actionList = new ArrayList<String>();
-
-    static {
-        actionList.add("set");
-        actionList.add("get");
-        actionList.add("rm");
-
-        actionList.add("list");
-        actionList.add("clear");
-
-        actionList.add("setPolicy");
-        actionList.add("getPolicy");
-        actionList.add("setNegativePolicy");
-        actionList.add("getNegativePolicy");
-    }
+    final static List<String> actionList = DcmAgent.getActionList();
 
     public static void main(String[] args) throws Exception {
         final String tmpFile = getConfig(DCM_TOOLS_TMP_FILE);
