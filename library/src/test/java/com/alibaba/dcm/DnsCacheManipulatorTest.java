@@ -6,10 +6,7 @@ import org.junit.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.alibaba.dcm.Util.getIpByName;
 import static com.alibaba.dcm.internal.TestTimeUtil.NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS;
@@ -34,7 +31,7 @@ public class DnsCacheManipulatorTest {
     private static final String DOMAIN_CUSTOMIZED = "www.customized.com";
     private static final String IP_CUSTOMIZED = "42.42.42.42";
 
-    private static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-7352jt-12559-AZ-7524087.com";
+    private static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-2D4B2C4E-61D5-46B3-81FA-3A975156D1AE.com";
 
     @BeforeClass
     public static void beforeClass() {
@@ -65,11 +62,15 @@ public class DnsCacheManipulatorTest {
     @Test
     public void test_loadDnsCacheConfig_from_D_Option() throws Exception {
         final String key = "dcm.config.filename";
-        System.setProperty(key, "customized-dns-cache.properties");
-        DnsCacheManipulator.loadDnsCacheConfig();
-        final String ip = getIpByName(DOMAIN_CUSTOMIZED);
-        assertEquals(IP_CUSTOMIZED, ip);
-        System.clearProperty(key);
+        try {
+            System.setProperty(key, "customized-dns-cache.properties");
+            DnsCacheManipulator.loadDnsCacheConfig();
+
+            final String ip = getIpByName(DOMAIN_CUSTOMIZED);
+            assertEquals(IP_CUSTOMIZED, ip);
+        } finally {
+            System.clearProperty(key);
+        }
     }
 
     @Test
@@ -85,10 +86,8 @@ public class DnsCacheManipulatorTest {
         String ip = getIpByName("multi.ip.com");
         assertEquals("1.1.1.1", ip);
 
-        InetAddress[] all = InetAddress.getAllByName("multi.ip.com");
-        assertEquals(2, all.length);
-        String[] ips = {all[0].getHostAddress(), all[1].getHostAddress()};
-        assertArrayEquals(new String[]{"1.1.1.1", "2.2.2.2"}, ips);
+        List<String> allIps = getAllIps("multi.ip.com");
+        assertEquals(Arrays.asList("1.1.1.1", "2.2.2.2"), allIps);
     }
 
     @Test
@@ -123,19 +122,19 @@ public class DnsCacheManipulatorTest {
     public void test_canSetExistedDomain_canExpire_thenReLookupBack() throws Exception {
         final String domain = "github.com";
 
-        Set<String> expected = getAllHostAddresses(domain);
+        List<String> expected = getAllIps(domain);
 
         DnsCacheManipulator.setDnsCache(30, domain, IP3);
         assertEquals(IP3, getIpByName(domain));
 
         sleep(32);
 
-        assertEquals(expected, getAllHostAddresses(domain));
+        assertEquals(expected, getAllIps(domain));
     }
 
-    private static Set<String> getAllHostAddresses(String domain) throws Exception {
+    private static List<String> getAllIps(String domain) throws Exception {
         final InetAddress[] allByName = InetAddress.getAllByName(domain);
-        Set<String> all = new HashSet<String>();
+        List<String> all = new ArrayList<String>();
         for (InetAddress inetAddress : allByName) {
             all.add(inetAddress.getHostAddress());
         }
