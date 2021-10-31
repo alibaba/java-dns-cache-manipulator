@@ -6,13 +6,13 @@ import org.junit.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static com.alibaba.dcm.Util.getIpByName;
+import static com.alibaba.dcm.internal.TestTimeUtil.NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertArrayEquals;
@@ -108,19 +108,14 @@ public class DnsCacheManipulatorTest {
         DnsCacheManipulator.setDnsCache(host, IP3);
 
         final List<DnsCacheEntry> allDnsCacheEntries = DnsCacheManipulator.getAllDnsCache();
-        @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
-        final List<DnsCacheEntry> expected = Arrays.asList(
-                new DnsCacheEntry(host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE)));
+        assertEquals(1, allDnsCacheEntries.size());
 
-        assertEquals(expected.size(), allDnsCacheEntries.size());
+        final DnsCacheEntry expected = new DnsCacheEntry(
+                host.toLowerCase(), new String[]{IP3}, new Date(Long.MAX_VALUE));
 
-        DnsCacheEntry expectedDnsCacheEntry = expected.get(0);
-        DnsCacheEntry dnsCacheEntry = allDnsCacheEntries.get(0);
-        assertEqualsIgnoreCase(expectedDnsCacheEntry.getHost(), dnsCacheEntry.getHost());
-        assertEquals(expectedDnsCacheEntry.getIp(), dnsCacheEntry.getIp());
+        assertEqualsIgnoreHostCase(expected, allDnsCacheEntries.get(0));
 
-        long now = currentTimeMillis();
-        assertEquals(expectedDnsCacheEntry.getExpiration().getTime() - now > 315360000000L, dnsCacheEntry.getExpiration().getTime() - now > 315360000000L);
+        // Check NegativeCache
         assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
     }
 
@@ -211,26 +206,21 @@ public class DnsCacheManipulatorTest {
 
     @Test
     public void test_multi_ips_in_config_file() {
-        long now = currentTimeMillis();
         DnsCacheManipulator.loadDnsCacheConfig("dns-cache-multi-ips.properties");
 
         final String host = "www.hello-multi-ips.com";
-        DnsCacheEntry entry = new DnsCacheEntry(host,
+        DnsCacheEntry expected = new DnsCacheEntry(host,
                 new String[]{"42.42.41.1", "42.42.41.2"}, new Date(Long.MAX_VALUE));
-        DnsCacheEntry dnsCache = DnsCacheManipulator.getDnsCache(host);
-        assertEquals(entry.getHost(), dnsCache.getHost());
-        assertEquals(entry.getIp(), dnsCache.getIp());
-        assertEquals(entry.getExpiration().getTime() - now > 315360000000L, dnsCache.getExpiration().getTime() - now > 315360000000L);
 
+        final DnsCacheEntry actual = DnsCacheManipulator.getDnsCache(host);
+        assertEqualsIgnoreHostCase(expected, actual);
 
         final String hostLoose = "www.hello-multi-ips-loose.com";
-        DnsCacheEntry entryLoose = new DnsCacheEntry(hostLoose,
+        DnsCacheEntry expectedLoose = new DnsCacheEntry(hostLoose,
                 new String[]{"42.42.41.1", "42.42.41.2", "42.42.41.3", "42.42.41.4"}, new Date(Long.MAX_VALUE));
-        DnsCacheEntry dnsCacheLoose = DnsCacheManipulator.getDnsCache(hostLoose);
-        assertEquals(entryLoose.getHost(), dnsCacheLoose.getHost());
-        assertEquals(entryLoose.getIp(), dnsCacheLoose.getIp());
-        assertEquals(entryLoose.getExpiration().getTime() - now > 315360000000L, dnsCacheLoose.getExpiration().getTime() - now > 315360000000L);
 
+        DnsCacheEntry actualLoose = DnsCacheManipulator.getDnsCache(hostLoose);
+        assertEqualsIgnoreHostCase(expectedLoose, actualLoose);
     }
 
     @Test
@@ -314,7 +304,23 @@ public class DnsCacheManipulatorTest {
         assertBetween(relookup.getExpiration().getTime(), relookupTick, relookupTick + 2020);
     }
 
-    static void assertEqualsIgnoreCase(String expected, String  actual) {
+    static void assertEqualsIgnoreHostCase(DnsCacheEntry expected, DnsCacheEntry actual) {
+        assertEqualsIgnoreCase(expected.getHost(), actual.getHost());
+        assertArrayEquals(expected.getIps(), actual.getIps());
+
+        final long expectedExpiration = expected.getExpiration().getTime();
+        final long actualExpiration = actual.getExpiration().getTime();
+        if (expectedExpiration == Long.MAX_VALUE) {
+            // hard code test logic for jdk 9+
+            if (actualExpiration != Long.MAX_VALUE) {
+                assertEqualsWithTolerance(NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS, actualExpiration, 5);
+            }
+        } else {
+            assertEquals(expectedExpiration, actualExpiration);
+        }
+    }
+
+    static void assertEqualsIgnoreCase(String expected, String actual) {
         assertEquals(expected.toLowerCase(), actual.toLowerCase());
     }
 
@@ -323,5 +329,9 @@ public class DnsCacheManipulatorTest {
         if (!ok) {
             fail(start + " <= " + actual + " <= " + end + ", failed!");
         }
+    }
+
+    static void assertEqualsWithTolerance(long expected, long actual, long tolerance) {
+        assertBetween(actual, expected - tolerance, expected + tolerance);
     }
 }
