@@ -3,11 +3,8 @@ package com.alibaba.dcm.tool;
 import com.alibaba.dcm.agent.DcmAgent;
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -113,6 +110,7 @@ public class DcmTool {
         return var;
     }
 
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     static String selectProcess() {
         System.out.println("Which java process to attache:");
         final List<VirtualMachineDescriptor> list = VirtualMachine.list();
@@ -125,7 +123,7 @@ public class DcmTool {
 
         for (int i = 0; i < list.size(); i++) {
             final VirtualMachineDescriptor vm = list.get(i);
-            System.out.printf("%d) %-5s %s\n", i + 1, vm.id(), vm.displayName());
+            System.out.printf("%d) %-5s %s%n", i + 1, vm.id(), vm.displayName());
         }
 
         Scanner in = new Scanner(System.in);

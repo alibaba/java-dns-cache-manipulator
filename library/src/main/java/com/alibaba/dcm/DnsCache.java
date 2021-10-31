@@ -1,11 +1,12 @@
 package com.alibaba.dcm;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * JVM whole dns cache info, including negative cache.
@@ -21,7 +22,8 @@ public class DnsCache implements Serializable {
     private final List<DnsCacheEntry> cache;
     private final List<DnsCacheEntry> negativeCache;
 
-    public DnsCache(@Nonnull List<DnsCacheEntry> cache, @Nonnull List<DnsCacheEntry> negativeCache) {
+    public DnsCache(@SuppressFBWarnings("EI_EXPOSE_REP2") @Nonnull List<DnsCacheEntry> cache,
+                    @SuppressFBWarnings("EI_EXPOSE_REP2") @Nonnull List<DnsCacheEntry> negativeCache) {
         this.cache = cache;
         this.negativeCache = negativeCache;
     }

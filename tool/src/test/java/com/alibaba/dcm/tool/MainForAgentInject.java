@@ -11,7 +11,7 @@ public class MainForAgentInject {
     public static void main(String[] args) throws Exception {
         final String host = "bing.com";
         while (true) {
-            System.out.printf("%s: %s %s\n",
+            System.out.printf("%s: %s %s%n",
                     new Date(),
                     host,
                     InetAddress.getByName(host).getHostAddress()

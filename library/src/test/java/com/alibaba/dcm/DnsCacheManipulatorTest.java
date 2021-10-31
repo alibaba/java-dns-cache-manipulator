@@ -6,7 +6,10 @@ import org.junit.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import static com.alibaba.dcm.Util.getIpByName;
 import static com.alibaba.dcm.internal.JavaVersionUtil.isJdkAtMost8;
@@ -34,7 +37,7 @@ public class DnsCacheManipulatorTest {
         // System Properties
         // https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.printf("Env info:\njava home: %s\njdk version: %s\n",
+        System.out.printf("Env info:%njava home: %s%njdk version: %s%n",
                 System.getProperty("java.home"),
                 System.getProperty("java.version"));
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -148,11 +151,11 @@ public class DnsCacheManipulatorTest {
 
     @Test
     public void test_setNotExistedDomain_RemoveThenReLookupAndNotExisted() throws Exception {
-        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s\n",
+        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s%n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         DnsCacheManipulator.setDnsCache(DOMAIN_NOT_EXISTED, IP3);
 
-        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s\n",
+        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s%n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         final String ip = getIpByName(DOMAIN_NOT_EXISTED);
         assertEquals(IP3, ip);
@@ -162,7 +165,7 @@ public class DnsCacheManipulatorTest {
         assertDomainNotExisted();
 
 
-        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s\n",
+        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s%n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
         assertTrue(cache.isEmpty());
@@ -185,11 +188,11 @@ public class DnsCacheManipulatorTest {
 
     @Test
     public void test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted() throws Exception {
-        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s\n",
+        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         DnsCacheManipulator.setDnsCache(100, DOMAIN_NOT_EXISTED, IP3);
 
-        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s\n",
+        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         final String ip = getIpByName(DOMAIN_NOT_EXISTED);
         assertEquals(IP3, ip);
@@ -198,7 +201,7 @@ public class DnsCacheManipulatorTest {
 
         assertDomainNotExisted();
 
-        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s\n",
+        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
                 new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
         assertTrue(cache.isEmpty());

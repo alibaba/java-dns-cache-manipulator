@@ -91,12 +91,14 @@ public class InetAddressCacheUtilCommons {
             if (negativeSet$InetAddressCachePolicy == null) {
                 synchronized (InetAddressCacheUtilForJdk8Minus.class) {
                     if (negativeSet$InetAddressCachePolicy == null) {
+                        Field f;
                         try {
-                            negativeSet$InetAddressCachePolicy = clazz.getDeclaredField("propertyNegativeSet");
+                            f = clazz.getDeclaredField("propertyNegativeSet");
                         } catch (NoSuchFieldException e) {
-                            negativeSet$InetAddressCachePolicy = clazz.getDeclaredField("negativeSet");
+                            f = clazz.getDeclaredField("negativeSet");
                         }
-                        negativeSet$InetAddressCachePolicy.setAccessible(true);
+                        f.setAccessible(true);
+                        negativeSet$InetAddressCachePolicy = f;
                     }
                 }
             }
@@ -105,12 +107,14 @@ public class InetAddressCacheUtilCommons {
             if (setFiled$InetAddressCachePolicy == null) {
                 synchronized (InetAddressCacheUtilForJdk8Minus.class) {
                     if (setFiled$InetAddressCachePolicy == null) {
+                        Field f;
                         try {
-                            setFiled$InetAddressCachePolicy = clazz.getDeclaredField("propertySet");
+                            f = clazz.getDeclaredField("propertySet");
                         } catch (NoSuchFieldException e) {
-                            setFiled$InetAddressCachePolicy = clazz.getDeclaredField("set");
+                            f = clazz.getDeclaredField("set");
                         }
-                        setFiled$InetAddressCachePolicy.setAccessible(true);
+                        f.setAccessible(true);
+                        setFiled$InetAddressCachePolicy = f;
                     }
                 }
             }

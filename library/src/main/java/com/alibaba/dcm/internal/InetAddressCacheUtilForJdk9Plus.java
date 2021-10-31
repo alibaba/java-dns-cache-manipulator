@@ -95,9 +95,9 @@ public class InetAddressCacheUtilForJdk9Plus {
         if (hostFieldOfInetAddress$CacheAddress == null) {
             synchronized (InetAddressCacheUtilForJdk9Plus.class) {
                 if (hostFieldOfInetAddress$CacheAddress == null) {
-                    Class<?> clazz = cachedAddresses.getClass();
-                    hostFieldOfInetAddress$CacheAddress = clazz.getDeclaredField("host");
-                    hostFieldOfInetAddress$CacheAddress.setAccessible(true);
+                    final Field f = cachedAddresses.getClass().getDeclaredField("host");
+                    f.setAccessible(true);
+                    hostFieldOfInetAddress$CacheAddress = f;
                 }
             }
         }

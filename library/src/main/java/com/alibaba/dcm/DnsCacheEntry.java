@@ -1,5 +1,7 @@
 package com.alibaba.dcm;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
@@ -38,10 +40,13 @@ public final class DnsCacheEntry implements Serializable {
      * return value {@link Long#MAX_VALUE} means "never expiration".
      */
     public Date getExpiration() {
-        return expiration;
+        // defensive copy
+        return new Date(expiration.getTime());
     }
 
-    public DnsCacheEntry(String host, @Nonnull String[] ips, Date expiration) {
+    public DnsCacheEntry(String host,
+                         @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips,
+                         @SuppressFBWarnings("EI_EXPOSE_REP2") Date expiration) {
         this.host = host;
         this.ips = ips;
         this.expiration = expiration;

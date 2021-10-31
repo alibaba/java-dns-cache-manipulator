@@ -21,7 +21,7 @@ public class DcmAgent {
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
     public static void agentmain(String agentArgument) throws Exception {
-        System.out.printf("%s: attached with agent argument: %s.\n", DcmAgent.class.getName(), agentArgument);
+        System.out.printf("%s: attached with agent argument: %s.%n", DcmAgent.class.getName(), agentArgument);
 
         agentArgument = agentArgument.trim();
         if (agentArgument.isEmpty()) {
@@ -49,7 +49,7 @@ public class DcmAgent {
             if (action2Arguments.isEmpty()) {
                 System.out.println(DcmAgent.class.getName() + ": No action in agent argument, do nothing!");
                 if (filePrinter != null) {
-                    filePrinter.printf("No action in agent argument, do nothing! agent argument: %s.\n", agentArgument);
+                    filePrinter.printf("No action in agent argument, do nothing! agent argument: %s.%n", agentArgument);
                 }
                 return;
             }
@@ -62,9 +62,9 @@ public class DcmAgent {
                 final String argumentString = join(arguments);
 
                 if (!action2Method.containsKey(action)) {
-                    System.out.printf("%s: Unknown action %s, ignore! action: %<s %s!\n", DcmAgent.class.getName(), action, argumentString);
+                    System.out.printf("%s: Unknown action %s, ignore! action: %<s %s!%n", DcmAgent.class.getName(), action, argumentString);
                     if (filePrinter != null) {
-                        filePrinter.printf("Unknown action %s, ignore! action: %<s %s !\n", action, argumentString);
+                        filePrinter.printf("Unknown action %s, ignore! action: %<s %s !%n", action, argumentString);
                     }
                     continue;
                 }
@@ -76,9 +76,9 @@ public class DcmAgent {
                     allSuccess = false;
                     final String exString = throwable2StackString(e);
 
-                    System.out.printf("%s: Error to do action %s %s, cause: %s\n", DcmAgent.class.getName(), action, argumentString, exString);
+                    System.out.printf("%s: Error to do action %s %s, cause: %s%n", DcmAgent.class.getName(), action, argumentString, exString);
                     if (filePrinter != null) {
-                        filePrinter.printf("Error to do action %s %s, cause: %s\n", action, argumentString, exString);
+                        filePrinter.printf("Error to do action %s %s, cause: %s%n", action, argumentString, exString);
                     }
                 }
             }
@@ -200,18 +200,18 @@ public class DcmAgent {
         } else if (result instanceof DnsCacheEntry) {
             final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
             DnsCacheEntry entry = (DnsCacheEntry) result;
-            writer.printf("%s %s %s\n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
+            writer.printf("%s %s %s%n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
         } else if (result instanceof DnsCache) {
             final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
             DnsCache dnsCache = (DnsCache) result;
 
             writer.println("Dns cache:");
             for (DnsCacheEntry entry : dnsCache.getCache()) {
-                writer.printf("    %s %s %s\n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
+                writer.printf("    %s %s %s%n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
             }
             writer.println("Dns negative cache: ");
             for (DnsCacheEntry entry : dnsCache.getNegativeCache()) {
-                writer.printf("    %s %s %s\n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
+                writer.printf("    %s %s %s%n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
             }
         } else {
             writer.println(result);
