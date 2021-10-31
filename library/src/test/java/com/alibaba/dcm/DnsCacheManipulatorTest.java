@@ -45,7 +45,7 @@ public class DnsCacheManipulatorTest {
     public void before() {
         DnsCacheManipulator.clearDnsCache();
         assertTrue(DnsCacheManipulator.getAllDnsCache().isEmpty());
-        assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
+        assertTrue(DnsCacheManipulator.listDnsNegativeCache().isEmpty());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class DnsCacheManipulatorTest {
         assertNotSame(another, another2);
 
         // Check NegativeCache
-        assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
+        assertTrue(DnsCacheManipulator.listDnsNegativeCache().isEmpty());
     }
 
     @Test
@@ -167,7 +167,7 @@ public class DnsCacheManipulatorTest {
         final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
         assertTrue(cache.isEmpty());
 
-        final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
+        final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.listDnsNegativeCache();
         assertEquals(1, negativeCache.size());
         assertEqualsIgnoreCase(DOMAIN_NOT_EXISTED, negativeCache.get(0).getHost());
     }
@@ -203,7 +203,7 @@ public class DnsCacheManipulatorTest {
         final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
         assertTrue(cache.isEmpty());
 
-        final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
+        final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.listDnsNegativeCache();
         assertEquals(1, negativeCache.size());
         assertEqualsIgnoreCase(DOMAIN_NOT_EXISTED, negativeCache.get(0).getHost());
     }
@@ -330,7 +330,7 @@ public class DnsCacheManipulatorTest {
         if (isJdkAtMost8()) {
             assertOnlyNegativeCache(tick, tick + 2020);
         } else {
-            assertTrue(DnsCacheManipulator.getWholeDnsCache().getNegativeCache().isEmpty());
+            assertTrue(DnsCacheManipulator.listDnsNegativeCache().isEmpty());
         }
 
         //////////////////////////////////////////////////
@@ -351,7 +351,7 @@ public class DnsCacheManipulatorTest {
     }
 
     static void assertOnlyNegativeCache(long start, long end) {
-        final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.getWholeDnsCache().getNegativeCache();
+        final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.listDnsNegativeCache();
         assertEquals(1, negativeCache.size());
         final DnsCacheEntry first = negativeCache.get(0);
         assertBetween(first.getExpiration().getTime(), start, end);

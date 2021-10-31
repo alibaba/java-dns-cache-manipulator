@@ -210,6 +210,21 @@ public class DnsCacheManipulator {
     }
 
     /**
+     * Get dns negative cache entries.
+     * <p>
+     * Same as {@code getWholeDnsCache().getNegativeCache()}
+     *
+     * @return dns negative cache entries
+     * @throws DnsCacheManipulatorException Operation fail
+     * @see #getWholeDnsCache()
+     * @since 1.6.0
+     */
+    @Nonnull
+    public static List<DnsCacheEntry> listDnsNegativeCache() {
+        return getWholeDnsCache().getNegativeCache();
+    }
+
+    /**
      * Remove dns cache entry(including cache and negative cache), cause lookup dns server for host after.
      *
      * @param host host
