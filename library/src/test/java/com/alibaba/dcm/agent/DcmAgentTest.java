@@ -104,6 +104,7 @@ public class DcmAgentTest {
     @Test
     public void test_agentmain_list() throws Exception {
         DcmAgent.agentmain("   list  ");
+        DcmAgent.agentmain("   ls  ");
     }
 
     @Test
