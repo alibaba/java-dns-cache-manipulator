@@ -9,6 +9,10 @@
 	<baseDirectory>dcm-${project.version}</baseDirectory>
 	<dependencySets>
 		<dependencySet>
+			<excludes>
+				<exclude>com.github.spotbugs:*</exclude>
+				<exclude>com.google.code.findbugs:*</exclude>
+			</excludes>
 			<outputDirectory>dependencies</outputDirectory>
 		</dependencySet>
 	</dependencySets>

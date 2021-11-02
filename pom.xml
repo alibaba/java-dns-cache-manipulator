@@ -95,6 +95,9 @@
 								<requireMavenVersion>
 									<version>3.3.9</version>
 								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>[1.8,)</version>
+								</requireJavaVersion>
 							</rules>
 						</configuration>
 					</execution>
@@ -167,7 +170,6 @@
 					-->
 					<plugin>
 						<artifactId>maven-enforcer-plugin</artifactId>
-						<version>3.0.0</version>
 						<executions>
 							<execution>
 								<id>enforce-jdk-versions</id>
@@ -177,7 +179,7 @@
 								<configuration>
 									<rules>
 										<requireJavaVersion>
-											<version>[1.8,)</version>
+											<version>11</version>
 										</requireJavaVersion>
 									</rules>
 								</configuration>

@@ -85,14 +85,14 @@
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
 			<artifactId>spotbugs-annotations</artifactId>
-			<scope>provided</scope>
 			<version>4.4.2</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
-			<scope>provided</scope>
 			<version>3.0.2</version>
+			<optional>true</optional>
 		</dependency>
 		<!-- Testing libs -->
 		<dependency>
@@ -115,6 +115,7 @@
 			<plugin>
 				<!--
 					https://maven.apache.org/plugins/maven-assembly-plugin/usage.html
+					https://maven.apache.org/plugins/maven-assembly-plugin/assembly.html
 				-->
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.3.0</version>
@@ -168,6 +169,9 @@
 								<requireMavenVersion>
 									<version>3.3.9</version>
 								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>[1.8,)</version>
+								</requireJavaVersion>
 							</rules>
 						</configuration>
 					</execution>
@@ -493,7 +497,6 @@
 					-->
 					<plugin>
 						<artifactId>maven-enforcer-plugin</artifactId>
-						<version>3.0.0</version>
 						<executions>
 							<execution>
 								<id>enforce-jdk-versions</id>
@@ -503,7 +506,7 @@
 								<configuration>
 									<rules>
 										<requireJavaVersion>
-											<version>[1.8,)</version>
+											<version>11</version>
 										</requireJavaVersion>
 									</rules>
 								</configuration>
