@@ -13,11 +13,11 @@ import static org.junit.Assert.*;
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class Util {
-    static String getIpByName(String name) throws UnknownHostException {
+    static String lookupIpByName(String name) throws UnknownHostException {
         return InetAddress.getByName(name).getHostAddress();
     }
 
-    static List<String> getAllIps(String domain) throws Exception {
+    static List<String> lookupAllIps(String domain) throws Exception {
         final InetAddress[] allByName = InetAddress.getAllByName(domain);
         List<String> all = new ArrayList<String>();
         for (InetAddress inetAddress : allByName) {
@@ -29,14 +29,14 @@ public class Util {
     static void skipOSLookupTimeAfterThenClear(String... domains) throws UnknownHostException {
         for (String domain : domains) {
             // trigger dns cache by lookup and clear, skip OS lookup time after
-            getIpByName(domain);
+            lookupIpByName(domain);
         }
         DnsCacheManipulator.clearDnsCache();
     }
 
-    static void lookupNotExisted(String domain) {
+    static void assertLookupNotExisted(String domain) {
         try {
-            getIpByName(domain);
+            lookupIpByName(domain);
             fail();
         } catch (UnknownHostException expected) {
             assertTrue(true);
@@ -46,7 +46,7 @@ public class Util {
     @SuppressWarnings("ThrowablePrintedToSystemOut")
     static void assertDomainNotExisted(String domain) {
         try {
-            getIpByName(domain);
+            lookupIpByName(domain);
             fail();
         } catch (UnknownHostException expected) {
             System.out.println(expected);

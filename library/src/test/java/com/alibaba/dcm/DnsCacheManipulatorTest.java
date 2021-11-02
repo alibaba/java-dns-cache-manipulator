@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static com.alibaba.dcm.Util.*;
@@ -71,8 +70,8 @@ public class DnsCacheManipulatorTest {
         final String host = "single.ip.com";
         DnsCacheManipulator.setDnsCache(host, IP1);
 
-        assertEquals(IP1, getIpByName(host));
-        assertEquals(Collections.singletonList(IP1), getAllIps(host));
+        assertEquals(IP1, lookupIpByName(host));
+        assertEquals(Collections.singletonList(IP1), lookupAllIps(host));
     }
 
     @Test
@@ -81,8 +80,8 @@ public class DnsCacheManipulatorTest {
         final String[] ips = {IP1, IP2};
         DnsCacheManipulator.setDnsCache(host, ips);
 
-        assertEquals(ips[0], getIpByName(host));
-        assertEquals(Arrays.asList(ips), getAllIps(host));
+        assertEquals(ips[0], lookupIpByName(host));
+        assertEquals(Arrays.asList(ips), lookupAllIps(host));
     }
 
     @Test
@@ -114,36 +113,24 @@ public class DnsCacheManipulatorTest {
 
     @Test
     public void test_canSetExistedDomain_canExpire_thenReLookupBack() throws Exception {
-        final String domain = EXISTED_DOMAIN;
-        List<String> expected = getAllIps(domain);
+        List<String> expected = lookupAllIps(EXISTED_DOMAIN);
 
-        DnsCacheManipulator.setDnsCache(20, domain, IP1);
-        assertEquals(IP1, getIpByName(domain));
+        DnsCacheManipulator.setDnsCache(20, EXISTED_DOMAIN, IP1);
+        assertEquals(IP1, lookupIpByName(EXISTED_DOMAIN));
 
-        sleep(30);
+        sleep(40);
 
-        assertEquals(expected, getAllIps(domain));
+        assertEquals(expected, lookupAllIps(EXISTED_DOMAIN));
     }
 
     @Test
     public void test_setNotExistedDomain_RemoveThenReLookupAndNotExisted() throws Exception {
-        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s%n",
-                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
         DnsCacheManipulator.setDnsCache(DOMAIN_NOT_EXISTED, IP1);
-
-        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s%n",
-                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
-        final String ip = getIpByName(DOMAIN_NOT_EXISTED);
-        assertEquals(IP1, ip);
+        assertEquals(IP1, lookupIpByName(DOMAIN_NOT_EXISTED));
 
         DnsCacheManipulator.removeDnsCache(DOMAIN_NOT_EXISTED);
-
         assertDomainNotExisted(DOMAIN_NOT_EXISTED);
-
-        System.out.printf("%s(%s) test_setNotExistedDomain_RemoveThenReLookupAndNotExisted %s%n",
-                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
-        final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
-        assertTrue(cache.isEmpty());
+        assertTrue(DnsCacheManipulator.listDnsCache().isEmpty());
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.listDnsNegativeCache();
         assertEquals(1, negativeCache.size());
@@ -152,22 +139,15 @@ public class DnsCacheManipulatorTest {
 
     @Test
     public void test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted() throws Exception {
-        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
-                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
-        DnsCacheManipulator.setDnsCache(50, DOMAIN_NOT_EXISTED, IP1);
+        DnsCacheManipulator.setDnsCache(20, DOMAIN_NOT_EXISTED, IP1);
 
-        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
-                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
-        final String ip = getIpByName(DOMAIN_NOT_EXISTED);
+        final String ip = lookupIpByName(DOMAIN_NOT_EXISTED);
         assertEquals(IP1, ip);
 
-        sleep(100);
+        sleep(40);
         assertDomainNotExisted(DOMAIN_NOT_EXISTED);
 
-        System.out.printf("%s(%s) test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted %s%n",
-                new Date(), currentTimeMillis(), DnsCacheManipulator.getWholeDnsCache());
-        final List<DnsCacheEntry> cache = DnsCacheManipulator.listDnsCache();
-        assertTrue(cache.isEmpty());
+        assertTrue(DnsCacheManipulator.listDnsCache().isEmpty());
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.listDnsNegativeCache();
         assertEquals(1, negativeCache.size());
@@ -187,83 +167,83 @@ public class DnsCacheManipulatorTest {
         // make below time-tracking test code more stability
         skipOSLookupTimeAfterThenClear(EXISTED_DOMAIN, EXISTED_ANOTHER_DOMAIN);
 
-        DnsCacheManipulator.setDnsCachePolicy(2);
-        assertEquals(2, DnsCacheManipulator.getDnsCachePolicy());
+        DnsCacheManipulator.setDnsCachePolicy(1);
+        assertEquals(1, DnsCacheManipulator.getDnsCachePolicy());
 
         //////////////////////////////////////////////////
         // 0. trigger dns cache by lookup
         //////////////////////////////////////////////////
-        getIpByName(EXISTED_DOMAIN);
+        lookupIpByName(EXISTED_DOMAIN);
         final long tick = currentTimeMillis();
         DnsCacheEntry dnsCacheEntry = DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN);
         assertBetween(dnsCacheEntry.getExpiration().getTime(),
-                tick, tick + 2020);
+                tick, tick + 1020);
 
         //////////////////////////////////////////////////
         // 1. lookup before expire
         //////////////////////////////////////////////////
-        sleep(1000);
-        getIpByName(EXISTED_DOMAIN);
+        sleep(500);
+        lookupIpByName(EXISTED_DOMAIN);
         // get dns cache before expire
         assertEquals(dnsCacheEntry, DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN));
 
         //////////////////////////////////////////////////
         // 2. get dns cache after expire
         //////////////////////////////////////////////////
-        sleep(1020);
+        sleep(520);
         // return expired entry, because of no dns cache touch by external related operation!
         assertEquals(dnsCacheEntry, DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN));
 
         //////////////////////////////////////////////////
         // 3. touch dns cache with external other host operation
         //////////////////////////////////////////////////
-        getIpByName(EXISTED_ANOTHER_DOMAIN);
+        lookupIpByName(EXISTED_ANOTHER_DOMAIN);
         assertNull(DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN));
 
         //////////////////////////////////////////////////
         // 4. relookup
         //////////////////////////////////////////////////
-        getIpByName(EXISTED_DOMAIN);
+        lookupIpByName(EXISTED_DOMAIN);
         final long relookupTick = currentTimeMillis();
         // get dns cache after expire
         final DnsCacheEntry relookup = DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN);
         assertBetween(relookup.getExpiration().getTime(),
-                relookupTick, relookupTick + 2020);
+                relookupTick, relookupTick + 1020);
     }
 
     @Test
     public void test_setNegativeDnsCachePolicy() throws Exception {
-        DnsCacheManipulator.setDnsNegativeCachePolicy(2);
-        assertEquals(2, DnsCacheManipulator.getDnsNegativeCachePolicy());
+        DnsCacheManipulator.setDnsNegativeCachePolicy(1);
+        assertEquals(1, DnsCacheManipulator.getDnsNegativeCachePolicy());
 
         //////////////////////////////////////////////////
         // 0. trigger dns cache by lookup
         //////////////////////////////////////////////////
-        lookupNotExisted(DOMAIN_NOT_EXISTED);
+        assertLookupNotExisted(DOMAIN_NOT_EXISTED);
         final long tick = currentTimeMillis();
-        assertOnlyNegativeCache(tick, tick + 2020);
+        assertOnlyNegativeCache(tick, tick + 1020);
 
         //////////////////////////////////////////////////
         // 1. lookup before expire
         //////////////////////////////////////////////////
-        sleep(1000);
-        lookupNotExisted(DOMAIN_NOT_EXISTED);
+        sleep(500);
+        assertLookupNotExisted(DOMAIN_NOT_EXISTED);
         // get dns cache before expire
-        assertOnlyNegativeCache(tick, tick + 2020);
+        assertOnlyNegativeCache(tick, tick + 1020);
 
         //////////////////////////////////////////////////
         // 2. get dns cache after expire
         //////////////////////////////////////////////////
-        sleep(1020);
+        sleep(520);
         // get dns cache before expire
-        assertOnlyNegativeCache(tick, tick + 2020);
+        assertOnlyNegativeCache(tick, tick + 1020);
 
         //////////////////////////////////////////////////
         // 3. touch dns cache with external other host operation
         //////////////////////////////////////////////////
-        getIpByName(EXISTED_DOMAIN);
+        lookupIpByName(EXISTED_DOMAIN);
         if (isJdkAtMost8()) {
-            assertOnlyNegativeCache(tick, tick + 2020);
+            assertOnlyNegativeCache(tick, tick + 1020);
         } else {
             assertTrue(DnsCacheManipulator.listDnsNegativeCache().isEmpty());
         }
@@ -271,9 +251,9 @@ public class DnsCacheManipulatorTest {
         //////////////////////////////////////////////////
         // 4. relookup
         //////////////////////////////////////////////////
-        lookupNotExisted(DOMAIN_NOT_EXISTED);
+        assertLookupNotExisted(DOMAIN_NOT_EXISTED);
         final long relookupTick = currentTimeMillis();
-        assertOnlyNegativeCache(relookupTick, relookupTick + 2020);
+        assertOnlyNegativeCache(relookupTick, relookupTick + 1020);
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -283,7 +263,7 @@ public class DnsCacheManipulatorTest {
     @Test
     public void test_loadDnsCacheConfig() throws Exception {
         DnsCacheManipulator.loadDnsCacheConfig();
-        final String ip = getIpByName(DOMAIN1);
+        final String ip = lookupIpByName(DOMAIN1);
         assertEquals(IP1, ip);
     }
 
@@ -294,7 +274,7 @@ public class DnsCacheManipulatorTest {
             System.setProperty(key, "customized-dns-cache.properties");
             DnsCacheManipulator.loadDnsCacheConfig();
 
-            final String ip = getIpByName(DOMAIN_CUSTOMIZED);
+            final String ip = lookupIpByName(DOMAIN_CUSTOMIZED);
             assertEquals(IP_CUSTOMIZED, ip);
         } finally {
             System.clearProperty(key);
@@ -304,7 +284,7 @@ public class DnsCacheManipulatorTest {
     @Test
     public void test_loadDnsCacheConfig_fromMyConfig() throws Exception {
         DnsCacheManipulator.loadDnsCacheConfig("my-dns-cache.properties");
-        final String ip = getIpByName(DOMAIN2);
+        final String ip = lookupIpByName(DOMAIN2);
         assertEquals(IP2, ip);
     }
 
