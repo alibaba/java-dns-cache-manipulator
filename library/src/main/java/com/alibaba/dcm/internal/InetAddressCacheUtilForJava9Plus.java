@@ -27,7 +27,7 @@ import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
-public class InetAddressCacheUtilForJdk9Plus {
+public class InetAddressCacheUtilForJava9Plus {
     /**
      * {@link InetAddress.CachedAddresses}
      * <p>
@@ -93,7 +93,7 @@ public class InetAddressCacheUtilForJdk9Plus {
      */
     private static String getHostOfInetAddress$CacheAddress(Object cachedAddresses) throws NoSuchFieldException, IllegalAccessException {
         if (hostFieldOfInetAddress$CacheAddress == null) {
-            synchronized (InetAddressCacheUtilForJdk9Plus.class) {
+            synchronized (InetAddressCacheUtilForJava9Plus.class) {
                 if (hostFieldOfInetAddress$CacheAddress == null) {
                     final Field f = cachedAddresses.getClass().getDeclaredField("host");
                     f.setAccessible(true);
@@ -131,7 +131,7 @@ public class InetAddressCacheUtilForJdk9Plus {
      */
     private static Object[] getCacheAndExpirySetFieldOfInetAddress0() throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_EXPIRY_SET == null) {
-            synchronized (InetAddressCacheUtilForJdk9Plus.class) {
+            synchronized (InetAddressCacheUtilForJava9Plus.class) {
                 if (ADDRESS_CACHE_AND_EXPIRY_SET == null) {
                     final Field cacheField = InetAddress.class.getDeclaredField("cache");
                     cacheField.setAccessible(true);
@@ -211,7 +211,7 @@ public class InetAddressCacheUtilForJdk9Plus {
         final String addressesClassName = addresses.getClass().getName();
 
         if (reqAddrFieldOfInetAddress$NameServiceAddress == null) {
-            synchronized (InetAddressCacheUtilForJdk9Plus.class) {
+            synchronized (InetAddressCacheUtilForJava9Plus.class) {
                 ///////////////////////////////////////////////
                 // Fields of InetAddress$CachedAddresses
                 ///////////////////////////////////////////////
@@ -271,6 +271,6 @@ public class InetAddressCacheUtilForJdk9Plus {
         getExpirySetFieldOfInetAddress().clear();
     }
 
-    private InetAddressCacheUtilForJdk9Plus() {
+    private InetAddressCacheUtilForJava9Plus() {
     }
 }

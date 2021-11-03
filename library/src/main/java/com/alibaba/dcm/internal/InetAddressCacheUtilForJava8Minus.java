@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,7 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddress
  * @see InetAddress#cacheInitIfNeeded()
  * @see InetAddress#cacheAddresses(String, InetAddress[], boolean)
  */
-public class InetAddressCacheUtilForJdk8Minus {
+public class InetAddressCacheUtilForJava8Minus {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
      */
@@ -137,7 +136,7 @@ public class InetAddressCacheUtilForJdk8Minus {
     private static Object[] getAddressCacheFieldsOfInetAddress0()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {
-            synchronized (InetAddressCacheUtilForJdk8Minus.class) {
+            synchronized (InetAddressCacheUtilForJava8Minus.class) {
                 if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {  // double check
                     final Field cacheField = InetAddress.class.getDeclaredField("addressCache");
                     cacheField.setAccessible(true);
@@ -208,7 +207,7 @@ public class InetAddressCacheUtilForJdk8Minus {
 
     private static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry) throws IllegalAccessException {
         if (expirationFieldOfInetAddress$CacheEntry == null || addressesFieldOfInetAddress$CacheEntry == null) {
-            synchronized (InetAddressCacheUtilForJdk8Minus.class) {
+            synchronized (InetAddressCacheUtilForJava8Minus.class) {
                 if (expirationFieldOfInetAddress$CacheEntry == null) { // double check
                     Class<?> cacheEntryClass = entry.getClass();
                     // InetAddress.CacheEntry has 2 filed:
@@ -255,6 +254,6 @@ public class InetAddressCacheUtilForJdk8Minus {
         }
     }
 
-    private InetAddressCacheUtilForJdk8Minus() {
+    private InetAddressCacheUtilForJava8Minus() {
     }
 }

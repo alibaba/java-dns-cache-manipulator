@@ -38,9 +38,9 @@ public class DnsCacheManipulator {
     public static void setDnsCache(@Nonnull String host, @Nonnull String... ips) {
         try {
             if (isJdkAtMost8()) {
-                InetAddressCacheUtilForJdk8Minus.setInetAddressCache(host, ips, NEVER_EXPIRATION);
+                InetAddressCacheUtilForJava8Minus.setInetAddressCache(host, ips, NEVER_EXPIRATION);
             } else {
-                InetAddressCacheUtilForJdk9Plus.setInetAddressCache(host, ips, NEVER_EXPIRATION);
+                InetAddressCacheUtilForJava9Plus.setInetAddressCache(host, ips, NEVER_EXPIRATION);
             }
         } catch (Exception e) {
             final String message = String.format("Fail to setDnsCache for host %s ip %s, cause: %s",
@@ -60,9 +60,9 @@ public class DnsCacheManipulator {
     public static void setDnsCache(long expireMillis, @Nonnull String host, @Nonnull String... ips) {
         try {
             if (isJdkAtMost8()) {
-                InetAddressCacheUtilForJdk8Minus.setInetAddressCache(host, ips, expireMillis);
+                InetAddressCacheUtilForJava8Minus.setInetAddressCache(host, ips, expireMillis);
             } else {
-                InetAddressCacheUtilForJdk9Plus.setInetAddressCache(host, ips, expireMillis);
+                InetAddressCacheUtilForJava9Plus.setInetAddressCache(host, ips, expireMillis);
             }
         } catch (Exception e) {
             final String message = String.format("Fail to setDnsCache for host %s ip %s expireMillis %s, cause: %s",
@@ -148,9 +148,9 @@ public class DnsCacheManipulator {
     public static DnsCacheEntry getDnsCache(@Nonnull String host) {
         try {
             if (isJdkAtMost8()) {
-                return InetAddressCacheUtilForJdk8Minus.getInetAddressCache(host);
+                return InetAddressCacheUtilForJava8Minus.getInetAddressCache(host);
             } else {
-                return InetAddressCacheUtilForJdk9Plus.getInetAddressCache(host);
+                return InetAddressCacheUtilForJava9Plus.getInetAddressCache(host);
             }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to getDnsCache, cause: " + e, e);
@@ -171,9 +171,9 @@ public class DnsCacheManipulator {
     public static DnsCache getWholeDnsCache() {
         try {
             if (isJdkAtMost8()) {
-                return InetAddressCacheUtilForJdk8Minus.listInetAddressCache();
+                return InetAddressCacheUtilForJava8Minus.listInetAddressCache();
             } else {
-                return InetAddressCacheUtilForJdk9Plus.listInetAddressCache();
+                return InetAddressCacheUtilForJava9Plus.listInetAddressCache();
             }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to getWholeDnsCache, cause: " + e, e);
@@ -234,9 +234,9 @@ public class DnsCacheManipulator {
     public static void removeDnsCache(@Nonnull String host) {
         try {
             if (isJdkAtMost8()) {
-                InetAddressCacheUtilForJdk8Minus.removeInetAddressCache(host);
+                InetAddressCacheUtilForJava8Minus.removeInetAddressCache(host);
             } else {
-                InetAddressCacheUtilForJdk9Plus.removeInetAddressCache(host);
+                InetAddressCacheUtilForJava9Plus.removeInetAddressCache(host);
             }
         } catch (Exception e) {
             final String message = String.format("Fail to removeDnsCache for host %s, cause: %s", host, e);
@@ -252,9 +252,9 @@ public class DnsCacheManipulator {
     public static void clearDnsCache() {
         try {
             if (isJdkAtMost8()) {
-                InetAddressCacheUtilForJdk8Minus.clearInetAddressCache();
+                InetAddressCacheUtilForJava8Minus.clearInetAddressCache();
             } else {
-                InetAddressCacheUtilForJdk9Plus.clearInetAddressCache();
+                InetAddressCacheUtilForJava9Plus.clearInetAddressCache();
             }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to clearDnsCache, cause: " + e, e);

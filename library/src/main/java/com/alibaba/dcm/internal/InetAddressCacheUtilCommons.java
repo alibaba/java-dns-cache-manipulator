@@ -89,7 +89,7 @@ public class InetAddressCacheUtilCommons {
         final Field setField;
         if (isNegative) {
             if (negativeSet$InetAddressCachePolicy == null) {
-                synchronized (InetAddressCacheUtilForJdk8Minus.class) {
+                synchronized (InetAddressCacheUtilForJava8Minus.class) {
                     if (negativeSet$InetAddressCachePolicy == null) {
                         Field f;
                         try {
@@ -105,7 +105,7 @@ public class InetAddressCacheUtilCommons {
             setField = negativeSet$InetAddressCachePolicy;
         } else {
             if (setFiled$InetAddressCachePolicy == null) {
-                synchronized (InetAddressCacheUtilForJdk8Minus.class) {
+                synchronized (InetAddressCacheUtilForJava8Minus.class) {
                     if (setFiled$InetAddressCachePolicy == null) {
                         Field f;
                         try {
