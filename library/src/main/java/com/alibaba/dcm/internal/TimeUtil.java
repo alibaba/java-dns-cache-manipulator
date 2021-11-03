@@ -6,7 +6,7 @@ package com.alibaba.dcm.internal;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
-class TimeUtil {
+final class TimeUtil {
     /**
      * record point of {@link System#currentTimeMillis()} for {@link #NANO_TIME_CHECK_POINT}
      */
@@ -29,5 +29,8 @@ class TimeUtil {
 
     public static long getNanoTimeAfterMs(long millSeconds) {
         return System.nanoTime() + millSeconds * NS_PER_MS;
+    }
+
+    private TimeUtil() {
     }
 }

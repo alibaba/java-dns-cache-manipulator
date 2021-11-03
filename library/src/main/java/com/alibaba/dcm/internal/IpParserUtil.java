@@ -5,7 +5,7 @@ import sun.net.util.IPAddressUtil;
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
-class IpParserUtil {
+final class IpParserUtil {
     private static final String INVALID_IPV_6_ADDRESS = ": invalid IPv6 address";
     private static final String INVALID_IP_ADDRESS = ": invalid IP address";
 
@@ -45,5 +45,8 @@ class IpParserUtil {
         } else {
             throw new IllegalArgumentException(ip + INVALID_IP_ADDRESS);
         }
+    }
+
+    private IpParserUtil() {
     }
 }

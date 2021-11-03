@@ -5,7 +5,7 @@ package com.alibaba.dcm.internal;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
-public class JavaVersionUtil {
+public final class JavaVersionUtil {
     public static boolean isJdkAtMost8() {
         return JAVA_SPECIFICATION_VERSION_AS_ENUM.atMost(JavaVersion.JAVA_1_8);
     }
@@ -30,7 +30,9 @@ public class JavaVersionUtil {
             // System.err.println("Caught a SecurityException reading the system property '" + property
             //   + "'; the SystemUtils property value will default to null.");
             return null;
-
         }
+    }
+
+    private JavaVersionUtil() {
     }
 }

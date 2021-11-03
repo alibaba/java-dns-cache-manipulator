@@ -37,7 +37,7 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddress
  * @see InetAddress#cacheInitIfNeeded()
  * @see InetAddress#cacheAddresses(String, InetAddress[], boolean)
  */
-public class InetAddressCacheUtilForJava8Minus {
+public final class InetAddressCacheUtilForJava8Minus {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
      */

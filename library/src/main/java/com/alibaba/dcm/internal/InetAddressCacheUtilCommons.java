@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
-public class InetAddressCacheUtilCommons {
+public final class InetAddressCacheUtilCommons {
     /**
      * We never really have "never".
      * <p>
@@ -27,7 +27,6 @@ public class InetAddressCacheUtilCommons {
         for (int i = 0; i < addresses.length; i++) {
             addresses[i] = InetAddress.getByAddress(host, IpParserUtil.ip2ByteArray(ips[i]));
         }
-
         return addresses;
     }
 
@@ -125,5 +124,8 @@ public class InetAddressCacheUtilCommons {
             cachePolicyFiled.set(null, seconds);
             setField.set(null, true);
         }
+    }
+
+    private InetAddressCacheUtilCommons() {
     }
 }

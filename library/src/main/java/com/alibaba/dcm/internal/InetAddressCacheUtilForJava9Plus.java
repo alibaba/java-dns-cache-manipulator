@@ -27,7 +27,7 @@ import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
-public class InetAddressCacheUtilForJava9Plus {
+public final class InetAddressCacheUtilForJava9Plus {
     /**
      * {@link InetAddress.CachedAddresses}
      * <p>
