@@ -418,6 +418,11 @@
 								<goals>
 									<goal>report</goal>
 								</goals>
+								<configuration>
+									<excludes>
+										<exclude>com/alibaba/dcm/internal/JavaVersion.class</exclude>
+									</excludes>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
