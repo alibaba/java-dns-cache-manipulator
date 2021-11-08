@@ -30,7 +30,7 @@ public class DcmToolTest {
 
     @Before
     public void setUp() throws Exception {
-        outputFile = new File("target/output.log");
+        outputFile = File.createTempFile("dcm-output-", ".log");
         FileUtils.deleteQuietly(outputFile);
         FileUtils.touch(outputFile);
         assertEquals(0, outputFile.length());
