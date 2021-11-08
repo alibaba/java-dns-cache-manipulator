@@ -391,14 +391,24 @@
 		</profile>
 		<profile>
 			<id>gen-code-cov</id>
-			<activation>
-				<property>
-					<name>env.TRAVIS</name>
-					<value>true</value>
-				</property>
-			</activation>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.eluder.coveralls</groupId>
+						<artifactId>coveralls-maven-plugin</artifactId>
+						<version>4.3.0</version>
+						<configuration>
+							<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
+						</configuration>
+						<!-- https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
+						<dependencies>
+							<dependency>
+								<groupId>javax.xml.bind</groupId>
+								<artifactId>jaxb-api</artifactId>
+								<version>2.2.3</version>
+							</dependency>
+						</dependencies>
+					</plugin>
 					<plugin>
 						<!-- for codecov.io -->
 						<!-- config example: https://github.com/codecov/example-java -->
@@ -411,6 +421,12 @@
 								<goals>
 									<goal>prepare-agent</goal>
 								</goals>
+								<!--
+									https://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html
+								-->
+								<configuration>
+									<append>true</append>
+								</configuration>
 							</execution>
 							<execution>
 								<id>report</id>
@@ -418,13 +434,17 @@
 								<goals>
 									<goal>report</goal>
 								</goals>
-								<configuration>
-									<excludes>
-										<exclude>com/alibaba/dcm/internal/JavaVersion.class</exclude>
-									</excludes>
-								</configuration>
 							</execution>
 						</executions>
+						<configuration>
+							<!--
+								Maven Jacoco Configuration - Exclude classes/packages from report not working - Stack Overflow
+								https://stackoverflow.com/questions/27799419
+							-->
+							<excludes>
+								<exclude>com/alibaba/dcm/internal/JavaVersion.class</exclude>
+							</excludes>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
