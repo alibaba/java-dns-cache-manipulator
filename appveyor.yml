@@ -9,8 +9,8 @@
 
 version: '{build}'
 image:
-  - Visual Studio 2017
   - Ubuntu2004
+  - Visual Studio 2017
 build: false
 clone_depth: 50
 branches:
@@ -22,6 +22,27 @@ environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
 
 for:
+  -
+    #------------------
+    # Ubuntu
+    #------------------
+    matrix:
+      only:
+        - image: Ubuntu2004
+    init:
+      - sh: export MAVEN_OPTS="-Xmx768m -XX:MaxPermSize=128m -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2"
+      - sh: export JAVA_OPTS="-Xmx768m -XX:MaxPermSize=128m"
+
+    test_script:
+      - sh: ./scripts/integration-test.sh
+
+    after_test:
+      - sh: ./scripts/codecov.sh
+      - sh: rm -rf /home/appveyor/.m2/repository/com/alibaba/dns-cache-manipulator*
+
+    cache:
+      - /home/appveyor/.m2/
+      - /home/appveyor/.sdkman/
   -
     #------------------
     # Windows
@@ -51,24 +72,3 @@ for:
 
     cache:
       - C:\Users\appveyor\.m2\
-  -
-    #------------------
-    # Ubuntu
-    #------------------
-    matrix:
-      only:
-        - image: Ubuntu2004
-    init:
-      - sh: export MAVEN_OPTS="-Xmx768m -XX:MaxPermSize=128m -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2"
-      - sh: export JAVA_OPTS="-Xmx768m -XX:MaxPermSize=128m"
-
-    test_script:
-      - sh: ./scripts/integration-test.sh
-
-    after_test:
-      - sh: ./scripts/codecov.sh
-      - sh: rm -rf /home/appveyor/.m2/repository/com/alibaba/dns-cache-manipulator*
-
-    cache:
-      - /home/appveyor/.m2/
-      - /home/appveyor/.sdkman/
