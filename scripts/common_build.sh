@@ -27,7 +27,7 @@ readonly -a JAVA_CMD=(
 )
 
 readonly -a MVN_CMD=(
-    "$ROOT_PROJECT_DIR/mvnw" -V
+    "$ROOT_PROJECT_DIR/mvnw" -V --no-transfer-progress
 )
 
 #################################################################################
@@ -56,7 +56,7 @@ mvnBuildJar() {
             # https://stackoverflow.com/questions/25201430
             runCmd "${MVN_CMD[@]}" install -DperformRelease -P '!gen-sign' || die "fail to build jar!"
         else
-            runCmd "${MVN_CMD[@]}" package -Dmaven.test.skip=true || die "fail to build jar!"
+            runCmd "${MVN_CMD[@]}" install -Dmaven.test.skip=true || die "fail to build jar!"
         fi
     )
 }
@@ -79,11 +79,3 @@ mvnCopyDependencies() {
         runCmd "${MVN_CMD[@]}" dependency:copy-dependencies -DincludeScope=test -DexcludeArtifactIds=jsr305,spotbugs-annotations || die "fail to mvn copy-dependencies!"
     )
 }
-
-#################################################################################
-# maven actions
-#################################################################################
-
-if [ "${1:-}" != "skipClean" ]; then
-    mvnClean
-fi
