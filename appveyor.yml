@@ -66,6 +66,7 @@ for:
       - sh: ./scripts/integration-test.sh
 
     after_test:
+      - sh: ./scripts/codecov.sh
       - sh: rm -rf /home/appveyor/.m2/repository/com/alibaba/dns-cache-manipulator*
 
     cache:
