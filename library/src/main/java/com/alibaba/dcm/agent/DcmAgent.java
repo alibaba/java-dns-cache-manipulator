@@ -18,6 +18,7 @@ import java.util.*;
  */
 public class DcmAgent {
     static final String FILE = "file";
+    static final String DCM_AGENT_SUPRESS_EXCEPTION_STACK = "DCM_AGENT_SUPRESS_EXCEPTION_STACK";
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
     public static void agentmain(String agentArgument) throws Exception {
@@ -75,8 +76,14 @@ public class DcmAgent {
                 } catch (Exception e) {
                     allSuccess = false;
                     final String exString = throwable2StackString(e);
+                    final String sdtoutExString;
+                    if (isDcmAgentSupressExceptionStack()) {
+                        sdtoutExString = e.toString();
+                    } else {
+                        sdtoutExString = exString;
+                    }
 
-                    System.out.printf("%s: Error to do action %s %s, cause: %s%n", DcmAgent.class.getName(), action, argumentString, exString);
+                    System.out.printf("%s: Error to do action %s %s, cause: %s%n", DcmAgent.class.getName(), action, argumentString, sdtoutExString);
                     if (filePrinter != null) {
                         filePrinter.printf("Error to do action %s %s, cause: %s%n", action, argumentString, exString);
                     }
@@ -184,6 +191,24 @@ public class DcmAgent {
         }
 
         return methodArgs;
+    }
+
+    static boolean isDcmAgentSupressExceptionStack() {
+        String supressException = getConfig(DCM_AGENT_SUPRESS_EXCEPTION_STACK);
+        if (supressException == null) return false;
+
+        supressException = supressException.trim();
+        if (supressException.length() == 0) return false;
+
+        return "true".equalsIgnoreCase(supressException);
+    }
+
+    static String getConfig(String name) {
+        String var = System.getenv(name);
+        if (var == null || var.trim().length() == 0) {
+            var = System.getProperty(name);
+        }
+        return var;
     }
 
     static void printResult(String action, Object result, PrintWriter writer) {
