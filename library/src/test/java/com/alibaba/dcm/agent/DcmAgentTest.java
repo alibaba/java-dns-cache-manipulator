@@ -2,7 +2,6 @@ package com.alibaba.dcm.agent;
 
 import com.alibaba.dcm.DnsCacheManipulator;
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,15 +32,6 @@ public class DcmAgentTest {
         outputFilePath = outputFile.getAbsolutePath();
 
         DnsCacheManipulator.clearDnsCache();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        System.out.println("============================================");
-        System.out.println("Agent Output File Content");
-        System.out.println("============================================");
-        final String text = FileUtils.readFileToString(outputFile, UTF8);
-        System.out.println(text);
     }
 
     @Test

@@ -17,13 +17,13 @@ __loadSdkman() {
 
         curl -s get.sdkman.io | bash || die "fail to install sdkman"
         this_time_install_sdk_man=true
-    fi
 
-    {
-        echo sdkman_auto_answer=true
-        echo sdkman_auto_selfupdate=false
-        echo sdkman_disable_auto_upgrade_check=true
-    } >>"$HOME/.sdkman/etc/config"
+        {
+            echo sdkman_auto_answer=true
+            echo sdkman_auto_selfupdate=false
+            echo sdkman_disable_auto_upgrade_check=true
+        } >>"$HOME/.sdkman/etc/config"
+    fi
 
     set +u
     # shellcheck disable=SC1090

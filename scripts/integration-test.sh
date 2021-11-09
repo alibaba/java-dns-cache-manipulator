@@ -3,6 +3,7 @@ set -eEuo pipefail
 cd "$(dirname "$(readlink -f "$0")")"
 
 export CI_TEST_MODE=true
+export DCM_AGENT_SUPRESS_EXCEPTION_STACK=true
 
 source ./prepare-jdk.sh
 source ./common_build.sh
