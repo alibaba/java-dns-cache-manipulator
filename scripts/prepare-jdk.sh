@@ -37,6 +37,7 @@ jdks_install_by_sdkman=(
     6.0.119-zulu
     8.312.07.1-amzn
     11.0.12.7.1-ms
+    17.0.1-ms
 )
 java_home_var_names=()
 
@@ -65,7 +66,7 @@ __setJdkHomeVarsAndInstallJdk() {
             }
         fi
 
-        java_home_var_names=("${java_home_var_names[@]:+"${java_home_var_names[@]}"}" "$jdkHomeVarName")
+        java_home_var_names=(${java_home_var_names[@]:+"${java_home_var_names[@]}"} "$jdkHomeVarName")
         printf '%s :\n\t%s\n\tspecified is %s\n' "$jdkHomeVarName" "${!jdkHomeVarName}" "$jdkNameOfSdkman"
     done
 

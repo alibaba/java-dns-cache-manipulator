@@ -25,6 +25,6 @@ for jhome in "${java_home_var_names[@]}"; do
     export JAVA_HOME=${!jhome}
 
     headInfo "test with Java: $JAVA_HOME"
-    runCmd ../library/scripts/run-junit.sh skipClean
-    runCmd ../tool/scripts/run-junit.sh skipClean
+    logAndRun ../library/scripts/run-junit.sh skipClean
+    logAndRun ../tool/scripts/run-junit.sh skipClean
 done
