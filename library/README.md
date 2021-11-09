@@ -1,8 +1,8 @@
 Java Dns Cache Manipulator(DCM) Library
 =======================================
 
-[![Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
-[![Coveralls branch](https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/master)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)
+[![Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/v1.6.0.svg?label=build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
+[![Coveralls branch](https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/v1.6.0)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=v1.6.0)
 [![JDK support](https://img.shields.io/badge/JDK-6+-green?logo=java&logoColor=white)](https://openjdk.java.net/)  
 [![License](https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Javadocs](https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator?label=javadoc&color=3d7c47&logo=microsoft-academic&logoColor=white)](https://alibaba.github.io/java-dns-cache-manipulator/apidocs/)
@@ -230,7 +230,7 @@ content = m2.getResponseBodyAsString();
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.6.0-RC2</version>
+    <version>1.6.0</version>
 </dependency>
 ```
 
