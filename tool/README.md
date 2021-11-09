@@ -50,7 +50,7 @@ Java Dns Cache Manipulator Tool
 
 [![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.0-RC2/dcm-1.6.0-RC2.tar.gz.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.0-RC2/dcm-1.6.0-RC2.tar.gz) 下载文件`dcm-x.x.x.tar.gz`。
 
-解压后，运行`bin`目录下的`dcm`脚本（`Shell脚本`）。
+解压后，运行`bin`目录下的`dcm`。
 
 ```bash
 $ dcm -h
