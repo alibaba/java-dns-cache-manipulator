@@ -25,6 +25,8 @@ __loadSdkman() {
         } >>"$HOME/.sdkman/etc/config"
     fi
 
+    logAndRun cat "$HOME/.sdkman/etc/config"
+
     set +eEuo pipefail
     # shellcheck disable=SC1090
     source "$HOME/.sdkman/bin/sdkman-init.sh"
