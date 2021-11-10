@@ -28,7 +28,7 @@ __loadSdkman() {
     set +eEuo pipefail
     # shellcheck disable=SC1090
     source "$HOME/.sdkman/bin/sdkman-init.sh"
-    "$this_time_install_sdk_man" && logAndRun sdk ls java
+    "$this_time_install_sdk_man" && logAndRun sdk ls java | sed -n '/^ Vendor/,/^===========/p'
     set -eEuo pipefail
 }
 __loadSdkman

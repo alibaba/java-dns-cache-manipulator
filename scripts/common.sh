@@ -78,7 +78,7 @@ versionGreatEqThan() {
 }
 
 logAndRun() {
-    blueEcho "Run under work directory $PWD :$nl$*"
+    blueEcho "Run under work directory $PWD :$nl$*" 1>&2
     time "$@"
 }
 
