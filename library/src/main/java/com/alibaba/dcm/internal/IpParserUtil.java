@@ -1,7 +1,5 @@
 package com.alibaba.dcm.internal;
 
-import sun.net.util.IPAddressUtil;
-
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
@@ -46,6 +44,7 @@ final class IpParserUtil {
             throw new IllegalArgumentException(ip + INVALID_IP_ADDRESS);
         }
     }
+
 
     private IpParserUtil() {
     }

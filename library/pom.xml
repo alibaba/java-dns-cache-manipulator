@@ -443,6 +443,7 @@
 							-->
 							<excludes>
 								<exclude>com/alibaba/dcm/internal/JavaVersion.class</exclude>
+								<exclude>com/alibaba/dcm/internal/IPAddressUtil.class</exclude>
 							</excludes>
 						</configuration>
 					</plugin>

@@ -34,7 +34,6 @@ JAVA_CMD() {
     versionGreatEqThan $(__getJavaVersion) 12 && additionalOptionsForJava11Plus=(
         --add-opens java.base/java.net=ALL-UNNAMED
         --add-opens java.base/sun.net=ALL-UNNAMED
-        --add-opens java.base/sun.net.util=ALL-UNNAMED
     )
 
     logAndRun "$JAVA_HOME/bin/java" -Xmx128m -Xms128m -server -ea -Duser.language=en -Duser.country=US \
