@@ -38,8 +38,12 @@ for:
     after_test:
       - sh: ./scripts/codecov.sh
       - sh: rm -rf /home/appveyor/.m2/repository/com/alibaba/dns-cache-manipulator*
+      - sh: rm -rf /home/appveyor/.sdkman/archives/*
 
     cache:
+      # if cache size is exceed appveyor limit:
+      #   Compressed cache item cannot exceed 1,048,576,000 bytes
+      # skip below maven cache:
       - /home/appveyor/.m2/
       - /home/appveyor/.sdkman/
   -
