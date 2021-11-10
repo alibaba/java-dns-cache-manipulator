@@ -34,7 +34,6 @@ final class IpParserUtil {
             address = IPAddressUtil.textToNumericFormatV6(ip);
             if (address != null) return address;
 
-
             if (ipv6Expected) {
                 throw new IllegalArgumentException(ip + INVALID_IPV_6_ADDRESS);
             } else {

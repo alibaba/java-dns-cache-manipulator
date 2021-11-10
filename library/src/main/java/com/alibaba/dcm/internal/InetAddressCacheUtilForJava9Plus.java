@@ -52,9 +52,11 @@ public final class InetAddressCacheUtilForJava9Plus {
             throws ClassNotFoundException, UnknownHostException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<?> clazz = Class.forName(inetAddress$CachedAddresses_ClassName);
         // InetAddress.CachedAddresses has only a constructor:
-        // - for jdk 9-jdk12, constructor signature is  CachedAddresses(String host, InetAddress[] inetAddresses, long expiryTime)
-        // code in jdk 9-jdk12:
-        //  http://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#783
+        // - for jdk 9-jdk12, constructor signature is CachedAddresses(String host, InetAddress[] inetAddresses, long expiryTime)
+        // code in jdk 9:
+        //   https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783
+        // code in jdk 11:
+        //   https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787
         Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
         return constructor.newInstance(host, toInetAddressArray(host, ips), expiration);

@@ -16,13 +16,15 @@
  */
 package com.alibaba.dcm.internal;
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// this source code file is copied and small adopted from commons-lang-3.12.0:
+// This source code file is copied and small adopted from commons-lang-3.12.0:
 //
 // https://github.com/apache/commons-lang/blob/rel/commons-lang-3.12.0/src/main/java/org/apache/commons/lang3/JavaVersion.java
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 /**
  * <p>An enum representing all the versions of the Java specification.

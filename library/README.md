@@ -314,10 +314,11 @@ private static void cacheAddresses(String hostname,
     该项目的[使用文档](http://leopard.io/modules/javahost)。  
     本项目如何设置`Java DNS Cache`的解法来自该项目。刚开始在持续集成项目中碰到`host`绑定的问题时，也是使用该项目来解决的 :+1:
 - 类`InetAddress`的源代码：
-    - `JDK 6`的[`InetAddress`](http://hg.openjdk.java.net/jdk6/jdk6/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l739)
-    - `JDK 7`的[`InetAddress`](http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l742)
-    - `JDK 8`的[`InetAddress`](http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l748)
-    - `JDK 9`的[`InetAddress`](http://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#783)
+    - `JDK 6`的[`InetAddress`](https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739)
+    - `JDK 7`的[`InetAddress`](https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742)
+    - `JDK 8`的[`InetAddress`](https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748)
+    - `JDK 9`的[`InetAddress`](https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783)
+    - `JDK 11`的[`InetAddress`](https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787)
 - [`JVM Networking Properties` - `java docs`](http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html)
 - [`java dns`解析缓存之源码解析](http://rongmayisheng.com/?p=1006)，写得很完整，源码解析。给出值得注意的结论：
     - 打开`Java`中的`SecurityManager`，`DNS`缓存将不会失效。

@@ -10,13 +10,15 @@ public final class JavaVersionUtil {
         return JAVA_SPECIFICATION_VERSION_AS_ENUM.atMost(JavaVersion.JAVA_1_8);
     }
 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // blow source code is copied from commons-lang-3.12.0:
+    // Blow source code is copied from commons-lang-3.12.0:
     //
     // https://github.com/apache/commons-lang/blob/rel/commons-lang-3.12.0/src/main/java/org/apache/commons/lang3/SystemUtils.java
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     private static final String JAVA_SPECIFICATION_VERSION = getSystemProperty("java.specification.version");
     private static final JavaVersion JAVA_SPECIFICATION_VERSION_AS_ENUM = JavaVersion.get(JAVA_SPECIFICATION_VERSION);

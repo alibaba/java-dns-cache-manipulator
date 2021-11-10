@@ -63,11 +63,11 @@ public final class InetAddressCacheUtilForJava8Minus {
         // - for jdk 6, constructor signature is CacheEntry(Object address, long expiration)
         // - for jdk 7+, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
         // code in jdk 6:
-        //   http://hg.openjdk.java.net/jdk6/jdk6/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l739
+        //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
         // code in jdk 7:
-        //   http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l742
+        //   https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742
         // code in jdk 8:
-        //   http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l748
+        //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
         Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
         return constructor.newInstance(toInetAddressArray(host, ips), expiration);
@@ -214,11 +214,11 @@ public final class InetAddressCacheUtilForJava8Minus {
                     // - for jdk 6, address and expiration
                     // - for jdk 7+, addresses(*renamed* from 6!) and expiration
                     // code in jdk 6:
-                    //   http://hg.openjdk.java.net/jdk6/jdk6/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l739
+                    //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
                     // code in jdk 7:
-                    //   http://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l742
+                    //   https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742
                     // code in jdk 8:
-                    //   http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/tip/src/share/classes/java/net/InetAddress.java#l748
+                    //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
                     final Field[] fields = cacheEntryClass.getDeclaredFields();
                     for (Field field : fields) {
                         final String name = field.getName();
