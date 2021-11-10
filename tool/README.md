@@ -1,8 +1,8 @@
 Java Dns Cache Manipulator Tool
 =================================
 
-[![Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master.svg?label=build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
-[![Coveralls branch](https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/master)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master)
+[![Build Status](https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/v1.6.1.svg?label=build)](https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator)
+[![Coveralls branch](https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/v1.6.1)](https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=v1.6.1)
 [![JDK support](https://img.shields.io/badge/JDK-6+-green?logo=java&logoColor=white)](https://openjdk.java.net/)
 [![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.0/dcm-1.6.0.tar.gz.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.0/dcm-1.6.0.tar.gz)  
 [![License](https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97)](https://www.apache.org/licenses/LICENSE-2.0.html)
