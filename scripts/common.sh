@@ -77,6 +77,14 @@ versionGreatEqThan() {
     [ "$(printf '%s\n' "$ver" "$destVer" | sort -V | head -n1)" = "$destVer" ]
 }
 
+loose() {
+    set +eEuo pipefail
+    "$@"
+    local exit_code=$?
+    set -eEuo pipefail
+    return $exit_code
+}
+
 logAndRun() {
     blueEcho "Run under work directory $PWD :$nl$*" 1>&2
     time "$@"

@@ -27,11 +27,12 @@ __loadSdkman() {
 
     logAndRun cat "$HOME/.sdkman/etc/config"
 
-    set +eEuo pipefail
     # shellcheck disable=SC1090
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-    "$this_time_install_sdk_man" && logAndRun sdk ls java | sed -n '/^ Vendor/,/^===========/p'
-    set -eEuo pipefail
+    loose source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+    if "$this_time_install_sdk_man"; then
+        loose logAndRun sdk ls java | sed -n '/^ Vendor/,/^===========/p'
+    fi
 }
 __loadSdkman
 
@@ -62,9 +63,7 @@ __setJdkHomeVarsAndInstallJdk() {
 
             # install jdk by sdkman
             [ ! -d "$jdkHomePath" ] && {
-                set +eEuo pipefail
-                logAndRun sdk install java "$jdkNameOfSdkman" || die "fail to install jdk $jdkNameOfSdkman by sdkman"
-                set -eEuo pipefail
+                loose logAndRun sdk install java "$jdkNameOfSdkman" || die "fail to install jdk $jdkNameOfSdkman by sdkman"
             }
         fi
 
