@@ -30,8 +30,8 @@ __getJavaVersion() {
 # set env variable ENABLE_JAVA_RUN_DEBUG to enable java debug mode
 
 JAVA_CMD() {
-    local additionalOptionsForJava11Plus
-    versionGreatEqThan $(__getJavaVersion) 12 && additionalOptionsForJava11Plus=(
+    local additionalOptionsForJava12Plus
+    versionGreatThanEq $(__getJavaVersion) 12 && additionalOptionsForJava12Plus=(
         --add-opens java.base/java.net=ALL-UNNAMED
         --add-opens java.base/sun.net=ALL-UNNAMED
     )
@@ -39,7 +39,7 @@ JAVA_CMD() {
     logAndRun "$JAVA_HOME/bin/java" -Xmx128m -Xms128m -server -ea -Duser.language=en -Duser.country=US \
     ${ENABLE_JAVA_RUN_VERBOSE_CLASS+ -verbose:class} \
     ${ENABLE_JAVA_RUN_DEBUG+ -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005} \
-    ${additionalOptionsForJava11Plus[@]:+"${additionalOptionsForJava11Plus[@]}"} \
+    ${additionalOptionsForJava12Plus[@]:+"${additionalOptionsForJava12Plus[@]}"} \
     "$@"
 }
 

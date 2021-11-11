@@ -66,13 +66,13 @@ headInfo() {
 
 # How to compare a program's version in a shell script?
 #   https://unix.stackexchange.com/questions/285924
-versionGreatEqThan() {
+versionGreatThanEq() {
     (($# == 2)) || die "${FUNCNAME[0]} need only 2 arguments, actual arguments: $*"
 
     local ver=$1
     local destVer=$2
 
-    [ "$ver" = "$destVer" ] && return 1
+    [ "$ver" = "$destVer" ] && return 0
 
     [ "$(printf '%s\n' "$ver" "$destVer" | sort -V | head -n1)" = "$destVer" ]
 }
