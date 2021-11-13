@@ -4,14 +4,13 @@ package com.alibaba.dcm.internal;
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 final class IpParserUtil {
-    private static final String INVALID_IPV_6_ADDRESS = ": invalid IPv6 address";
+    private static final String INVALID_IP_V6_ADDRESS = ": invalid IPv6 address";
     private static final String INVALID_IP_ADDRESS = ": invalid IP address";
 
     /**
      * source code is dug from {@link java.net.InetAddress#getAllByName(java.lang.String, java.net.InetAddress)}
      */
     static byte[] ip2ByteArray(String ip) {
-
         boolean ipv6Expected = false;
         if (ip.charAt(0) == '[') {
             // This is supposed to be an IPv6 literal
@@ -20,7 +19,7 @@ final class IpParserUtil {
                 ipv6Expected = true;
             } else {
                 // This was supposed to be a IPv6 address, but it's not!
-                throw new IllegalArgumentException(ip + INVALID_IPV_6_ADDRESS);
+                throw new IllegalArgumentException(ip + INVALID_IP_V6_ADDRESS);
             }
         }
 
@@ -35,7 +34,7 @@ final class IpParserUtil {
             if (address != null) return address;
 
             if (ipv6Expected) {
-                throw new IllegalArgumentException(ip + INVALID_IPV_6_ADDRESS);
+                throw new IllegalArgumentException(ip + INVALID_IP_V6_ADDRESS);
             } else {
                 throw new IllegalArgumentException(ip + INVALID_IP_ADDRESS);
             }
