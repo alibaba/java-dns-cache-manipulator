@@ -89,7 +89,7 @@ public final class InetAddressCacheUtilCommons {
         if (isNegative) {
             if (negativeSet$InetAddressCachePolicy == null) {
                 synchronized (InetAddressCacheUtilCommons.class) {
-                    if (negativeSet$InetAddressCachePolicy == null) {
+                    if (negativeSet$InetAddressCachePolicy == null) { // double check
                         Field f;
                         try {
                             f = clazz.getDeclaredField("propertyNegativeSet");
@@ -105,7 +105,7 @@ public final class InetAddressCacheUtilCommons {
         } else {
             if (setFiled$InetAddressCachePolicy == null) {
                 synchronized (InetAddressCacheUtilCommons.class) {
-                    if (setFiled$InetAddressCachePolicy == null) {
+                    if (setFiled$InetAddressCachePolicy == null) { // double check
                         Field f;
                         try {
                             f = clazz.getDeclaredField("propertySet");
