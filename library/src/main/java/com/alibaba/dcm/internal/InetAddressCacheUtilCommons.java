@@ -121,8 +121,8 @@ public final class InetAddressCacheUtilCommons {
         }
 
         synchronized (InetAddressCachePolicy.class) { // static synchronized method!
-            cachePolicyFiled.set(null, seconds);
-            setField.set(null, true);
+            cachePolicyFiled.setInt(null, seconds);
+            setField.setBoolean(null, true);
         }
     }
 

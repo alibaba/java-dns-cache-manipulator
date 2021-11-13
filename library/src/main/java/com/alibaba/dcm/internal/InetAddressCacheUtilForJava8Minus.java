@@ -237,7 +237,7 @@ public final class InetAddressCacheUtilForJava8Minus {
             }
         }
 
-        long expiration = (Long) expirationFieldOfInetAddress$CacheEntry.get(entry);
+        long expiration = expirationFieldOfInetAddress$CacheEntry.getLong(entry);
         InetAddress[] addresses = (InetAddress[]) addressesFieldOfInetAddress$CacheEntry.get(entry);
 
         String[] ips = new String[addresses.length];

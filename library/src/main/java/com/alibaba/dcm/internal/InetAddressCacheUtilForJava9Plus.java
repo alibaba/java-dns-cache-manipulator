@@ -253,7 +253,7 @@ public final class InetAddressCacheUtilForJava9Plus {
         if (addressesClassName.equals(inetAddress$CachedAddresses_ClassName)) {
             inetAddressArray = (InetAddress[]) inetAddressesFieldOfInetAddress$CacheAddress.get(addresses);
 
-            long expiryTimeNanos = (Long) expiryTimeFieldOfInetAddress$CacheAddress.get(addresses);
+            long expiryTimeNanos = expiryTimeFieldOfInetAddress$CacheAddress.getLong(addresses);
             expiration = convertNanoTimeToTimeMillis(expiryTimeNanos);
         } else if (addressesClassName.equals(inetAddress$NameServiceAddresses_ClassName)) {
             InetAddress inetAddress = (InetAddress) reqAddrFieldOfInetAddress$NameServiceAddress.get(addresses);
