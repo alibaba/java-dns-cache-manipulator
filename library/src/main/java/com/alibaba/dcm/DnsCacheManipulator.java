@@ -1,16 +1,18 @@
 package com.alibaba.dcm;
 
-import com.alibaba.dcm.internal.*;
+import com.alibaba.dcm.internal.InetAddressCacheUtilCommons;
+import com.alibaba.dcm.internal.InetAddressCacheUtilForJava8Minus;
+import com.alibaba.dcm.internal.InetAddressCacheUtilForJava9Plus;
+import sun.net.InetAddressCachePolicy;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
 import static com.alibaba.dcm.internal.JavaVersionUtil.isJdkAtMost8;
@@ -265,12 +267,15 @@ public class DnsCacheManipulator {
      * Get JVM DNS cache policy.
      *
      * @return cache seconds.
-     * <p>
      * <ul>
-     * <li> {@code -1} means never expired.(In effect, all negative value)</li>
-     * <li> {@code 0} never cached.</li>
+     * <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
+     * <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
      * </ul>
      * @throws DnsCacheManipulatorException Operation fail
+     * @see InetAddressCachePolicy#get()
+     * @see InetAddressCachePolicy#FOREVER
+     * @see InetAddressCachePolicy#NEVER
+     * @see InetAddressCachePolicy#DEFAULT_POSITIVE
      * @since 1.3.0
      */
     public static int getDnsCachePolicy() {
@@ -288,10 +293,16 @@ public class DnsCacheManipulator {
      *
      * @param cacheSeconds set default dns cache time. Special input case:
      *                     <ul>
-     *                     <li> {@code -1} means never expired.(In effect, all negative value)</li>
-     *                     <li> {@code 0} never cached.</li>
+     *                     <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
+     *                     <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
      *                     </ul>
      * @throws DnsCacheManipulatorException Operation fail
+     * @see InetAddressCachePolicy
+     * @see InetAddressCachePolicy#cachePolicy
+     * @see InetAddressCachePolicy#get()
+     * @see InetAddressCachePolicy#FOREVER
+     * @see InetAddressCachePolicy#NEVER
+     * @see InetAddressCachePolicy#DEFAULT_POSITIVE
      * @since 1.3.0
      */
     public static void setDnsCachePolicy(int cacheSeconds) {
@@ -308,10 +319,13 @@ public class DnsCacheManipulator {
      * @return negative cache seconds.
      * <p>
      * <ul>
-     * <li> {@code -1} means never expired.(In effect, all negative value)</li>
-     * <li> {@code 0} never cached.</li>
+     * <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
+     * <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
      * </ul>
      * @throws DnsCacheManipulatorException Operation fail
+     * @see InetAddressCachePolicy#getNegative()
+     * @see InetAddressCachePolicy#FOREVER
+     * @see InetAddressCachePolicy#NEVER
      * @since 1.3.0
      */
     public static int getDnsNegativeCachePolicy() {
@@ -327,10 +341,13 @@ public class DnsCacheManipulator {
      *
      * @param negativeCacheSeconds set default dns cache time. Special input case:
      *                             <ul>
-     *                             <li> {@code -1} means never expired.(In effect, all negative value)</li>
-     *                             <li> {@code 0} never cached.</li>
+     *                             <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
+     *                             <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
      *                             </ul>
      * @throws DnsCacheManipulatorException Operation fail
+     * @see InetAddressCachePolicy
+     * @see InetAddressCachePolicy#FOREVER
+     * @see InetAddressCachePolicy#NEVER
      * @since 1.3.0
      */
     public static void setDnsNegativeCachePolicy(int negativeCacheSeconds) {

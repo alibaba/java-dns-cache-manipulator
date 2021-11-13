@@ -31,41 +31,62 @@ public final class InetAddressCacheUtilCommons {
     }
 
     /**
-     * Set JVM DNS cache policy
+     * Set JVM DNS cache policy.
      *
      * @param cacheSeconds set default dns cache time. Special input case:
      *                     <ul>
-     *                     <li> {@code -1} means never expired.(In effect, all negative value)</li>
-     *                     <li> {@code 0} never cached.</li>
+     *                     <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
+     *                     <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
      *                     </ul>
      * @see InetAddressCachePolicy
      * @see InetAddressCachePolicy#cachePolicy
+     * @see InetAddressCachePolicy#get()
+     * @see InetAddressCachePolicy#FOREVER
+     * @see InetAddressCachePolicy#NEVER
+     * @see InetAddressCachePolicy#DEFAULT_POSITIVE
      */
     public static void setDnsCachePolicy(int cacheSeconds)
             throws NoSuchFieldException, IllegalAccessException {
         setCachePolicy0(false, cacheSeconds);
     }
 
+    /**
+     * Get JVM DNS cache policy.
+     *
+     * @see InetAddressCachePolicy#get()
+     * @see InetAddressCachePolicy#FOREVER
+     * @see InetAddressCachePolicy#NEVER
+     * @see InetAddressCachePolicy#DEFAULT_POSITIVE
+     */
     public static int getDnsCachePolicy() {
         return InetAddressCachePolicy.get();
     }
 
     /**
-     * Set JVM DNS negative cache policy
+     * Set JVM DNS negative cache policy.
      *
      * @param negativeCacheSeconds set default dns cache time. Special input case:
      *                             <ul>
-     *                             <li> {@code -1} means never expired.(In effect, all negative value)</li>
-     *                             <li> {@code 0} never cached.</li>
+     *                             <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
+     *                             <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
      *                             </ul>
      * @see InetAddressCachePolicy
      * @see InetAddressCachePolicy#negativeCachePolicy
+     * @see InetAddressCachePolicy#FOREVER
+     * @see InetAddressCachePolicy#NEVER
      */
     public static void setDnsNegativeCachePolicy(int negativeCacheSeconds)
             throws NoSuchFieldException, IllegalAccessException {
         setCachePolicy0(true, negativeCacheSeconds);
     }
 
+    /**
+     * Get JVM DNS negative cache policy.
+     *
+     * @see InetAddressCachePolicy#getNegative()
+     * @see InetAddressCachePolicy#FOREVER
+     * @see InetAddressCachePolicy#NEVER
+     */
     public static int getDnsNegativeCachePolicy() {
         return InetAddressCachePolicy.getNegative();
     }
