@@ -27,9 +27,7 @@ public final class DnsCacheEntry implements Serializable {
 
     @Nonnull
     public String[] getIps() {
-        String[] copy = new String[ips.length];
-        System.arraycopy(ips, 0, copy, 0, ips.length); // defensive copy
-        return copy;
+        return ips.clone(); // defensive copy
     }
 
     public String getIp() {
@@ -40,7 +38,6 @@ public final class DnsCacheEntry implements Serializable {
      * return value {@link Long#MAX_VALUE} means "never expiration".
      */
     public Date getExpiration() {
-        // defensive copy
         return new Date(expiration);
     }
 
