@@ -37,15 +37,15 @@ for:
 
     after_test:
       - sh: ./scripts/codecov.sh
-      - sh: rm -rf /home/appveyor/.m2/repository/com/alibaba/dns-cache-manipulator*
-      - sh: rm -rf /home/appveyor/.sdkman/archives/*
+      - sh: rm -rf $HOME/.m2/repository/com/alibaba/dns-cache-manipulator*
+      - sh: rm -rf $HOME/.sdkman/archives/*
 
     cache:
       # if cache size is exceed appveyor limit:
       #   Compressed cache item cannot exceed 1,048,576,000 bytes
       # skip below maven cache:
-      - /home/appveyor/.m2/
-      - /home/appveyor/.sdkman/
+      - $HOME/.m2/
+      - $HOME/.sdkman/
   -
     #------------------
     # Windows
@@ -67,7 +67,8 @@ for:
       - ./mvnw.cmd -V clean install --no-transfer-progress
 
     after_test:
-      - ps: Remove-Item -r -fo C:\Users\appveyor\.m2\repository\com\alibaba\dns-cache-manipulator*
+      - ps: Remove-Item -r -fo $home\.m2\repository\com\alibaba\dns-cache-manipulator*
 
     cache:
-      - C:\Users\appveyor\.m2\
+      # https://www.appveyor.com/docs/build-cache/
+      - '%HOMEDRIVE%%HOMEPATH%\.m2\'
