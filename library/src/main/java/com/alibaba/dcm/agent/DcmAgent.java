@@ -17,8 +17,11 @@ import java.util.*;
  * @since 1.4.0
  */
 public class DcmAgent {
-    static final String FILE = "file";
-    static final String DCM_AGENT_SUPRESS_EXCEPTION_STACK = "DCM_AGENT_SUPRESS_EXCEPTION_STACK";
+
+    private static final String FILE_KEY = "file";
+
+    private static final String DCM_AGENT_SUPRESS_EXCEPTION_STACK = "DCM_AGENT_SUPRESS_EXCEPTION_STACK";
+
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
     public static void agentmain(String agentArgument) throws Exception {
@@ -39,12 +42,12 @@ public class DcmAgent {
             PrintWriter filePrinter = null;
 
             // Extract file argument, set file printer if needed
-            if (action2Arguments.containsKey(FILE)) {
-                fileOutputStream = new FileOutputStream(action2Arguments.get(FILE).get(0), false);
+            if (action2Arguments.containsKey(FILE_KEY)) {
+                fileOutputStream = new FileOutputStream(action2Arguments.get(FILE_KEY).get(0), false);
                 final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
 
                 filePrinter = new PrintWriter(outputStreamWriter, true);
-                action2Arguments.remove(FILE);
+                action2Arguments.remove(FILE_KEY);
             }
 
             if (action2Arguments.isEmpty()) {
@@ -104,7 +107,7 @@ public class DcmAgent {
         }
     }
 
-    static Map<String, List<String>> parseAgentArgument(String argument) {
+    private static Map<String, List<String>> parseAgentArgument(String argument) {
         final String[] split = argument.split("\\s+");
 
         int idx = 0;
@@ -128,11 +131,11 @@ public class DcmAgent {
         return action2Arguments;
     }
 
-    static String join(List<String> list) {
+    private static String join(List<String> list) {
         return join(list, " ");
     }
 
-    static String join(List<String> list, String separator) {
+    private static String join(List<String> list, String separator) {
         StringBuilder ret = new StringBuilder();
         for (String argument : list) {
             if (ret.length() > 0) {
@@ -143,7 +146,7 @@ public class DcmAgent {
         return ret.toString();
     }
 
-    static Object doAction(String action, String[] arguments) throws Exception {
+    private static Object doAction(String action, String[] arguments) throws Exception {
         Method method = action2Method.get(action);
 
         final Class<?>[] parameterTypes = method.getParameterTypes();
@@ -151,14 +154,12 @@ public class DcmAgent {
         return method.invoke(null, methodArgs);
     }
 
-    static Object[] convertStringArray2Arguments(String action, String[] arguments, Class<?>[] parameterTypes) {
+    private static Object[] convertStringArray2Arguments(String action, String[] arguments, Class<?>[] parameterTypes) {
         if (arguments.length < parameterTypes.length) {
             final String message = String.format("action %s need more argument! arguments: %s", action, Arrays.toString(arguments));
             throw new IllegalStateException(message);
         }
-        if (parameterTypes.length == 0) {
-            return new Object[0];
-        }
+        if (parameterTypes.length == 0) return new Object[0];
 
         final Object[] methodArgs = new Object[parameterTypes.length];
 
@@ -174,9 +175,8 @@ public class DcmAgent {
         }
 
         for (int i = 0; i < parameterTypes.length; i++) {
-            if (methodArgs[i] != null) { // already set
-                continue;
-            }
+            // already set
+            if (methodArgs[i] != null) continue;
 
             Class<?> parameterType = parameterTypes[i];
             final String argument = arguments[i];
@@ -193,7 +193,7 @@ public class DcmAgent {
         return methodArgs;
     }
 
-    static boolean isDcmAgentSupressExceptionStack() {
+    private static boolean isDcmAgentSupressExceptionStack() {
         String supressException = getConfig(DCM_AGENT_SUPRESS_EXCEPTION_STACK);
         if (supressException == null) return false;
 
@@ -203,7 +203,7 @@ public class DcmAgent {
         return "true".equalsIgnoreCase(supressException);
     }
 
-    static String getConfig(String name) {
+    private static String getConfig(String name) {
         String var = System.getenv(name);
         if (var == null || var.trim().length() == 0) {
             var = System.getProperty(name);
@@ -211,15 +211,12 @@ public class DcmAgent {
         return var;
     }
 
-    static void printResult(String action, Object result, PrintWriter writer) {
-        if (writer == null) {
-            return;
-        }
+    private static void printResult(String action, Object result, PrintWriter writer) {
+        if (writer == null) return;
 
         final Method method = action2Method.get(action);
-        if (method.getReturnType() == void.class) {
-            return;
-        }
+        if (method.getReturnType() == void.class) return;
+
         if (result == null) {
             writer.println((Object) null);
         } else if (result instanceof DnsCacheEntry) {
@@ -243,16 +240,16 @@ public class DcmAgent {
         }
     }
 
-    static String throwable2StackString(Throwable e) {
+    private static String throwable2StackString(Throwable e) {
         final StringWriter w = new StringWriter();
         e.printStackTrace(new PrintWriter(w, true));
         return w.toString();
     }
 
-    static volatile Map<String, Method> action2Method;
-    static volatile ArrayList<String> actionList;
+    private static volatile Map<String, Method> action2Method;
+    private static volatile ArrayList<String> actionList;
 
-    static synchronized void initAction2Method() throws Exception {
+    private static synchronized void initAction2Method() throws Exception {
         if (action2Method != null) return;
 
         Map<String, Method> map = new LinkedHashMap<String, Method>();
@@ -271,7 +268,7 @@ public class DcmAgent {
 
         actionList = new ArrayList<String>(map.keySet());
 
-        map.put(FILE, null); // FAKE KEY
+        map.put(FILE_KEY, null); // FAKE KEY
 
         action2Method = map;
     }
@@ -280,6 +277,7 @@ public class DcmAgent {
     public static List<String> getActionList() {
         try {
             initAction2Method();
+
             return (List<String>) actionList.clone();
         } catch (Exception e) {
             throw new RuntimeException("fail to getActionList, cause: " + e, e);
