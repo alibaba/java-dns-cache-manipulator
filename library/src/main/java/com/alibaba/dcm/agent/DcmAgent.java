@@ -250,6 +250,7 @@ public class DcmAgent {
     }
 
     static volatile Map<String, Method> action2Method;
+    static volatile ArrayList<String> actionList;
 
     static synchronized void initAction2Method() throws Exception {
         if (action2Method != null) return;
@@ -268,15 +269,18 @@ public class DcmAgent {
         map.put("setNegativePolicy", DnsCacheManipulator.class.getMethod("setDnsNegativeCachePolicy", int.class));
         map.put("getNegativePolicy", DnsCacheManipulator.class.getMethod("getDnsNegativeCachePolicy"));
 
+        actionList = new ArrayList<String>(map.keySet());
+
         map.put(FILE, null); // FAKE KEY
 
         action2Method = map;
     }
 
+    @SuppressWarnings("unchecked")
     public static List<String> getActionList() {
         try {
             initAction2Method();
-            return new ArrayList<String>(action2Method.keySet());
+            return (List<String>) actionList.clone();
         } catch (Exception e) {
             throw new RuntimeException("fail to getActionList, cause: " + e, e);
         }
