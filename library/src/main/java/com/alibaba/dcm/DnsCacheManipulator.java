@@ -317,7 +317,6 @@ public class DnsCacheManipulator {
      * JVM DNS negative cache policy.
      *
      * @return negative cache seconds.
-     * <p>
      * <ul>
      * <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
      * <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>

@@ -3,6 +3,8 @@ package com.alibaba.dcm.internal;
 import com.alibaba.dcm.DnsCache;
 import com.alibaba.dcm.DnsCacheEntry;
 
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -12,9 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.GuardedBy;
 
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
@@ -56,21 +55,44 @@ public final class InetAddressCacheUtilForJava8Minus {
 
     private static Object newCacheEntry(String host, String[] ips, long expiration)
             throws UnknownHostException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        String className = "java.net.InetAddress$CacheEntry";
-        Class<?> clazz = Class.forName(className);
-
         // InetAddress.CacheEntry has only a constructor:
-        // - for jdk 6, constructor signature is CacheEntry(Object address, long expiration)
-        // - for jdk 7+, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
-        // code in jdk 6:
-        //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
-        // code in jdk 7:
-        //   https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742
-        // code in jdk 8:
-        //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
-        Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
-        constructor.setAccessible(true);
-        return constructor.newInstance(toInetAddressArray(host, ips), expiration);
+        return getConstructorOfInetAddress$CacheEntry().newInstance(toInetAddressArray(host, ips), expiration);
+    }
+
+    /**
+     * {@link InetAddress.CacheEntry#CacheEntry}
+     */
+    private static volatile Constructor<?> constructorOfInetAddress$CacheEntry = null;
+
+    private static Constructor<?> getConstructorOfInetAddress$CacheEntry() throws ClassNotFoundException {
+        if (constructorOfInetAddress$CacheEntry != null) {
+            return constructorOfInetAddress$CacheEntry;
+        }
+
+        synchronized (InetAddressCacheUtilCommons.class) {
+            if (constructorOfInetAddress$CacheEntry != null) { // double check
+                return constructorOfInetAddress$CacheEntry;
+            }
+
+            final String className = "java.net.InetAddress$CacheEntry";
+            final Class<?> clazz = Class.forName(className);
+
+            // InetAddress.CacheEntry has only a constructor:
+            // - for jdk 6, constructor signature is CacheEntry(Object address, long expiration)
+            // - for jdk 7/8, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
+            //
+            // code in jdk 6:
+            //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
+            // code in jdk 7:
+            //   https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742
+            // code in jdk 8:
+            //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
+            final Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
+            constructor.setAccessible(true);
+
+            constructorOfInetAddress$CacheEntry = constructor;
+            return constructor;
+        }
     }
 
     public static void removeInetAddressCache(String host)
