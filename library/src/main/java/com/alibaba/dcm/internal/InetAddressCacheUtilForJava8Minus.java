@@ -47,15 +47,15 @@ public final class InetAddressCacheUtilForJava8Minus {
         long expiration = expireMillis == NEVER_EXPIRATION ? NEVER_EXPIRATION : System.currentTimeMillis() + expireMillis;
         Object entry = newCacheEntry(host, ips, expiration);
 
-        synchronized (getAddressCacheFieldOfInetAddress()) {
-            getCacheFiledOfAddressCacheFiledOfInetAddress().put(host, entry);
-            getCacheFiledOfNegativeCacheFiledOfInetAddress().remove(host);
+        synchronized (getAddressCacheOfInetAddress()) {
+            getCache().put(host, entry);
+            getNegativeCache().remove(host);
         }
     }
 
     private static Object newCacheEntry(String host, String[] ips, long expiration)
             throws UnknownHostException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        // InetAddress.CacheEntry has only a constructor:
+        // InetAddress.CacheEntry has only one constructor
         return getConstructorOfInetAddress$CacheEntry().newInstance(toInetAddressArray(host, ips), expiration);
     }
 
@@ -77,7 +77,7 @@ public final class InetAddressCacheUtilForJava8Minus {
             final String className = "java.net.InetAddress$CacheEntry";
             final Class<?> clazz = Class.forName(className);
 
-            // InetAddress.CacheEntry has only a constructor:
+            // InetAddress.CacheEntry has only one constructor:
             // - for jdk 6, constructor signature is CacheEntry(Object address, long expiration)
             // - for jdk 7/8, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
             //
@@ -99,32 +99,32 @@ public final class InetAddressCacheUtilForJava8Minus {
             throws NoSuchFieldException, IllegalAccessException {
         host = host.toLowerCase();
 
-        synchronized (getAddressCacheFieldOfInetAddress()) {
-            getCacheFiledOfAddressCacheFiledOfInetAddress().remove(host);
-            getCacheFiledOfNegativeCacheFiledOfInetAddress().remove(host);
+        synchronized (getAddressCacheOfInetAddress()) {
+            getCache().remove(host);
+            getNegativeCache().remove(host);
         }
     }
 
     /**
      * @return {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}
      */
-    @GuardedBy("getAddressCacheFieldOfInetAddress()")
-    private static Map<String, Object> getCacheFiledOfAddressCacheFiledOfInetAddress()
+    @GuardedBy("getAddressCacheOfInetAddress()")
+    private static Map<String, Object> getCache()
             throws NoSuchFieldException, IllegalAccessException {
-        return getCacheFiledOfInetAddress$Cache0(getAddressCacheFieldOfInetAddress());
+        return getCacheOfInetAddress$Cache0(getAddressCacheOfInetAddress());
     }
 
     /**
      * @return {@link InetAddress.Cache#cache} in {@link InetAddress#negativeCache}
      */
-    @GuardedBy("getAddressCacheFieldOfInetAddress()")
-    private static Map<String, Object> getCacheFiledOfNegativeCacheFiledOfInetAddress()
+    @GuardedBy("getAddressCacheOfInetAddress()")
+    private static Map<String, Object> getNegativeCache()
             throws NoSuchFieldException, IllegalAccessException {
-        return getCacheFiledOfInetAddress$Cache0(getNegativeCacheFieldOfInetAddress());
+        return getCacheOfInetAddress$Cache0(getNegativeCacheOfInetAddress());
     }
 
     @SuppressWarnings("unchecked")
-    private static Map<String, Object> getCacheFiledOfInetAddress$Cache0(Object inetAddressCache)
+    private static Map<String, Object> getCacheOfInetAddress$Cache0(Object inetAddressCache)
             throws NoSuchFieldException, IllegalAccessException {
         Class<?> clazz = inetAddressCache.getClass();
 
@@ -136,17 +136,17 @@ public final class InetAddressCacheUtilForJava8Minus {
     /**
      * @return {@link InetAddress#addressCache}
      */
-    private static Object getAddressCacheFieldOfInetAddress()
+    private static Object getAddressCacheOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
-        return getAddressCacheFieldsOfInetAddress0()[0];
+        return getAddressCacheAndNegativeCacheOfInetAddress0()[0];
     }
 
     /**
      * @return {@link InetAddress#negativeCache}
      */
-    private static Object getNegativeCacheFieldOfInetAddress()
+    private static Object getNegativeCacheOfInetAddress()
             throws NoSuchFieldException, IllegalAccessException {
-        return getAddressCacheFieldsOfInetAddress0()[1];
+        return getAddressCacheAndNegativeCacheOfInetAddress0()[1];
     }
 
     private static volatile Object[] ADDRESS_CACHE_AND_NEGATIVE_CACHE = null;
@@ -154,8 +154,7 @@ public final class InetAddressCacheUtilForJava8Minus {
     /**
      * @return {@link InetAddress#addressCache} and {@link InetAddress#negativeCache}
      */
-    @SuppressWarnings("JavaReflectionMemberAccess")
-    private static Object[] getAddressCacheFieldsOfInetAddress0()
+    private static Object[] getAddressCacheAndNegativeCacheOfInetAddress0()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {
             synchronized (InetAddressCacheUtilForJava8Minus.class) {
@@ -182,8 +181,8 @@ public final class InetAddressCacheUtilForJava8Minus {
         host = host.toLowerCase();
 
         final Object cacheEntry;
-        synchronized (getAddressCacheFieldOfInetAddress()) {
-            cacheEntry = getCacheFiledOfAddressCacheFiledOfInetAddress().get(host);
+        synchronized (getAddressCacheOfInetAddress()) {
+            cacheEntry = getCache().get(host);
         }
 
         if (null == cacheEntry) return null;
@@ -202,9 +201,9 @@ public final class InetAddressCacheUtilForJava8Minus {
             throws NoSuchFieldException, IllegalAccessException {
         final Map<String, Object> cache;
         final Map<String, Object> negativeCache;
-        synchronized (getAddressCacheFieldOfInetAddress()) {
-            cache = new HashMap<String, Object>(getCacheFiledOfAddressCacheFiledOfInetAddress());
-            negativeCache = new HashMap<String, Object>(getCacheFiledOfNegativeCacheFiledOfInetAddress());
+        synchronized (getAddressCacheOfInetAddress()) {
+            cache = new HashMap<String, Object>(getCache());
+            negativeCache = new HashMap<String, Object>(getNegativeCache());
         }
 
         return new DnsCache(convert(cache), convert(negativeCache));
@@ -270,9 +269,9 @@ public final class InetAddressCacheUtilForJava8Minus {
     }
 
     public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {
-        synchronized (getAddressCacheFieldOfInetAddress()) {
-            getCacheFiledOfAddressCacheFiledOfInetAddress().clear();
-            getCacheFiledOfNegativeCacheFiledOfInetAddress().clear();
+        synchronized (getAddressCacheOfInetAddress()) {
+            getCache().clear();
+            getNegativeCache().clear();
         }
     }
 
