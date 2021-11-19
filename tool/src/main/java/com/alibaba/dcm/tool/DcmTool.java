@@ -1,13 +1,14 @@
 package com.alibaba.dcm.tool;
 
 import com.alibaba.dcm.agent.DcmAgent;
-import com.sun.tools.attach.VirtualMachine;
-import com.sun.tools.attach.VirtualMachineDescriptor;
+import com.sun.tools.attach.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 
+import javax.annotation.Nonnull;
 import java.io.File;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.Iterator;
 import java.util.List;
@@ -20,28 +21,18 @@ import static java.lang.System.exit;
  * @since 1.4.0
  */
 public class DcmTool {
-    static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
     static final String DCM_TOOLS_TMP_FILE_KEY = "DCM_TOOLS_TMP_FILE";
     static final String DCM_TOOLS_AGENT_JAR_KEY = "DCM_TOOLS_AGENT_JAR";
 
-    final static List<String> actionList = DcmAgent.getActionList();
+    private static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
-    public static void main(String[] args) throws Exception {
+    private final static List<String> actionList = DcmAgent.getActionList();
+
+    public static void main(@Nonnull String[] args) throws Exception {
         final String tmpFile = getConfig(DCM_TOOLS_TMP_FILE_KEY);
         final String agentJar = getConfig(DCM_TOOLS_AGENT_JAR_KEY);
 
-        final Options options = new Options();
-        options.addOption("p", "pid", true, "java process id to attach");
-        options.addOption("h", "help", false, "show help");
-
-        CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse(options, args);
-
-        if (cmd.hasOption('h')) {
-            HelpFormatter hf = new HelpFormatter();
-            hf.printHelp("Options", options);
-            return;
-        }
+        final CommandLine cmd = parseCommandLine(args);
 
         final String[] arguments = cmd.getArgs();
         if (arguments.length < 1) {
@@ -61,7 +52,32 @@ public class DcmTool {
             pid = selectProcess();
         }
 
-        StringBuilder agentArgument = new StringBuilder();
+        doDcmActionViaAgent(tmpFile, agentJar, arguments, action, pid);
+    }
+
+    @Nonnull
+    private static CommandLine parseCommandLine(@Nonnull String[] args) throws ParseException {
+        final Options options = new Options();
+        options.addOption("p", "pid", true, "java process id to attach");
+        options.addOption("h", "help", false, "show help");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
+        if (cmd.hasOption('h')) {
+            HelpFormatter hf = new HelpFormatter();
+            hf.printHelp("Options", options);
+            exit(0);
+        }
+
+        return cmd;
+    }
+
+    private static void doDcmActionViaAgent(
+            @Nonnull String tmpFile, @Nonnull String agentJar,
+            @Nonnull String[] arguments, @Nonnull String action, @Nonnull String pid)
+            throws AttachNotSupportedException, IOException, AgentLoadException, AgentInitializationException {
+        final StringBuilder agentArgument = new StringBuilder();
         agentArgument.append(action);
         for (int i = 1; i < arguments.length; i++) {
             String s = arguments[i];
@@ -70,23 +86,12 @@ public class DcmTool {
         agentArgument.append(" file ").append(tmpFile);
 
         VirtualMachine vm = null; // target java process pid
-        boolean actionSuccess = false;
+        boolean actionSuccess;
         try {
             vm = VirtualMachine.attach(pid);
             vm.loadAgent(agentJar, agentArgument.toString()); // loadAgent method will wait to agentmain finished.
 
-            final List<String> lines = FileUtils.readLines(new File(tmpFile), "UTF-8");
-
-            final int lastIdx = lines.size() - 1;
-            final String lastLine = lines.get(lastIdx);
-            if (DCM_AGENT_SUCCESS_MARK_LINE.equals(lastLine)) {
-                lines.remove(lastIdx);
-                actionSuccess = true;
-            }
-
-            for (String line : lines) {
-                System.out.println(line);
-            }
+            actionSuccess = printDcmResult(tmpFile);
         } finally {
             if (null != vm) {
                 vm.detach();
@@ -98,7 +103,31 @@ public class DcmTool {
         }
     }
 
-    static String getConfig(String name) {
+    private static boolean printDcmResult(@Nonnull String tmpFile) throws IOException {
+        boolean actionSuccess = false;
+
+        final List<String> lines = FileUtils.readLines(new File(tmpFile), "UTF-8");
+
+        final int lastIdx = lines.size() - 1;
+        final String lastLine = lines.get(lastIdx);
+        if (DCM_AGENT_SUCCESS_MARK_LINE.equals(lastLine)) {
+            lines.remove(lastIdx);
+            actionSuccess = true;
+        }
+
+        for (String line : lines) {
+            System.out.println(line);
+        }
+
+        return actionSuccess;
+    }
+
+    ///////////////////////////////////////////////
+    // util methods
+    ///////////////////////////////////////////////
+
+    @Nonnull
+    private static String getConfig(@Nonnull String name) {
         String var = System.getenv(name);
         if (var == null || var.trim().length() == 0) {
             var = System.getProperty(name);
@@ -110,8 +139,9 @@ public class DcmTool {
         return var;
     }
 
+    @Nonnull
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    static String selectProcess() {
+    private static String selectProcess() {
         System.out.println("Which java process to attache:");
         final List<VirtualMachineDescriptor> list = VirtualMachine.list();
 
@@ -142,6 +172,7 @@ public class DcmTool {
         }
     }
 
+    @Nonnull
     static String pid() {
         final String name = ManagementFactory.getRuntimeMXBean().getName();
         final int idx = name.indexOf("@");
