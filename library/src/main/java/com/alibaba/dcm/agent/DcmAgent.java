@@ -11,12 +11,16 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
+
+import static java.lang.String.format;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.4.0
  */
 public class DcmAgent {
+    private static final Logger logger = Logger.getLogger(DcmAgent.class.getName());
 
     private static final String FILE_KEY = "file";
 
@@ -25,11 +29,11 @@ public class DcmAgent {
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
     public static void agentmain(String agentArgument) throws Exception {
-        System.out.printf("%s: attached with agent argument: %s.%n", DcmAgent.class.getName(), agentArgument);
+        logger.info(format("%s: attached with agent argument: %s.%n", DcmAgent.class.getName(), agentArgument));
 
         agentArgument = agentArgument.trim();
         if (agentArgument.isEmpty()) {
-            System.out.println(DcmAgent.class.getName() + ": agent argument is blank, do nothing!");
+            logger.info(DcmAgent.class.getName() + ": agent argument is blank, do nothing!");
             return;
         }
 
@@ -51,7 +55,7 @@ public class DcmAgent {
             }
 
             if (action2Arguments.isEmpty()) {
-                System.out.println(DcmAgent.class.getName() + ": No action in agent argument, do nothing!");
+                logger.info(DcmAgent.class.getName() + ": No action in agent argument, do nothing!");
                 if (filePrinter != null) {
                     filePrinter.printf("No action in agent argument, do nothing! agent argument: %s.%n", agentArgument);
                 }
@@ -66,7 +70,7 @@ public class DcmAgent {
                 final String argumentString = join(arguments);
 
                 if (!action2Method.containsKey(action)) {
-                    System.out.printf("%s: Unknown action %s, ignore! action: %<s %s!%n", DcmAgent.class.getName(), action, argumentString);
+                    logger.info(format(("%s: Unknown action %s, ignore! action: %<s %s!%n"), DcmAgent.class.getName(), action, argumentString));
                     if (filePrinter != null) {
                         filePrinter.printf("Unknown action %s, ignore! action: %<s %s !%n", action, argumentString);
                     }
@@ -86,7 +90,7 @@ public class DcmAgent {
                         sdtoutExString = exString;
                     }
 
-                    System.out.printf("%s: Error to do action %s %s, cause: %s%n", DcmAgent.class.getName(), action, argumentString, sdtoutExString);
+                    logger.info(format(("%s: Error to do action %s %s, cause: %s%n"), DcmAgent.class.getName(), action, argumentString, sdtoutExString));
                     if (filePrinter != null) {
                         filePrinter.printf("Error to do action %s %s, cause: %s%n", action, argumentString, exString);
                     }
@@ -156,7 +160,7 @@ public class DcmAgent {
 
     private static Object[] convertStringArray2Arguments(String action, String[] arguments, Class<?>[] parameterTypes) {
         if (arguments.length < parameterTypes.length) {
-            final String message = String.format("action %s need more argument! arguments: %s", action, Arrays.toString(arguments));
+            final String message = format("action %s need more argument! arguments: %s", action, Arrays.toString(arguments));
             throw new IllegalStateException(message);
         }
         if (parameterTypes.length == 0) return new Object[0];
@@ -170,7 +174,7 @@ public class DcmAgent {
             System.arraycopy(arguments, lastArgumentIdx, varArgs, 0, varArgs.length);
             methodArgs[(lastArgumentIdx)] = varArgs;
         } else if (arguments.length > parameterTypes.length) {
-            String message = String.format("Too more arguments for Action %s! arguments: %s", action, Arrays.toString(arguments));
+            String message = format("Too more arguments for Action %s! arguments: %s", action, Arrays.toString(arguments));
             throw new IllegalStateException(message);
         }
 
@@ -185,7 +189,7 @@ public class DcmAgent {
             } else if (parameterType.equals(int.class)) {
                 methodArgs[i] = Integer.parseInt(argument);
             } else {
-                final String message = String.format("Unexpected method type %s! Misused or Bug!!", parameterType.getName());
+                final String message = format("Unexpected method type %s! Misused or Bug!!", parameterType.getName());
                 throw new IllegalStateException(message);
             }
         }
