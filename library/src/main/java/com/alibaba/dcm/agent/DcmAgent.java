@@ -160,7 +160,7 @@ public class DcmAgent {
 
     private static Object[] convertStringArray2Arguments(String action, String[] arguments, Class<?>[] parameterTypes) {
         if (arguments.length < parameterTypes.length) {
-            final String message = format("action %s need more argument! arguments: %s", action, Arrays.toString(arguments));
+            final String message = format("Action %s need more argument! arguments: %s", action, Arrays.toString(arguments));
             throw new IllegalStateException(message);
         }
         if (parameterTypes.length == 0) return new Object[0];
@@ -174,7 +174,7 @@ public class DcmAgent {
             System.arraycopy(arguments, lastArgumentIdx, varArgs, 0, varArgs.length);
             methodArgs[(lastArgumentIdx)] = varArgs;
         } else if (arguments.length > parameterTypes.length) {
-            String message = format("Too more arguments for Action %s! arguments: %s", action, Arrays.toString(arguments));
+            String message = format("Too many arguments for action %s! arguments: %s", action, Arrays.toString(arguments));
             throw new IllegalStateException(message);
         }
 

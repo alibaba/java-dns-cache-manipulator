@@ -145,7 +145,7 @@ public class DcmAgentTest {
 
         final List<String> content = FileUtils.readLines(outputFile, UTF8);
         assertThat(content.get(0), containsString("Error to do action setNegativePolicy"));
-        assertThat(content.get(0), containsString("action setNegativePolicy need more argument!"));
+        assertThat(content.get(0), containsString("Action setNegativePolicy need more argument!"));
     }
 
     @Test
@@ -158,7 +158,7 @@ public class DcmAgentTest {
 
         final List<String> content = FileUtils.readLines(outputFile, UTF8);
         assertThat(content.get(0), containsString("Error to do action setNegativePolicy 737 HaHa"));
-        assertThat(content.get(0), containsString("Too more arguments for Action setNegativePolicy! arguments: [737, HaHa]"));
+        assertThat(content.get(0), containsString("Too many arguments for action setNegativePolicy! arguments: [737, HaHa]"));
     }
 
     @Test
