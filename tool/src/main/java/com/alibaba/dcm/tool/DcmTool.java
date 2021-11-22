@@ -29,9 +29,6 @@ public class DcmTool {
     private final static List<String> actionList = DcmAgent.getActionList();
 
     public static void main(@Nonnull String[] args) throws Exception {
-        final String tmpFile = getConfig(DCM_TOOLS_TMP_FILE_KEY);
-        final String agentJar = getConfig(DCM_TOOLS_AGENT_JAR_KEY);
-
         final CommandLine cmd = parseCommandLine(args);
 
         final String[] arguments = cmd.getArgs();
@@ -52,7 +49,7 @@ public class DcmTool {
             pid = selectProcess();
         }
 
-        doDcmActionViaAgent(tmpFile, agentJar, arguments, action, pid);
+        doDcmActionViaAgent(action, arguments, pid);
     }
 
     @Nonnull
@@ -73,10 +70,11 @@ public class DcmTool {
         return cmd;
     }
 
-    private static void doDcmActionViaAgent(
-            @Nonnull String tmpFile, @Nonnull String agentJar,
-            @Nonnull String[] arguments, @Nonnull String action, @Nonnull String pid)
+    private static void doDcmActionViaAgent(@Nonnull String action, @Nonnull String[] arguments, @Nonnull String pid)
             throws AttachNotSupportedException, IOException, AgentLoadException, AgentInitializationException {
+        final String tmpFile = getConfig(DCM_TOOLS_TMP_FILE_KEY);
+        final String agentJar = getConfig(DCM_TOOLS_AGENT_JAR_KEY);
+
         final StringBuilder agentArgument = new StringBuilder();
         agentArgument.append(action);
         for (int i = 1; i < arguments.length; i++) {
