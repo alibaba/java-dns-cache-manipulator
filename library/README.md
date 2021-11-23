@@ -1,9 +1,10 @@
 Java Dns Cache Manipulator(DCM) Library
 =======================================
 
-<div align="center">
+<p align="center">
 <a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master?logo=appveyor&amp;logoColor=white" alt="Build Status"></a>
 <a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/master?logo=coveralls&amp;logoColor=white" alt="Coveralls branch"></a>
+<a href="https://codeclimate.com/github/alibaba/java-dns-cache-manipulator/maintainability"><img src="https://api.codeclimate.com/v1/badges/80e64dc9160cf6f62080/maintainability" alt="Maintainability"></a>
 <a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/JDK-6+-green?logo=java&amp;logoColor=white" alt="JDK support"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97" alt="License"></a>
 <a href="https://alibaba.github.io/java-dns-cache-manipulator/apidocs/"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator?label=javadoc&amp;color=3d7c47&amp;logo=microsoft-academic&amp;logoColor=white" alt="Javadocs"></a>
@@ -16,7 +17,7 @@ Java Dns Cache Manipulator(DCM) Library
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/issues"><img src="https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator" alt="GitHub issues"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors"><img src="https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator" alt="GitHub Contributors"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/github/repo-size/alibaba/java-dns-cache-manipulator" alt="GitHub repo size"></a>
-</div>
+</p>
 
 :point_right: 用编码的方式设置/查看`JVM`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`，支持`IPv6`。
 
