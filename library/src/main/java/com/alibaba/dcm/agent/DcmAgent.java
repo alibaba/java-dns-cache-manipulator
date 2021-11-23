@@ -210,24 +210,29 @@ public class DcmAgent {
         if (result == null) {
             writer.println((Object) null);
         } else if (result instanceof DnsCacheEntry) {
-            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-            DnsCacheEntry entry = (DnsCacheEntry) result;
-            writer.printf("%s %s %s%n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
+            printDnsCacheEntry((DnsCacheEntry) result, writer);
         } else if (result instanceof DnsCache) {
-            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
             DnsCache dnsCache = (DnsCache) result;
 
-            writer.println("Dns cache:");
-            for (DnsCacheEntry entry : dnsCache.getCache()) {
-                writer.printf("    %s %s %s%n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
-            }
-            writer.println("Dns negative cache: ");
-            for (DnsCacheEntry entry : dnsCache.getNegativeCache()) {
-                writer.printf("    %s %s %s%n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
-            }
+            printDnsCacheEntryList("Dns cache: ", dnsCache.getCache(), writer);
+
+            writer.println();
+            printDnsCacheEntryList("Dns negative cache: ", dnsCache.getNegativeCache(), writer);
         } else {
             writer.println(result);
         }
+    }
+
+    private static void printDnsCacheEntryList(String msg, List<DnsCacheEntry> dnsCacheEntries, PrintWriter writer) {
+        writer.println(msg);
+        for (DnsCacheEntry entry : dnsCacheEntries) {
+            printDnsCacheEntry(entry, writer);
+        }
+    }
+
+    private static void printDnsCacheEntry(DnsCacheEntry entry, PrintWriter writer) {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        writer.printf("    %s %s %s%n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
     }
 
     private static volatile Map<String, Method> action2Method;
