@@ -2,8 +2,8 @@ Java Dns Cache Manipulator(DCM) Library
 =======================================
 
 <div align="center">
-<a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master?logo=appveyor&amp;logoColor=white" alt="Build Status"></a>
-<a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/master?logo=coveralls&amp;logoColor=white" alt="Coveralls branch"></a>
+<a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/v1.6.3?logo=appveyor&amp;logoColor=white" alt="Build Status"></a>
+<a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=v1.6.3"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/v1.6.3?logo=coveralls&amp;logoColor=white" alt="Coveralls branch"></a>
 <a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/JDK-6+-green?logo=java&amp;logoColor=white" alt="JDK support"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97" alt="License"></a>
 <a href="https://alibaba.github.io/java-dns-cache-manipulator/apidocs/"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator?label=javadoc&amp;color=3d7c47&amp;logo=microsoft-academic&amp;logoColor=white" alt="Javadocs"></a>
@@ -233,7 +233,7 @@ content = m2.getResponseBodyAsString();
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.6.2</version>
+    <version>1.6.3</version>
 </dependency>
 ```
 
