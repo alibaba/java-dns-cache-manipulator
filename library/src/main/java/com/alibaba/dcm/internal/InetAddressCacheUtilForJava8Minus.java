@@ -15,8 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
-import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
 
 /**
  * Util class to manipulate dns cache for {@code JDK 8-}.
@@ -271,13 +270,11 @@ public final class InetAddressCacheUtilForJava8Minus {
             }
         }
 
-        long expiration = expirationFieldOfInetAddress$CacheEntry.getLong(entry);
-        InetAddress[] addresses = (InetAddress[]) addressesFieldOfInetAddress$CacheEntry.get(entry);
+        final long expiration = expirationFieldOfInetAddress$CacheEntry.getLong(entry);
 
-        String[] ips = new String[addresses.length];
-        for (int i = 0; i < addresses.length; i++) {
-            ips[i] = addresses[i].getHostAddress();
-        }
+        final InetAddress[] addresses = (InetAddress[]) addressesFieldOfInetAddress$CacheEntry.get(entry);
+        final String[] ips = getIpFromInetAddress(addresses);
+
         return new DnsCacheEntry(host, ips, expiration);
     }
 

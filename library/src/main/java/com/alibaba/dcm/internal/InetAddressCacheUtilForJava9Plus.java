@@ -16,8 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
-import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
 import static com.alibaba.dcm.internal.TimeUtil.convertNanoTimeToTimeMillis;
 import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
 
@@ -272,16 +271,16 @@ public final class InetAddressCacheUtilForJava9Plus {
             }
         }
 
-        final InetAddress[] inetAddressArray;
+        final InetAddress[] inetAddresses;
         final long expiration;
         if (addressesClassName.equals(inetAddress$CachedAddresses_ClassName)) {
-            inetAddressArray = (InetAddress[]) inetAddressesFieldOfInetAddress$CacheAddress.get(addresses);
+            inetAddresses = (InetAddress[]) inetAddressesFieldOfInetAddress$CacheAddress.get(addresses);
 
             long expiryTimeNanos = expiryTimeFieldOfInetAddress$CacheAddress.getLong(addresses);
             expiration = convertNanoTimeToTimeMillis(expiryTimeNanos);
         } else if (addressesClassName.equals(inetAddress$NameServiceAddresses_ClassName)) {
             InetAddress inetAddress = (InetAddress) reqAddrFieldOfInetAddress$NameServiceAddress.get(addresses);
-            inetAddressArray = new InetAddress[]{inetAddress};
+            inetAddresses = new InetAddress[]{inetAddress};
 
             expiration = NEVER_EXPIRATION;
         } else {
@@ -289,15 +288,7 @@ public final class InetAddressCacheUtilForJava9Plus {
                     " for class InetAddress.Addresses, report issue for dns-cache-manipulator lib!");
         }
 
-        final String[] ips;
-        if (inetAddressArray == null) {
-            ips = new String[0];
-        } else {
-            ips = new String[inetAddressArray.length];
-            for (int i = 0; i < inetAddressArray.length; i++) {
-                ips[i] = inetAddressArray[i].getHostAddress();
-            }
-        }
+        final String[] ips = getIpFromInetAddress(inetAddresses);
 
         return new DnsCacheEntry(host, ips, expiration);
     }

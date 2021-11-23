@@ -2,6 +2,8 @@ package com.alibaba.dcm.internal;
 
 import sun.net.InetAddressCachePolicy;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -28,6 +30,17 @@ public final class InetAddressCacheUtilCommons {
             addresses[i] = InetAddress.getByAddress(host, IpParserUtil.ip2ByteArray(ips[i]));
         }
         return addresses;
+    }
+
+    @Nonnull
+    static String[] getIpFromInetAddress(@Nullable InetAddress[] inetAddresses) {
+        if (inetAddresses == null) return new String[0];
+
+        final String[] ips = new String[inetAddresses.length];
+        for (int i = 0; i < inetAddresses.length; i++) {
+            ips[i] = inetAddresses[i].getHostAddress();
+        }
+        return ips;
     }
 
     /**
