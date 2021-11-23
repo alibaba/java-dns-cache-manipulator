@@ -242,11 +242,11 @@ public final class InetAddressCacheUtilForJava8Minus {
     private static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry) throws IllegalAccessException {
         if (expirationFieldOfInetAddress$CacheEntry == null || addressesFieldOfInetAddress$CacheEntry == null) {
             synchronized (InetAddressCacheUtilForJava8Minus.class) {
-                if (expirationFieldOfInetAddress$CacheEntry == null) { // double check
+                if (expirationFieldOfInetAddress$CacheEntry == null || addressesFieldOfInetAddress$CacheEntry == null) { // double check
                     Class<?> cacheEntryClass = entry.getClass();
                     // InetAddress.CacheEntry has 2 filed:
                     // - for jdk 6, address and expiration
-                    // - for jdk 7+, addresses(*renamed* from 6!) and expiration
+                    // - for jdk 7+, addresses(*renamed*!) and expiration
                     // code in jdk 6:
                     //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
                     // code in jdk 7:
