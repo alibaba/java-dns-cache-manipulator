@@ -147,35 +147,33 @@ public final class InetAddressCacheUtilCommons {
         if (negativeSetOfInetAddressCachePolicy != null) return;
 
         final Class<?> clazz = InetAddressCachePolicy.class;
-
         synchronized (InetAddressCacheUtilCommons.class) {
-            if (negativeSetOfInetAddressCachePolicy == null) { // double check
-                Field f;
+            // double check
+            if (negativeSetOfInetAddressCachePolicy != null) return;
 
-                f = clazz.getDeclaredField("cachePolicy");
-                f.setAccessible(true);
-                cachePolicyFiledOfInetAddressCachePolicy = f;
+            Field f = clazz.getDeclaredField("cachePolicy");
+            f.setAccessible(true);
+            cachePolicyFiledOfInetAddressCachePolicy = f;
 
-                f = clazz.getDeclaredField("negativeCachePolicy");
-                f.setAccessible(true);
-                negativeCachePolicyFiledOfInetAddressCachePolicy = f;
+            f = clazz.getDeclaredField("negativeCachePolicy");
+            f.setAccessible(true);
+            negativeCachePolicyFiledOfInetAddressCachePolicy = f;
 
-                try {
-                    f = clazz.getDeclaredField("propertySet");
-                } catch (NoSuchFieldException e) {
-                    f = clazz.getDeclaredField("set");
-                }
-                f.setAccessible(true);
-                setFiledOfInetAddressCachePolicy = f;
-
-                try {
-                    f = clazz.getDeclaredField("propertyNegativeSet");
-                } catch (NoSuchFieldException e) {
-                    f = clazz.getDeclaredField("negativeSet");
-                }
-                f.setAccessible(true);
-                negativeSetOfInetAddressCachePolicy = f;
+            try {
+                f = clazz.getDeclaredField("propertySet");
+            } catch (NoSuchFieldException e) {
+                f = clazz.getDeclaredField("set");
             }
+            f.setAccessible(true);
+            setFiledOfInetAddressCachePolicy = f;
+
+            try {
+                f = clazz.getDeclaredField("propertyNegativeSet");
+            } catch (NoSuchFieldException e) {
+                f = clazz.getDeclaredField("negativeSet");
+            }
+            f.setAccessible(true);
+            negativeSetOfInetAddressCachePolicy = f;
         }
     }
 
