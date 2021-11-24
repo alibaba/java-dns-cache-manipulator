@@ -22,22 +22,34 @@ public class DnsCache implements Serializable {
     private final List<DnsCacheEntry> cache;
     private final List<DnsCacheEntry> negativeCache;
 
+    /**
+     * Construct a {@link DnsCache}.
+     */
     public DnsCache(@SuppressFBWarnings("EI_EXPOSE_REP2") @Nonnull List<DnsCacheEntry> cache,
                     @SuppressFBWarnings("EI_EXPOSE_REP2") @Nonnull List<DnsCacheEntry> negativeCache) {
         this.cache = cache;
         this.negativeCache = negativeCache;
     }
 
+    /**
+     * DNS positive cache.
+     */
     public List<DnsCacheEntry> getCache() {
         // defensive copy
         return new ArrayList<DnsCacheEntry>(cache);
     }
 
+    /**
+     * DNS negative cache.
+     */
     public List<DnsCacheEntry> getNegativeCache() {
         // defensive copy
         return new ArrayList<DnsCacheEntry>(negativeCache);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "DnsCache{" +
@@ -46,6 +58,9 @@ public class DnsCache implements Serializable {
                 '}';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,6 +73,9 @@ public class DnsCache implements Serializable {
         return negativeCache.equals(dnsCache.negativeCache);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = cache.hashCode();

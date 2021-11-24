@@ -17,6 +17,8 @@ import java.util.Scanner;
 import static java.lang.System.exit;
 
 /**
+ * DCM Tool.
+ *
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.4.0
  */
@@ -28,6 +30,9 @@ public class DcmTool {
 
     private final static List<String> actionList = DcmAgent.getActionList();
 
+    /**
+     * entry main method.
+     */
     public static void main(@Nonnull String[] args) throws Exception {
         final CommandLine cmd = parseCommandLine(args);
 

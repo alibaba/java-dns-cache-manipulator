@@ -19,7 +19,7 @@ import static com.alibaba.dcm.internal.JavaVersionUtil.isJdkAtMost8;
 
 
 /**
- * Setting dns (in fact dns cache).
+ * DNS cache manipulator for querying/setting dns(in fact dns cache).
  * <p>
  * Throw {@link DnsCacheManipulatorException} if operation fail for all methods.
  *
@@ -205,8 +205,8 @@ public class DnsCacheManipulator {
      * @deprecated this method name is confused: method name is "all" but without negative cache.
      * use {@link #listDnsCache} instead.
      */
-    @Deprecated
     @Nonnull
+    @Deprecated
     public static List<DnsCacheEntry> getAllDnsCache() {
         return listDnsCache();
     }

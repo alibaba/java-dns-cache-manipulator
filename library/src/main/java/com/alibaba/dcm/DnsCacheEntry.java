@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
+ * DNS cache entry(DNS record).
+ *
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @see DnsCache
  */
@@ -21,20 +23,31 @@ public final class DnsCacheEntry implements Serializable {
     private final String[] ips;
     private final long expiration;
 
+    /**
+     * get host name/domain name of DNS cache entry(DNS record).
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     * get ips of DNS cache entry(DNS record).
+     */
     @Nonnull
     public String[] getIps() {
         return ips.clone(); // defensive copy
     }
 
+    /**
+     * get the first ip of {@link #getIps()}
+     */
     public String getIp() {
         return ips[0];
     }
 
     /**
+     * get the expiration of DNS cache entry(DNS record).
+     * <p>
      * return value {@link Long#MAX_VALUE} means "never expiration".
      */
     public Date getExpiration() {
@@ -42,6 +55,8 @@ public final class DnsCacheEntry implements Serializable {
     }
 
     /**
+     * Construct a {@link DnsCacheEntry}.
+     *
      * @deprecated use {@link #DnsCacheEntry(String, String[], long)} instead
      */
     @Deprecated
@@ -54,6 +69,8 @@ public final class DnsCacheEntry implements Serializable {
     }
 
     /**
+     * Construct a {@link DnsCacheEntry}.
+     *
      * @since 1.6.0
      */
     public DnsCacheEntry(String host,
@@ -64,6 +81,9 @@ public final class DnsCacheEntry implements Serializable {
         this.expiration = expiration;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -75,6 +95,9 @@ public final class DnsCacheEntry implements Serializable {
                 '}';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,6 +110,9 @@ public final class DnsCacheEntry implements Serializable {
         return Arrays.equals(ips, that.ips);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = host != null ? host.hashCode() : 0;

@@ -7,6 +7,7 @@ import com.alibaba.dcm.DnsCacheManipulator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -15,7 +16,13 @@ import java.util.logging.Logger;
 import static java.lang.String.format;
 
 /**
+ * DCM agent.
+ *
  * @author Jerry Lee (oldratlee at gmail dot com)
+ * @see Instrumentation
+ * @see <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.instrument/java/lang/instrument/package-summary.html">The mechanism for instrumentation</a>
+ * @see <a href="https://docs.oracle.com/javase/10/docs/specs/jar/jar.html#jar-manifest">JAR File Specification - JAR Manifest</a>
+ * @see <a href="https://docs.oracle.com/javase/tutorial/deployment/jar/manifestindex.html">Working with Manifest Files - The Java™ Tutorials</a>
  * @since 1.4.0
  */
 public class DcmAgent {
@@ -27,6 +34,9 @@ public class DcmAgent {
 
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
+    /**
+     * Entrance method of DCM Java Agent.
+     */
     public static void agentmain(@Nonnull String agentArgument) throws Exception {
         logger.info(format("%s: attached with agent argument: %s.%n", DcmAgent.class.getName(), agentArgument));
 
@@ -262,6 +272,11 @@ public class DcmAgent {
         action2Method = map;
     }
 
+    /**
+     * the action list for DCM agent.
+     *
+     * @since 1.6.0
+     */
     @SuppressWarnings("unchecked")
     public static List<String> getActionList() {
         try {
