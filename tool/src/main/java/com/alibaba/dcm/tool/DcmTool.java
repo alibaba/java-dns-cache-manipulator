@@ -28,7 +28,7 @@ public class DcmTool {
 
     private static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
-    private final static List<String> actionList = DcmAgent.getActionList();
+    private static final List<String> actionList = DcmAgent.getActionList();
 
     /**
      * entry main method.

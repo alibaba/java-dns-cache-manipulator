@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -79,7 +80,7 @@ public class DcmAgent {
             if (filePrinter != null) {
                 try {
                     filePrinter.close();
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     // do nothing!
                 }
             }
@@ -164,7 +165,7 @@ public class DcmAgent {
         return "true".equalsIgnoreCase(supressException);
     }
 
-    private static Object invokeAction(String action, String[] arguments) throws Exception {
+    private static Object invokeAction(String action, String[] arguments) throws InvocationTargetException, IllegalAccessException {
         Method method = action2Method.get(action);
 
         final Class<?>[] parameterTypes = method.getParameterTypes();
@@ -248,7 +249,7 @@ public class DcmAgent {
     private static volatile Map<String, Method> action2Method;
     private static volatile ArrayList<String> actionList;
 
-    private static synchronized void initAction2Method() throws Exception {
+    private static synchronized void initAction2Method() throws NoSuchMethodException {
         if (action2Method != null) return;
 
         Map<String, Method> map = new LinkedHashMap<String, Method>();
