@@ -212,10 +212,36 @@ public final class InetAddressCacheUtilForJava9Plus {
         return new DnsCache(retCache, retNegativeCache);
     }
 
+    /**
+     * convert {@link InetAddress.Addresses} to {@link DnsCacheEntry}
+     */
+    private static DnsCacheEntry inetAddress$Addresses2DnsCacheEntry(String host, Object addresses)
+            throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+        final String addressesClassName = addresses.getClass().getName();
 
-    //////////////////////////////////////////////////////////////////////////////
-    // getters of fields of InetAddress$CachedAddresses / NameServiceAddresses
-    //////////////////////////////////////////////////////////////////////////////
+        initFieldsOfAddresses();
+
+        final InetAddress[] inetAddresses;
+        final long expiration;
+        if (addressesClassName.equals(inetAddress$CachedAddresses_ClassName)) {
+            inetAddresses = (InetAddress[]) inetAddressesFieldOfInetAddress$CacheAddress.get(addresses);
+
+            long expiryTimeNanos = expiryTimeFieldOfInetAddress$CacheAddress.getLong(addresses);
+            expiration = convertNanoTimeToTimeMillis(expiryTimeNanos);
+        } else if (addressesClassName.equals(inetAddress$NameServiceAddresses_ClassName)) {
+            InetAddress inetAddress = (InetAddress) reqAddrFieldOfInetAddress$NameServiceAddress.get(addresses);
+            inetAddresses = new InetAddress[]{inetAddress};
+
+            expiration = NEVER_EXPIRATION;
+        } else {
+            throw new IllegalStateException("JDK add new child class " + addressesClassName +
+                    " for class InetAddress.Addresses, report issue for dns-cache-manipulator lib!");
+        }
+
+        final String[] ips = getIpFromInetAddress(inetAddresses);
+
+        return new DnsCacheEntry(host, ips, expiration);
+    }
 
     private static final String inetAddress$CachedAddresses_ClassName = "java.net.InetAddress$CachedAddresses";
     private static final String inetAddress$NameServiceAddresses_ClassName = "java.net.InetAddress$NameServiceAddresses";
@@ -236,13 +262,7 @@ public final class InetAddressCacheUtilForJava9Plus {
      */
     private static volatile Field reqAddrFieldOfInetAddress$NameServiceAddress = null;
 
-    /**
-     * convert {@link InetAddress.Addresses} to {@link DnsCacheEntry}
-     */
-    private static DnsCacheEntry inetAddress$Addresses2DnsCacheEntry(String host, Object addresses)
-            throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
-        final String addressesClassName = addresses.getClass().getName();
-
+    private static void initFieldsOfAddresses() throws ClassNotFoundException, NoSuchFieldException {
         if (reqAddrFieldOfInetAddress$NameServiceAddress == null) {
             synchronized (InetAddressCacheUtilForJava9Plus.class) {
                 if (reqAddrFieldOfInetAddress$NameServiceAddress == null) { // double check
@@ -270,31 +290,7 @@ public final class InetAddressCacheUtilForJava9Plus {
                 }
             }
         }
-
-        final InetAddress[] inetAddresses;
-        final long expiration;
-        if (addressesClassName.equals(inetAddress$CachedAddresses_ClassName)) {
-            inetAddresses = (InetAddress[]) inetAddressesFieldOfInetAddress$CacheAddress.get(addresses);
-
-            long expiryTimeNanos = expiryTimeFieldOfInetAddress$CacheAddress.getLong(addresses);
-            expiration = convertNanoTimeToTimeMillis(expiryTimeNanos);
-        } else if (addressesClassName.equals(inetAddress$NameServiceAddresses_ClassName)) {
-            InetAddress inetAddress = (InetAddress) reqAddrFieldOfInetAddress$NameServiceAddress.get(addresses);
-            inetAddresses = new InetAddress[]{inetAddress};
-
-            expiration = NEVER_EXPIRATION;
-        } else {
-            throw new IllegalStateException("JDK add new child class " + addressesClassName +
-                    " for class InetAddress.Addresses, report issue for dns-cache-manipulator lib!");
-        }
-
-        final String[] ips = getIpFromInetAddress(inetAddresses);
-
-        return new DnsCacheEntry(host, ips, expiration);
     }
-
-    //////////////////////////////////////////////////////////////////////////////
-
 
     public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {
         getCacheOfInetAddress().clear();
