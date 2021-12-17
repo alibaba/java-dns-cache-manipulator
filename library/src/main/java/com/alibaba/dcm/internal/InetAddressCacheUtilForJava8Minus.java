@@ -68,14 +68,11 @@ public final class InetAddressCacheUtilForJava8Minus {
     private static volatile Constructor<?> constructorOfInetAddress$CacheEntry = null;
 
     private static Constructor<?> getConstructorOfInetAddress$CacheEntry() throws ClassNotFoundException {
-        if (constructorOfInetAddress$CacheEntry != null) {
-            return constructorOfInetAddress$CacheEntry;
-        }
+        if (constructorOfInetAddress$CacheEntry != null) return constructorOfInetAddress$CacheEntry;
 
         synchronized (InetAddressCacheUtilCommons.class) {
-            if (constructorOfInetAddress$CacheEntry != null) { // double check
-                return constructorOfInetAddress$CacheEntry;
-            }
+            // double check
+            if (constructorOfInetAddress$CacheEntry != null) return constructorOfInetAddress$CacheEntry;
 
             final String className = "java.net.InetAddress$CacheEntry";
             final Class<?> clazz = Class.forName(className);
@@ -172,23 +169,24 @@ public final class InetAddressCacheUtilForJava8Minus {
      */
     private static Object[] getAddressCacheAndNegativeCacheOfInetAddress0()
             throws NoSuchFieldException, IllegalAccessException {
-        if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {
-            synchronized (InetAddressCacheUtilForJava8Minus.class) {
-                if (ADDRESS_CACHE_AND_NEGATIVE_CACHE == null) {  // double check
-                    final Field cacheField = InetAddress.class.getDeclaredField("addressCache");
-                    cacheField.setAccessible(true);
+        if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
 
-                    final Field negativeCacheField = InetAddress.class.getDeclaredField("negativeCache");
-                    negativeCacheField.setAccessible(true);
+        synchronized (InetAddressCacheUtilForJava8Minus.class) {
+            // double check
+            if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
 
-                    ADDRESS_CACHE_AND_NEGATIVE_CACHE = new Object[]{
-                            cacheField.get(InetAddress.class),
-                            negativeCacheField.get(InetAddress.class)
-                    };
-                }
-            }
+            final Field cacheField = InetAddress.class.getDeclaredField("addressCache");
+            cacheField.setAccessible(true);
+
+            final Field negativeCacheField = InetAddress.class.getDeclaredField("negativeCache");
+            negativeCacheField.setAccessible(true);
+
+            ADDRESS_CACHE_AND_NEGATIVE_CACHE = new Object[]{
+                    cacheField.get(InetAddress.class),
+                    negativeCacheField.get(InetAddress.class)
+            };
+            return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
         }
-        return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
     }
 
     @Nullable

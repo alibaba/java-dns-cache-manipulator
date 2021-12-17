@@ -69,14 +69,11 @@ public final class InetAddressCacheUtilForJava9Plus {
     private static volatile Constructor<?> constructorOfInetAddress$CachedAddresses = null;
 
     private static Constructor<?> getConstructorOfInetAddress$CachedAddresses() throws ClassNotFoundException {
-        if (constructorOfInetAddress$CachedAddresses != null) {
-            return constructorOfInetAddress$CachedAddresses;
-        }
+        if (constructorOfInetAddress$CachedAddresses != null) return constructorOfInetAddress$CachedAddresses;
 
         synchronized (InetAddressCacheUtilCommons.class) {
-            if (constructorOfInetAddress$CachedAddresses != null) { // double check
-                return constructorOfInetAddress$CachedAddresses;
-            }
+            // double check
+            if (constructorOfInetAddress$CachedAddresses != null) return constructorOfInetAddress$CachedAddresses;
 
             final Class<?> clazz = Class.forName(inetAddress$CachedAddresses_ClassName);
 
@@ -163,23 +160,24 @@ public final class InetAddressCacheUtilForJava9Plus {
      * @return {@link InetAddress#cache} and {@link InetAddress#expirySet}
      */
     private static Object[] getCacheAndExpirySetOfInetAddress0() throws NoSuchFieldException, IllegalAccessException {
-        if (ADDRESS_CACHE_AND_EXPIRY_SET == null) {
-            synchronized (InetAddressCacheUtilForJava9Plus.class) {
-                if (ADDRESS_CACHE_AND_EXPIRY_SET == null) { // double check
-                    final Field cacheField = InetAddress.class.getDeclaredField("cache");
-                    cacheField.setAccessible(true);
+        if (ADDRESS_CACHE_AND_EXPIRY_SET != null) return ADDRESS_CACHE_AND_EXPIRY_SET;
 
-                    final Field expirySetField = InetAddress.class.getDeclaredField("expirySet");
-                    expirySetField.setAccessible(true);
+        synchronized (InetAddressCacheUtilForJava9Plus.class) {
+            if (ADDRESS_CACHE_AND_EXPIRY_SET != null) return ADDRESS_CACHE_AND_EXPIRY_SET;
 
-                    ADDRESS_CACHE_AND_EXPIRY_SET = new Object[]{
-                            cacheField.get(InetAddress.class),
-                            expirySetField.get(InetAddress.class)
-                    };
-                }
-            }
+            final Field cacheField = InetAddress.class.getDeclaredField("cache");
+            cacheField.setAccessible(true);
+
+            final Field expirySetField = InetAddress.class.getDeclaredField("expirySet");
+            expirySetField.setAccessible(true);
+
+            ADDRESS_CACHE_AND_EXPIRY_SET = new Object[]{
+                    cacheField.get(InetAddress.class),
+                    expirySetField.get(InetAddress.class)
+            };
+
+            return ADDRESS_CACHE_AND_EXPIRY_SET;
         }
-        return ADDRESS_CACHE_AND_EXPIRY_SET;
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -267,32 +265,32 @@ public final class InetAddressCacheUtilForJava9Plus {
     private static volatile Field reqAddrFieldOfInetAddress$NameServiceAddress = null;
 
     private static void initFieldsOfAddresses() throws ClassNotFoundException, NoSuchFieldException {
-        if (reqAddrFieldOfInetAddress$NameServiceAddress == null) {
-            synchronized (InetAddressCacheUtilForJava9Plus.class) {
-                if (reqAddrFieldOfInetAddress$NameServiceAddress == null) { // double check
-                    ///////////////////////////////////////////////
-                    // Fields of InetAddress$CachedAddresses
-                    ///////////////////////////////////////////////
-                    final Class<?> cachedAddresses_Class = Class.forName(inetAddress$CachedAddresses_ClassName);
+        if (reqAddrFieldOfInetAddress$NameServiceAddress != null) return;
 
-                    final Field inetAddressesFiled = cachedAddresses_Class.getDeclaredField("inetAddresses");
-                    inetAddressesFiled.setAccessible(true);
-                    inetAddressesFieldOfInetAddress$CacheAddress = inetAddressesFiled;
+        synchronized (InetAddressCacheUtilForJava9Plus.class) {
+            if (reqAddrFieldOfInetAddress$NameServiceAddress != null) return;
 
-                    final Field expiryTimeFiled = cachedAddresses_Class.getDeclaredField("expiryTime");
-                    expiryTimeFiled.setAccessible(true);
-                    expiryTimeFieldOfInetAddress$CacheAddress = expiryTimeFiled;
+            ///////////////////////////////////////////////
+            // Fields of InetAddress$CachedAddresses
+            ///////////////////////////////////////////////
+            final Class<?> cachedAddresses_Class = Class.forName(inetAddress$CachedAddresses_ClassName);
 
-                    ///////////////////////////////////////////////
-                    // Fields of InetAddress$NameServiceAddresses
-                    ///////////////////////////////////////////////
-                    final Class<?> nameServiceAddresses_Class = Class.forName(inetAddress$NameServiceAddresses_ClassName);
+            final Field inetAddressesFiled = cachedAddresses_Class.getDeclaredField("inetAddresses");
+            inetAddressesFiled.setAccessible(true);
+            inetAddressesFieldOfInetAddress$CacheAddress = inetAddressesFiled;
 
-                    final Field reqAddrFiled = nameServiceAddresses_Class.getDeclaredField("reqAddr");
-                    reqAddrFiled.setAccessible(true);
-                    reqAddrFieldOfInetAddress$NameServiceAddress = reqAddrFiled;
-                }
-            }
+            final Field expiryTimeFiled = cachedAddresses_Class.getDeclaredField("expiryTime");
+            expiryTimeFiled.setAccessible(true);
+            expiryTimeFieldOfInetAddress$CacheAddress = expiryTimeFiled;
+
+            ///////////////////////////////////////////////
+            // Fields of InetAddress$NameServiceAddresses
+            ///////////////////////////////////////////////
+            final Class<?> nameServiceAddresses_Class = Class.forName(inetAddress$NameServiceAddresses_ClassName);
+
+            final Field reqAddrFiled = nameServiceAddresses_Class.getDeclaredField("reqAddr");
+            reqAddrFiled.setAccessible(true);
+            reqAddrFieldOfInetAddress$NameServiceAddress = reqAddrFiled;
         }
     }
 
