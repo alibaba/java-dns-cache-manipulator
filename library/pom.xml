@@ -7,7 +7,11 @@
 	<version>1.7.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Java Dns Cache Manipulator(DCM) Lib</name>
-	<description>🌏 A simple 0-dependency thread-safe lib for setting dns programmatically without touching host file, make unit/integration test portable.</description>
+	<description>
+		🌏 a simple 0-dependency thread-safe Java™ lib
+		for setting/viewing dns programmatically without touching host file,
+		make unit/integration test portable. support Java 6/8/11/17, support IPv6.
+	</description>
 	<url>https://github.com/alibaba/java-dns-cache-manipulator</url>
 	<inceptionYear>2015</inceptionYear>
 

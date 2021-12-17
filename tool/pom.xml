@@ -8,7 +8,10 @@
 	<version>1.7.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Java Dns Cache Manipulator(DCM) Tool</name>
-	<description>🌏 A tool for setting dns of running jvm process.</description>
+	<description>
+		🌏 a tool for setting/viewing dns of running JVM process.
+		support Java 6/8/11/17, support IPv6.
+	</description>
 	<url>https://github.com/alibaba/java-dns-cache-manipulator</url>
 	<inceptionYear>2015</inceptionYear>
 
