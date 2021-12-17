@@ -38,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @SuppressWarnings({"RedundantIfStatement", "PointlessBitwiseExpression"})
 @SuppressFBWarnings({"SF_SWITCH_FALLTHROUGH", "SF_SWITCH_NO_DEFAULT"})
-class IPAddressUtil {
+final class IPAddressUtil {
     private static final int INADDR4SZ = 4;
     private static final int INADDR16SZ = 16;
     private static final int INT16SZ = 2;

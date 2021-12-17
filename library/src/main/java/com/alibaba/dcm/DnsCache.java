@@ -19,7 +19,7 @@ import java.util.List;
 @Immutable
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
-public class DnsCache implements Serializable {
+public final class DnsCache implements Serializable {
     private static final long serialVersionUID = -8614746635950970028L;
 
     private final List<DnsCacheEntry> cache;

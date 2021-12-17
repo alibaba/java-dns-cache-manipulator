@@ -31,7 +31,7 @@ import static com.alibaba.dcm.internal.JavaVersionUtil.isJdkAtMost8;
  */
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
-public class DnsCacheManipulator {
+public final class DnsCacheManipulator {
     /**
      * Set a <b>never expired</b> dns cache entry.
      *
