@@ -15,6 +15,7 @@ import static org.junit.Assert.*;
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
+@SuppressWarnings("ConstantConditions")
 public class DcmAgentTest {
     private static final String UTF8 = "UTF-8";
 

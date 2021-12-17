@@ -17,14 +17,12 @@ import static org.junit.Assert.*;
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
+@SuppressWarnings("ConstantConditions")
 public class DnsCacheManipulatorTest {
     private static final String IP1 = "42.42.42.1";
     private static final String IP2 = "42.42.42.2";
-    private static final String IP_CUSTOMIZED = "42.42.42.42";
-
-    private static final String DOMAIN1 = "www.hello1.com";
-    private static final String DOMAIN2 = "www.hello2.com";
-    private static final String DOMAIN_CUSTOMIZED = "www.customized.com";
+    private static final String IP3 = "42.42.42.3";
+    private static final String IP4 = "42.42.42.4";
 
     private static final String DOMAIN_NOT_EXISTED = "www.domain-not-existed-2D4B2C4E-61D5-46B3-81FA-3A975156D1AE.com";
     private static final String EXISTED_DOMAIN = "bing.com";
@@ -263,7 +261,7 @@ public class DnsCacheManipulatorTest {
     @Test
     public void test_loadDnsCacheConfig() throws Exception {
         DnsCacheManipulator.loadDnsCacheConfig();
-        final String ip = lookupIpByName(DOMAIN1);
+        final String ip = lookupIpByName("www.hello1.com");
         assertEquals(IP1, ip);
     }
 
@@ -274,8 +272,8 @@ public class DnsCacheManipulatorTest {
             System.setProperty(key, "customized-dns-cache.properties");
             DnsCacheManipulator.loadDnsCacheConfig();
 
-            final String ip = lookupIpByName(DOMAIN_CUSTOMIZED);
-            assertEquals(IP_CUSTOMIZED, ip);
+            final String ip = lookupIpByName("www.customized.com");
+            assertEquals(IP2, ip);
         } finally {
             System.clearProperty(key);
         }
@@ -284,7 +282,7 @@ public class DnsCacheManipulatorTest {
     @Test
     public void test_loadDnsCacheConfig_fromMyConfig() throws Exception {
         DnsCacheManipulator.loadDnsCacheConfig("my-dns-cache.properties");
-        final String ip = lookupIpByName(DOMAIN2);
+        final String ip = lookupIpByName("www.hello2.com");
         assertEquals(IP2, ip);
     }
 
@@ -294,14 +292,14 @@ public class DnsCacheManipulatorTest {
 
         final String host = "www.hello-multi-ips.com";
         DnsCacheEntry expected = new DnsCacheEntry(host,
-                new String[]{"42.42.41.1", "42.42.41.2"}, Long.MAX_VALUE);
+                new String[]{IP1, IP2}, Long.MAX_VALUE);
 
         final DnsCacheEntry actual = DnsCacheManipulator.getDnsCache(host);
         assertEqualsIgnoreHostCase(expected, actual);
 
         final String hostLoose = "www.hello-multi-ips-loose.com";
         DnsCacheEntry expectedLoose = new DnsCacheEntry(hostLoose,
-                new String[]{"42.42.41.1", "42.42.41.2", "42.42.41.3", "42.42.41.4"}, Long.MAX_VALUE);
+                new String[]{IP1, IP2, IP3, IP4}, Long.MAX_VALUE);
 
         DnsCacheEntry actualLoose = DnsCacheManipulator.getDnsCache(hostLoose);
         assertEqualsIgnoreHostCase(expectedLoose, actualLoose);
