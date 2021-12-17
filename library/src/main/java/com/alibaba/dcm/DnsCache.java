@@ -1,8 +1,9 @@
 package com.alibaba.dcm;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.List;
  * @since 1.2.0
  */
 @Immutable
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public class DnsCache implements Serializable {
     private static final long serialVersionUID = -8614746635950970028L;
 
@@ -25,8 +28,8 @@ public class DnsCache implements Serializable {
     /**
      * Construct a {@link DnsCache}.
      */
-    public DnsCache(@SuppressFBWarnings("EI_EXPOSE_REP2") @Nonnull List<DnsCacheEntry> cache,
-                    @SuppressFBWarnings("EI_EXPOSE_REP2") @Nonnull List<DnsCacheEntry> negativeCache) {
+    public DnsCache(@SuppressFBWarnings("EI_EXPOSE_REP2") List<DnsCacheEntry> cache,
+                    @SuppressFBWarnings("EI_EXPOSE_REP2") List<DnsCacheEntry> negativeCache) {
         this.cache = cache;
         this.negativeCache = negativeCache;
     }

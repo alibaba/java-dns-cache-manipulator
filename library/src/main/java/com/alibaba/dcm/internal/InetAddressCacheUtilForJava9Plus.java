@@ -2,8 +2,10 @@ package com.alibaba.dcm.internal;
 
 import com.alibaba.dcm.DnsCache;
 import com.alibaba.dcm.DnsCacheEntry;
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +31,8 @@ import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public final class InetAddressCacheUtilForJava9Plus {
     /**
      * {@link InetAddress.CachedAddresses}

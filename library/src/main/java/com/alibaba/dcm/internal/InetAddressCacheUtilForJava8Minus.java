@@ -2,8 +2,10 @@ package com.alibaba.dcm.internal;
 
 import com.alibaba.dcm.DnsCache;
 import com.alibaba.dcm.DnsCacheEntry;
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.GuardedBy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -35,6 +37,8 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
  * @see InetAddress#cacheInitIfNeeded()
  * @see InetAddress#cacheAddresses(String, InetAddress[], boolean)
  */
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public final class InetAddressCacheUtilForJava8Minus {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
@@ -205,7 +209,7 @@ public final class InetAddressCacheUtilForJava8Minus {
         return dnsCacheEntry;
     }
 
-    private static boolean isDnsCacheEntryExpired(String host) {
+    private static boolean isDnsCacheEntryExpired(@Nullable String host) {
         return null == host || "0.0.0.0".equals(host);
     }
 

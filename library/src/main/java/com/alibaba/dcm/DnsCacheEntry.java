@@ -1,8 +1,9 @@
 package com.alibaba.dcm;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,8 @@ import java.util.Date;
  * @see DnsCache
  */
 @Immutable
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public final class DnsCacheEntry implements Serializable {
     private static final long serialVersionUID = -7476648934387757732L;
 
@@ -33,7 +36,6 @@ public final class DnsCacheEntry implements Serializable {
     /**
      * get ips of DNS cache entry(DNS record).
      */
-    @Nonnull
     public String[] getIps() {
         return ips.clone(); // defensive copy
     }
@@ -61,8 +63,8 @@ public final class DnsCacheEntry implements Serializable {
      */
     @Deprecated
     public DnsCacheEntry(String host,
-                         @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips,
-                         @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP2") Date expiration) {
+                         @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips,
+                         @SuppressFBWarnings("EI_EXPOSE_REP2") Date expiration) {
         this.host = host;
         this.ips = ips;
         this.expiration = expiration.getTime();
@@ -74,7 +76,7 @@ public final class DnsCacheEntry implements Serializable {
      * @since 1.6.0
      */
     public DnsCacheEntry(String host,
-                         @Nonnull @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips,
+                         @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips,
                          long expiration) {
         this.host = host;
         this.ips = ips;

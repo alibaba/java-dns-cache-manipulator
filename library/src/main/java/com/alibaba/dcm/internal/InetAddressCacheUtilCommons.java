@@ -1,9 +1,10 @@
 package com.alibaba.dcm.internal;
 
+import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import sun.net.InetAddressCachePolicy;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -14,6 +15,8 @@ import java.net.UnknownHostException;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
+@ParametersAreNonnullByDefault
+@ReturnValuesAreNonnullByDefault
 public final class InetAddressCacheUtilCommons {
     /**
      * We never really have "never".
@@ -32,7 +35,6 @@ public final class InetAddressCacheUtilCommons {
         return addresses;
     }
 
-    @Nonnull
     static String[] getIpFromInetAddress(@Nullable InetAddress[] inetAddresses) {
         if (inetAddresses == null) return new String[0];
 
