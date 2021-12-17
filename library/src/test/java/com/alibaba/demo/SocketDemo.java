@@ -1,4 +1,4 @@
-package com.alibaba.dcm;
+package com.alibaba.demo;
 
 import org.apache.commons.io.IOUtils;
 
