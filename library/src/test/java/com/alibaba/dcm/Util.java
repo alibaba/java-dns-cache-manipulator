@@ -61,8 +61,8 @@ public class Util {
         assertBetween(first.getExpiration().getTime(), start, end);
     }
 
-    static void assertEqualsIgnoreHostCase(DnsCacheEntry expected, DnsCacheEntry actual) {
-        assertEqualsIgnoreCase(expected.getHost(), actual.getHost());
+    static void assertEqualsDnsCacheEntry(DnsCacheEntry expected, DnsCacheEntry actual) {
+        assertEqualsHostName(expected.getHost(), actual.getHost());
         assertArrayEquals(expected.getIps(), actual.getIps());
 
         final long expectedExpiration = expected.getExpiration().getTime();
@@ -80,8 +80,13 @@ public class Util {
         }
     }
 
-    static void assertEqualsIgnoreCase(String expected, String actual) {
-        assertEquals(expected.toLowerCase(), actual.toLowerCase());
+    static void assertEqualsHostName(String expected, String actual) {
+        if (isJdkAtMost8()) {
+            // java 8-, host name is unified to lower case by InetAddress
+            assertEquals(expected.toLowerCase(), actual.toLowerCase());
+        } else {
+            assertEquals(expected, actual);
+        }
     }
 
     static void assertBetween(long actual, long start, long end) {

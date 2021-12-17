@@ -95,7 +95,7 @@ public class DnsCacheManipulatorTest {
                 host, new String[]{IP1}, Long.MAX_VALUE);
         DnsCacheEntry actual = allDnsCacheEntries.get(0);
 
-        assertEqualsIgnoreHostCase(expected, actual);
+        assertEqualsDnsCacheEntry(expected, actual);
 
         DnsCacheEntry another = DnsCacheManipulator.getDnsCache(host);
         DnsCacheEntry another2 = DnsCacheManipulator.getDnsCache(host);
@@ -132,7 +132,7 @@ public class DnsCacheManipulatorTest {
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.listDnsNegativeCache();
         assertEquals(1, negativeCache.size());
-        assertEqualsIgnoreCase(DOMAIN_NOT_EXISTED, negativeCache.get(0).getHost());
+        assertEqualsHostName(DOMAIN_NOT_EXISTED, negativeCache.get(0).getHost());
     }
 
     @Test
@@ -149,7 +149,7 @@ public class DnsCacheManipulatorTest {
 
         final List<DnsCacheEntry> negativeCache = DnsCacheManipulator.listDnsNegativeCache();
         assertEquals(1, negativeCache.size());
-        assertEqualsIgnoreCase(DOMAIN_NOT_EXISTED, negativeCache.get(0).getHost());
+        assertEqualsHostName(DOMAIN_NOT_EXISTED, negativeCache.get(0).getHost());
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -295,14 +295,14 @@ public class DnsCacheManipulatorTest {
                 new String[]{IP1, IP2}, Long.MAX_VALUE);
 
         final DnsCacheEntry actual = DnsCacheManipulator.getDnsCache(host);
-        assertEqualsIgnoreHostCase(expected, actual);
+        assertEqualsDnsCacheEntry(expected, actual);
 
         final String hostLoose = "www.hello-multi-ips-loose.com";
         DnsCacheEntry expectedLoose = new DnsCacheEntry(hostLoose,
                 new String[]{IP1, IP2, IP3, IP4}, Long.MAX_VALUE);
 
         DnsCacheEntry actualLoose = DnsCacheManipulator.getDnsCache(hostLoose);
-        assertEqualsIgnoreHostCase(expectedLoose, actualLoose);
+        assertEqualsDnsCacheEntry(expectedLoose, actualLoose);
     }
 
     @Test
