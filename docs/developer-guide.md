@@ -4,7 +4,7 @@
 <a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master?logo=appveyor&amp;logoColor=white" alt="Build Status"></a>
 <a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/master?logo=coveralls&amp;logoColor=white" alt="Coveralls branch"></a>
 <a href="https://codeclimate.com/github/alibaba/java-dns-cache-manipulator/maintainability"><img src="https://api.codeclimate.com/v1/badges/80e64dc9160cf6f62080/maintainability" alt="Maintainability"></a>
-<a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/JDK-6+-green?logo=java&amp;logoColor=white" alt="JDK support"></a>
+<a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-6+-green?logo=java&amp;logoColor=white" alt="JDK support"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97" alt="License"></a>
 <a href="https://alibaba.github.io/java-dns-cache-manipulator/apidocs/"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator?label=javadoc&amp;color=3d7c47&amp;logo=microsoft-academic&amp;logoColor=white" alt="Javadocs"></a>
 <a href="https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?color=2d545e&amp;logo=apache-maven&amp;logoColor=white" alt="Maven Central"></a>
@@ -24,9 +24,9 @@
 The DNS Cache of the JVM is maintained in the private field of the InetAddress class and is set by reflection. For specific implementation, see
 
 
-- [`InetAddressCacheUtilCommons.java`](library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilCommons.java)
-- [`InetAddressCacheUtilForJdk8Minus.java`](library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJdk8Minus.java)
-- [`InetAddressCacheUtilForJdk9Plus.java`](library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJdk9Plus.java)
+- [`InetAddressCacheUtilCommons.java`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilCommons.java)
+- [`InetAddressCacheUtilForJava8Minus.java`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava8Minus.java)
+- [`InetAddressCacheUtilForJava9Plus.java`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava9Plus.java)
 
 Pay attention to the thread safety of setting the DNS Cache of JVM
 The DNS Cache of the JVM is obviously shared globally, so the setting is guaranteed to be thread-safe and there is no concurrency problem.
@@ -54,7 +54,7 @@ private static void cacheAddresses(String hostname,
 }
 ```
 
-In the [`InetAddressCacheUtilForJdk8Minus`](library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJdk8Minus.java) class, the read and write to the DNS Cache also consistently adds a synchronized block with addressCache as the lock to ensure thread safety.
+In the [`InetAddressCacheUtilForJava8Minus`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava8Minus.java) class, the read and write to the DNS Cache also consistently adds a synchronized block with addressCache as the lock to ensure thread safety.
 
 ## Need to test different versions of JDK
 
@@ -66,11 +66,11 @@ The current tested LTS `JDK` versions 6/8/11/17, other `JDK` versions should wor
 ## 📚 Related Resources
 
 - The source code of the class `InetAddress`:
-    - `JDK 6`的[`InetAddress`](https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739)
-    - `JDK 7`的[`InetAddress`](https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742)
-    - `JDK 8`的[`InetAddress`](https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748)
-    - `JDK 9`的[`InetAddress`](https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783)
-    - `JDK 11`的[`InetAddress`](https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787)
+    - `JDK 6` [`InetAddress`](https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739)
+    - `JDK 7` [`InetAddress`](https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742)
+    - `JDK 8` [`InetAddress`](https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748)
+    - `JDK 9` [`InetAddress`](https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783)
+    - `JDK 11` [`InetAddress`](https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787)
 - [`JVM Networking Properties` - `java docs`](http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html)
 - [Domain Name System - wikipedia](http://en.wikipedia.org/wiki/Domain_Name_System)
 - `Java DNS` FAQ

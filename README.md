@@ -42,6 +42,9 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
         - [Clear JVM DNS cache](#clear-jvm-dns-cache)
         - [Set/View the default DNS cache time of JVM](#setview-the-default-dns-cache-time-of-jvm)
         - [Precautions for use](#precautions-for-use)
+            - [JVM settings for Java 17](#jvm-settings-for-java-17)
+            - [Domain name case](#domain-name-case)
+            - [Domain resolvation cache](#domain-resolvation-cache)
         - [More detailed functions](#more-detailed-functions)
     - [🔌 Java API Docs](#-java-api-docs)
     - [🍪 Dependency](#-dependency)
@@ -51,10 +54,11 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
     - [🔧 Features](#-features-1)
     - [👥 User Guide](#-user-guide-1)
         - [Download](#download)
-        - [Set/reset DNS](#setreset-dns)
-        - [View DNS Cache content](#view-dns-cache-content)
-        - [Delete/Empty DNS Cache](#deleteempty-dns-cache)
-        - [Set/View JVM's default DNS cache time](#setview-jvms-default-dns-cache-time)
+        - [Set/reset a DNS cache entry](#setreset-a-dns-cache-entry)
+        - [View DNS cache entry content](#view-dns-cache-entry-content)
+        - [Delete a DNS Cache](#delete-a-dns-cache)
+        - [Clear DNS Cache](#clear-dns-cache)
+        - [Set/View DNS cache time of `JVM`](#setview-dns-cache-time-of-jvm)
     - [📚 Related information](#-related-information)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -93,7 +97,7 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
 
 ## 👥 User Guide
 
-Set/View DNS through the class [`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java).
+Set/View DNS through the class [`DnsCacheManipulator`](library/src/main/java/com/alibaba/dcm/DnsCacheManipulator.java).
 
 ### Set directly
 
@@ -214,29 +218,45 @@ DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 
 ### Precautions for use
 
-- The domain name is not case-sensitive, and the domain name will be converted to lower case uniformly before entering the DNS Cache.  
-  One of the causes is that the case of the domain name in the DNS query result will be different from the case of the entered domain name, if the entered domain name has uppercase letters.
-- For the logic that has been resolved and saved the IP, setting the JVM DNS cache will not take effect! The connection can be re-created or the Client can be resolved.  
-  For HttpClient:
+#### JVM settings for Java 17
 
-    ```java
-    HttpClient client = new HttpClient();
-    GetMethod m1 = new GetMethod("https://bing.com");
-    client.executeMethod(m1);
-    String content = m1.getResponseBodyAsString();
+If use DCM under Java 17, add below Java options:
 
-    // Set up DNS and bind to your own machine
-    DnsCacheManipulator.setDnsCache("bing.com", "192.168.1.1");
-    
-    // Re-execute m1, still the old result
-    client.executeMethod(m1);
-    String content = m1.getResponseBodyAsString();
+```java
+--add-opens java.base/java.net=ALL-UNNAMED
+--add-opens java.base/sun.net=ALL-UNNAMED
+```
 
-    // Re-create GetMethod to get the results on your own machine
-    GetMethod m2 = new GetMethod("https://bing.com");
-    client.executeMethod(m2);
-    content = m2.getResponseBodyAsString();
-    ```
+#### Domain name case
+
+The domain name is not case-sensitive, and the domain name may be converted to lower case uniformly before entering the DNS Cache.
+
+One of the causes is that the case of the domain name in the DNS query result will be different from the case of the entered domain name, if the entered domain name has uppercase letters.
+
+#### Domain resolvation cache
+
+- For the logic that has been resolved and saved the IP, setting the JVM DNS cache will not take effect! The connection can be re-created or the Client can be resolved.
+
+For `HttpClient`:
+
+```java
+HttpClient client = new HttpClient();
+GetMethod m1 = new GetMethod("https://bing.com");
+client.executeMethod(m1);
+String content = m1.getResponseBodyAsString();
+
+// Set up DNS and bind to your own machine
+DnsCacheManipulator.setDnsCache("bing.com", "192.168.1.1");
+
+// Re-execute m1, still the old result
+client.executeMethod(m1);
+String content = m1.getResponseBodyAsString();
+
+// Re-create GetMethod to get the results on your own machine
+GetMethod m2 = new GetMethod("https://bing.com");
+client.executeMethod(m2);
+content = m2.getResponseBodyAsString();
+```
 
 ### More detailed functions
 
