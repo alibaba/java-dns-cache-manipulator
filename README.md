@@ -16,7 +16,7 @@
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/issues"><img src="https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator" alt="GitHub issues"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors"><img src="https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator" alt="GitHub Contributors"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/github/repo-size/alibaba/java-dns-cache-manipulator" alt="GitHub repo size"></a>
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.3/dcm-1.6.3.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.3/dcm-1.6.3.tar.gz.svg" alt="GitHub release download - dcm.tar.gz)"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.4/dcm-1.6.4.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.4/dcm-1.6.4.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
 Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
@@ -201,7 +201,7 @@ DnsCacheManipulator.clearDnsCache();
 ### Set/View the default DNS cache time of JVM
 
 ```java
-// View the cache time, in seconds. -1 means always cache, 0 means never cache
+// View the cache time, in seconds. -1 means cache forever, 0 means never cache
 int cachePolicy = DnsCacheManipulator.getDnsCachePolicy();
 // Set the cache time
 DnsCacheManipulator.setDnsCachePolicy(2);
@@ -254,7 +254,7 @@ Java API document: <http://alibaba.github.io/java-dns-cache-manipulator/apidocs>
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.6.3</version>
+    <version>1.6.4</version>
 </dependency>
 ```
 
@@ -289,7 +289,7 @@ You can view the latest version at [search.maven.org](https://search.maven.org/a
 
 ### Download
 
-[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.3/dcm-1.6.3.tar.gz.svg)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.3/dcm-1.6.3.tar.gz) download the file `dcm-x.x.x.tar.gz`.
+[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.4/dcm-1.6.4.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.4/dcm-1.6.4.tar.gz) download the file `dcm-x.x.x.tar.gz`.
 
 After decompression, run `dcm` in the `bin` directory.
 
@@ -356,17 +356,15 @@ $ dcm -p 12345 clear
 
 ```bash
 # View the cache time, in seconds.
-# -1 means always cache, 0 means no cache
-# 查看缓存时间，单位秒。-1表示永远缓存，0表示不缓存
+# -1 means cache forever, 0 means no cache
 $ dcm -p 12345 getPolicy
 30
 # Set cache time
 $ dcm --pid 12345 setPolicy 5
 # View the cache time of missed entries, in seconds.
-# -1 means always cache, 0 means no cache
+# -1 means cache forever, 0 means no cache
 $ dcm -p 12345 getNegativePolicy
 10
-# Set the cache time of missed entries
 # Set the cache time of missed entries
 $ dcm -p 12345 setNegativePolicy 0
 ```
