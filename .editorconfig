@@ -12,6 +12,9 @@ trim_trailing_whitespace = true
 indent_size = 4
 indent_style = tab
 
+[*.{sh,ps1}]
+indent_size = 4
+
 [*.yml]
 indent_size = 2
 
