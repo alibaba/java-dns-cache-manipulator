@@ -207,6 +207,7 @@ public final class DnsCacheManipulator {
      * use {@link #listDnsCache} instead.
      */
     @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
     public static List<DnsCacheEntry> getAllDnsCache() {
         return listDnsCache();
     }
@@ -268,7 +269,7 @@ public final class DnsCacheManipulator {
      * @return cache seconds.
      * <ul>
      * <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
-     * <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
+     * <li> {@link InetAddressCachePolicy#NEVER}({@code 0}) never cached.</li>
      * </ul>
      * @throws DnsCacheManipulatorException Operation fail
      * @see InetAddressCachePolicy#get()
@@ -293,7 +294,7 @@ public final class DnsCacheManipulator {
      * @param cacheSeconds set default dns cache time. Special input case:
      *                     <ul>
      *                     <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
-     *                     <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
+     *                     <li> {@link InetAddressCachePolicy#NEVER}({@code 0}) never cached.</li>
      *                     </ul>
      * @throws DnsCacheManipulatorException Operation fail
      * @see InetAddressCachePolicy
@@ -318,7 +319,7 @@ public final class DnsCacheManipulator {
      * @return negative cache seconds.
      * <ul>
      * <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
-     * <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
+     * <li> {@link InetAddressCachePolicy#NEVER}({@code 0}) never cached.</li>
      * </ul>
      * @throws DnsCacheManipulatorException Operation fail
      * @see InetAddressCachePolicy#getNegative()
@@ -340,7 +341,7 @@ public final class DnsCacheManipulator {
      * @param negativeCacheSeconds set default dns cache time. Special input case:
      *                             <ul>
      *                             <li> {@link InetAddressCachePolicy#FOREVER}({@code -1}) means never expired.(In effect, all negative value)</li>
-     *                             <li> {@link InetAddressCachePolicy#NEVER}(@code 0) never cached.</li>
+     *                             <li> {@link InetAddressCachePolicy#NEVER}({@code 0}) never cached.</li>
      *                             </ul>
      * @throws DnsCacheManipulatorException Operation fail
      * @see InetAddressCachePolicy

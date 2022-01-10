@@ -79,19 +79,19 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
 
 ## 🎨 Requirement Scenario
 
-1. The domain name is hard-coded in some libraries, and have to modify the `host file` binding to do the test(eg. unit test, integration test). Turn out:
+1. The domain name is hard-coded in some libraries, and have to modify the `host file` binding to do the test(e.g. unit test, integration test). Turn out:
     - Generally, developers do not have the permission to modify the `host file` on the continuous integration machine, which leads to the continuous integration of the project fail.
         - In fact, because of this, the demand for this library was born. 😣 🔫
         - Unit testing requires each developer to do some host binding on the development machine, which increases configuration operations and is tedious and repetitive.
 2. Some functions require domain names instead of IPs as input parameters, such as HTTP gateways or web applications with domain name restrictions.
     - In this case, you need a domain name to connect to the IP of the test machine; Or need use a test domain name that does not exist yet, but you do not want to or can not configure the DNS.
 3. In the performance test,
-    - want to skip lookup DNS through network (bypass the DNS resolution consumption), so that stress testing pays more attention to server response, and stress testing can fully reflects the performance of the core implementation code.
+    - want to skip lookup DNS through network (bypass the DNS resolution consumption), so that stress testing pays more attention to server response, and stress testing can fully reflect the performance of the core implementation code.
     - DNS cache can be set dynamically instead of inflexible ways such as modifying host files and http links.
     - A `JVM` process can have a set of domain name binding without affecting other JVM, be able to run stress testing with multi-scenario and multi-domain binding.
 4. When opening the `SecurityManager` in `Java` (such as a web application in the Web container `Tomcat`), `Java`'s DNS will not be expired by default. If the IP bound to the domain name changes, you can reset the DNS through this library.
     - Set the running JVM DNS Cache through the `DCM` Tool.
-      application **need not** contain `DCM` Library dependency (ie. `Jar`).
+      application **need not** contain `DCM` Library dependency (i.e. `Jar`).
     - Or call the method of `DCM` Library through the execution entry, such as remote call or [`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell).
       The application **need** contain `DCM` Library dependency (ie `Jar`).
 
@@ -218,9 +218,9 @@ DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 
 ### Precautions for use
 
-#### JVM settings for Java 17
+#### JVM settings for Java 17+
 
-If use DCM under Java 17, add below Java options:
+If you use DCM under Java 17+, add below Java options:
 
 ```java
 --add-opens java.base/java.net=ALL-UNNAMED
@@ -290,7 +290,7 @@ You can view the latest version at [search.maven.org](https://search.maven.org/a
     - Open the SecurityManager in Java, the DNS cache will not be invalidated.
     - Otherwise, the accessible DNS resolution will be cached for 30 seconds by default, and the inaccessible DNS resolution will be cached for 10 seconds by default.
 - [Regarding the jvm dns cache (domain name cache time) / 关于`jvm dns cache`(域名缓存时间)](https://nigelzeng.iteye.com/blog/1704052), the conclusion of "what strategy is used to return IP for multiple A records" is given:
-    - During the validity period of the cache, the obtained IP is always the first of all A records in the cache, and there is no such strategy as round robin.
+    - During the validity period of the cache, the obtained IP is always the first A records in the cache, and there is no such strategy as round-robin.
     - After the cache is invalidated, perform DNS resolution again. Because the order of the A records returned by the domain name resolution will change (visible in the dig google.com test), the order of the data in the cache has also changed, and the obtained IP will also change.
 - [Modify the content of DNS cache in JDK 1.6 through JAVA reflection / 通过`JAVA`反射修改`JDK 1.6`当中`DNS`缓存内容](https://tuicool.com/articles/auYzui), give the scene of setting DNS cache in performance test.
 - [The dns cache problem of java InetAddress / java InetAddress 的 dns cache 问题](http://blogjava.net/jjwwhmm/archive/2008/07/09/213685.html) indicates that `HttpClient` needs to recreate the `GetMethod`/`PostMethod` object to make the DNS setting take effect.
