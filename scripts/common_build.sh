@@ -1,20 +1,18 @@
 #!/bin/bash
-[ -z "${_source_mark_of_common_build:+dummy}" ] || return 0
-_source_mark_of_common_build=true
-
 set -eEuo pipefail
 
-readonly ROOT_SCRIPTS_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+[ -z "${__source_guard_E2EB46EC_DEB8_4818_8D4E_F425BDF4A275:+dummy}" ] || return 0
+__source_guard_E2EB46EC_DEB8_4818_8D4E_F425BDF4A275="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
 # shellcheck source=common.sh
-source "$ROOT_SCRIPTS_DIR/common.sh"
+source "$__source_guard_E2EB46EC_DEB8_4818_8D4E_F425BDF4A275/common.sh"
 
 #################################################################################
 # root project common info
 #################################################################################
 
 # set project root dir to PROJECT_ROOT_DIR var
-readonly ROOT_PROJECT_DIR="$(readlink -f "$ROOT_SCRIPTS_DIR/..")"
+readonly ROOT_PROJECT_DIR="$(readlink -f "$__source_guard_E2EB46EC_DEB8_4818_8D4E_F425BDF4A275/..")"
 
 readonly ROOT_PROJECT_VERSION=$(grep '<version>.*</version>' "$ROOT_PROJECT_DIR/pom.xml" | awk -F'</?version>' 'NR==1{print $2}')
 readonly ROOT_PROJECT_AID=$(grep '<artifactId>.*</artifactId>' "$ROOT_PROJECT_DIR/pom.xml" | awk -F'</?artifactId>' 'NR==1{print $2}')
@@ -96,4 +94,12 @@ mvnCopyDependencies() {
         # https://maven.apache.org/plugins/maven-dependency-plugin/copy-dependencies-mojo.html
         MVN_CMD dependency:copy-dependencies -DincludeScope=test -DexcludeArtifactIds=jsr305,spotbugs-annotations || die "fail to mvn copy-dependencies!"
     )
+}
+
+extractFirstElementValueFromPom() {
+    (($# == 2)) || die "${FUNCNAME[0]} need only 2 arguments, actual arguments: $*"
+
+    local element=$1
+    local pom_file=$2
+    grep \<"$element"'>.*</'"$element"\> "$pom_file" | awk -F'</?'"$element"\> 'NR==1 {print $2}'
 }

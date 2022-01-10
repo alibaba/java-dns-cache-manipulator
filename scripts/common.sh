@@ -1,8 +1,9 @@
 #!/bin/bash
-[ -z "${_source_mark_of_common:+dummy}" ] || return 0
-_source_mark_of_common=true
-
 set -eEuo pipefail
+
+[ -z "${__source_guard_4611926F_96EE_4837_8FAD_75929EF1EB98:+dummy}" ] || return 0
+__source_guard_4611926F_96EE_4837_8FAD_75929EF1EB98="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+readonly __source_guard_4611926F_96EE_4837_8FAD_75929EF1EB98
 
 ################################################################################
 # constants
@@ -59,9 +60,8 @@ blueEcho() {
 
 headInfo() {
     colorEcho "0;34;46" ================================================================================
-    echo "$*"
+    yellowEcho "$*"
     colorEcho "0;34;46" ================================================================================
-    echo
 }
 
 # How to compare a program's version in a shell script?
@@ -86,8 +86,19 @@ loose() {
 }
 
 logAndRun() {
-    blueEcho "Run under work directory $PWD :$nl$*" 1>&2
-    time "$@"
+    local simple_mode=false
+    [ "$1" = "-s" ] && {
+        simple_mode=true
+        shift
+    }
+
+    if $simple_mode; then
+        echo "Run under work directory $PWD : $*"
+        "$@"
+    else
+        blueEcho "Run under work directory $PWD :$nl$*" 1>&2
+        time "$@"
+    fi
 }
 
 die() {

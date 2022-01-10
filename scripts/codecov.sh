@@ -5,7 +5,7 @@ cd "$(dirname "$(readlink -f "$0")")"
 export DCM_AGENT_SUPRESS_EXCEPTION_STACK=true
 
 source ./common_build.sh
-source ./prepare-jdk.sh
+source ./prepare_jdk.sh
 
 cd "$ROOT_PROJECT_DIR"
 

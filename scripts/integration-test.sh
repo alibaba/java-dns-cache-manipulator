@@ -5,7 +5,7 @@ cd "$(dirname "$(readlink -f "$0")")"
 export CI_TEST_MODE=true
 export DCM_AGENT_SUPRESS_EXCEPTION_STACK=true
 
-source ./prepare-jdk.sh
+source ./prepare_jdk.sh
 source ./common_build.sh
 
 # default jdk 11, do build and test
