@@ -135,6 +135,11 @@
 				<artifactId>maven-artifact</artifactId>
 				<version>3.8.4</version>
 			</dependency>
+			<dependency>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy-agent</artifactId>
+				<version>1.12.6</version>
+			</dependency>
 
 			<!--
 				QA libs
