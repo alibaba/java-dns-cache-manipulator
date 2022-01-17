@@ -19,7 +19,7 @@
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.5/dcm-1.6.5.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.5/dcm-1.6.5.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
-## How to set the DNS Cache of JVM
+## How to set the DNS Cache of `JVM` safely
 
 The DNS Cache of the JVM is maintained in the private field of the InetAddress class and is set by reflection. For specific implementation, see
 
@@ -54,11 +54,11 @@ private static void cacheAddresses(String hostname,
 }
 ```
 
-In the [`InetAddressCacheUtilForJava8Minus`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava8Minus.java) class, the read and write to the DNS Cache also consistently adds a synchronized block with addressCache as the lock to ensure thread safety.
+In the [`InetAddressCacheUtilForJava8Minus`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava8Minus.java) class, the read and write to the DNS Cache also consistently adds a synchronized block with `addressCache` field as the lock to ensure thread safety.
 
-## Need to test different versions of JDK
+## Need test different `JDK` versions
 
-The implementation of this library uses the non-public API of the JDK, and different JDK implementations will be different, that is, compatible logic is required, and different versions of JDK are tested to ensure functionality.
+The implementation of this library uses the non-public API of the `JDK`, and different `JDK` implementations will be different, that is, compatible logic is required, and different versions of `JDK` are tested to ensure functionality.
 
 The current tested LTS `JDK` versions 6/8/11/17, other `JDK` versions should work properly.
 

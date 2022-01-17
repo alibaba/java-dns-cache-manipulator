@@ -42,7 +42,7 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
         - [Clear JVM DNS cache](#clear-jvm-dns-cache)
         - [Set/View the default DNS cache time of JVM](#setview-the-default-dns-cache-time-of-jvm)
         - [Precautions for use](#precautions-for-use)
-            - [JVM settings for Java 17](#jvm-settings-for-java-17)
+            - [JVM settings for Java 17+](#jvm-settings-for-java-17)
             - [Domain name case](#domain-name-case)
             - [Domain resolvation cache](#domain-resolvation-cache)
         - [More detailed functions](#more-detailed-functions)
