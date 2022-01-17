@@ -14,7 +14,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -39,11 +40,9 @@ public class DcmToolTest {
         System.out.println("Prepared output file: " + outputFilePath);
 
         setAgentFilePath();
-        assertNotNull(agentFilePath);
-        System.out.println("Found agent file: " + agentFilePath);
     }
 
-    public void setAgentFilePath() throws Exception {
+    private void setAgentFilePath() throws Exception {
         // find agent jar file from dcm lib project
         File dcmLibProjectDir = new File("library");
         if (!dcmLibProjectDir.exists()) {
@@ -63,7 +62,6 @@ public class DcmToolTest {
                 final File next = fileIterator.next();
                 final String fileName = next.getName();
                 final String agentJarPath = next.getCanonicalPath();
-                System.out.println("List Agent jar from target: " + agentJarPath);
 
                 if (fileName.startsWith("dns-cache-manipulator")) {
                     final String replaced = fileName.replace("dns-cache-manipulator-", "").replace("-SNAPSHOT", "");
@@ -94,12 +92,14 @@ public class DcmToolTest {
                 }
             }
 
-            assertTrue(list.size() > 0);
-            Collections.sort(list);
-
-            System.out.println("List Agent jar from .m2: " + list);
-            agentFilePath = list.get(list.size() - 1);
+            if (!list.isEmpty()) {
+                Collections.sort(list);
+                agentFilePath = list.get(list.size() - 1);
+            }
         }
+
+        assertNotNull("Not found agent file", agentFilePath);
+        System.out.println("Found agent file: " + agentFilePath);
     }
 
     @Test
