@@ -56,6 +56,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<kotlin.version>1.6.10</kotlin.version>
+		<kotlin.compiler.jvmTarget>${maven.compiler.source}</kotlin.compiler.jvmTarget>
 
 		<!-- testing dependencies versions -->
 		<junit5.version>5.8.2</junit5.version>
