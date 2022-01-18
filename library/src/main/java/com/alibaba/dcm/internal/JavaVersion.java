@@ -236,42 +236,43 @@ enum JavaVersion {
         if (versionStr == null) {
             return null;
         }
-        if ("0.9".equals(versionStr)) {
-            return JAVA_0_9;
-        } else if ("1.1".equals(versionStr)) {
-            return JAVA_1_1;
-        } else if ("1.2".equals(versionStr)) {
-            return JAVA_1_2;
-        } else if ("1.3".equals(versionStr)) {
-            return JAVA_1_3;
-        } else if ("1.4".equals(versionStr)) {
-            return JAVA_1_4;
-        } else if ("1.5".equals(versionStr)) {
-            return JAVA_1_5;
-        } else if ("1.6".equals(versionStr)) {
-            return JAVA_1_6;
-        } else if ("1.7".equals(versionStr)) {
-            return JAVA_1_7;
-        } else if ("1.8".equals(versionStr)) {
-            return JAVA_1_8;
-        } else if ("9".equals(versionStr)) {
-            return JAVA_9;
-        } else if ("10".equals(versionStr)) {
-            return JAVA_10;
-        } else if ("11".equals(versionStr)) {
-            return JAVA_11;
-        } else if ("12".equals(versionStr)) {
-            return JAVA_12;
-        } else if ("13".equals(versionStr)) {
-            return JAVA_13;
-        } else if ("14".equals(versionStr)) {
-            return JAVA_14;
-        } else if ("15".equals(versionStr)) {
-            return JAVA_15;
-        } else if ("16".equals(versionStr)) {
-            return JAVA_16;
-        } else if ("17".equals(versionStr)) {
-            return JAVA_17;
+        switch (versionStr) {
+            case "0.9":
+                return JAVA_0_9;
+            case "1.1":
+                return JAVA_1_1;
+            case "1.2":
+                return JAVA_1_2;
+            case "1.3":
+                return JAVA_1_3;
+            case "1.4":
+                return JAVA_1_4;
+            case "1.5":
+                return JAVA_1_5;
+            case "1.6":
+                return JAVA_1_6;
+            case "1.7":
+                return JAVA_1_7;
+            case "1.8":
+                return JAVA_1_8;
+            case "9":
+                return JAVA_9;
+            case "10":
+                return JAVA_10;
+            case "11":
+                return JAVA_11;
+            case "12":
+                return JAVA_12;
+            case "13":
+                return JAVA_13;
+            case "14":
+                return JAVA_14;
+            case "15":
+                return JAVA_15;
+            case "16":
+                return JAVA_16;
+            case "17":
+                return JAVA_17;
         }
         final float v = toFloatVersion(versionStr);
         if ((v - 1.) < 1.) { // then we need to check decimals > .9

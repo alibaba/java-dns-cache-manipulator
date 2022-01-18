@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -149,10 +148,7 @@ public class DcmTool {
         final List<VirtualMachineDescriptor> list = VirtualMachine.list();
 
         // remove current process
-        for (Iterator<VirtualMachineDescriptor> iterator = list.iterator(); iterator.hasNext(); ) {
-            VirtualMachineDescriptor vm = iterator.next();
-            if (vm.id().equals(pid())) iterator.remove();
-        }
+        list.removeIf(vm -> vm.id().equals(pid()));
 
         for (int i = 0; i < list.size(); i++) {
             final VirtualMachineDescriptor vm = list.get(i);

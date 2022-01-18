@@ -39,7 +39,7 @@ public final class DnsCache implements Serializable {
      */
     public List<DnsCacheEntry> getCache() {
         // defensive copy
-        return new ArrayList<DnsCacheEntry>(cache);
+        return new ArrayList<>(cache);
     }
 
     /**
@@ -47,7 +47,7 @@ public final class DnsCache implements Serializable {
      */
     public List<DnsCacheEntry> getNegativeCache() {
         // defensive copy
-        return new ArrayList<DnsCacheEntry>(negativeCache);
+        return new ArrayList<>(negativeCache);
     }
 
     /**

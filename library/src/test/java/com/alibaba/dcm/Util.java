@@ -19,7 +19,7 @@ public class Util {
 
     static List<String> lookupAllIps(String domain) throws Exception {
         final InetAddress[] allByName = InetAddress.getAllByName(domain);
-        List<String> all = new ArrayList<String>();
+        List<String> all = new ArrayList<>();
         for (InetAddress inetAddress : allByName) {
             all.add(inetAddress.getHostAddress());
         }

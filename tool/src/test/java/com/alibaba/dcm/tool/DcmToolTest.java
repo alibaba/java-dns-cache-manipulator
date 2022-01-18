@@ -77,7 +77,7 @@ public class DcmToolTest {
             String home = System.getProperty("user.home");
             String m2DcmLibDependencyDir = home + "/.m2/repository/com/alibaba/dns-cache-manipulator";
 
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             final Iterator<File> fileIterator = FileUtils.iterateFiles(new File(m2DcmLibDependencyDir), new String[]{"jar"}, true);
             while (fileIterator.hasNext()) {
                 final File next = fileIterator.next();

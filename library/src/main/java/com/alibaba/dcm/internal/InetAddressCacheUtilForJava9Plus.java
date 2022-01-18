@@ -196,8 +196,8 @@ public final class InetAddressCacheUtilForJava9Plus {
 
     public static DnsCache listInetAddressCache()
             throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
-        final List<DnsCacheEntry> retCache = new ArrayList<DnsCacheEntry>();
-        final List<DnsCacheEntry> retNegativeCache = new ArrayList<DnsCacheEntry>();
+        final List<DnsCacheEntry> retCache = new ArrayList<>();
+        final List<DnsCacheEntry> retNegativeCache = new ArrayList<>();
 
         final ConcurrentMap<String, Object> cache = getCacheOfInetAddress();
         for (Map.Entry<String, Object> entry : cache.entrySet()) {

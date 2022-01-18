@@ -216,15 +216,15 @@ public final class InetAddressCacheUtilForJava8Minus {
         final Map<String, Object> cache;
         final Map<String, Object> negativeCache;
         synchronized (getAddressCacheOfInetAddress()) {
-            cache = new HashMap<String, Object>(getCache());
-            negativeCache = new HashMap<String, Object>(getNegativeCache());
+            cache = new HashMap<>(getCache());
+            negativeCache = new HashMap<>(getNegativeCache());
         }
 
         return new DnsCache(convert(cache), convert(negativeCache));
     }
 
     private static List<DnsCacheEntry> convert(Map<String, Object> cache) throws IllegalAccessException, ClassNotFoundException {
-        final List<DnsCacheEntry> ret = new ArrayList<DnsCacheEntry>();
+        final List<DnsCacheEntry> ret = new ArrayList<>();
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
             if (isDnsCacheEntryExpired(host)) { // exclude expired entries!

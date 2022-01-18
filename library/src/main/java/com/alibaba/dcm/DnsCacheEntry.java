@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * DNS cache entry(DNS record).
@@ -108,7 +109,7 @@ public final class DnsCacheEntry implements Serializable {
         DnsCacheEntry that = (DnsCacheEntry) o;
 
         if (expiration != that.expiration) return false;
-        if (host != null ? !host.equals(that.host) : that.host != null) return false;
+        if (!Objects.equals(host, that.host)) return false;
         return Arrays.equals(ips, that.ips);
     }
 

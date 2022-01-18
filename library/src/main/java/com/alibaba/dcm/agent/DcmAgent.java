@@ -10,6 +10,7 @@ import java.io.*;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
@@ -92,14 +93,14 @@ public class DcmAgent {
         final String[] split = argument.split("\\s+");
 
         int idx = 0;
-        Map<String, List<String>> action2Arguments = new HashMap<String, List<String>>();
+        Map<String, List<String>> action2Arguments = new HashMap<>();
         while (idx < split.length) {
             final String action = split[idx++];
             if (!action2Method.containsKey(action)) {
                 continue; // TODO error message
             }
 
-            List<String> arguments = new ArrayList<String>();
+            List<String> arguments = new ArrayList<>();
             while (idx < split.length) {
                 if (action2Method.containsKey(split[idx])) {
                     break;
@@ -113,11 +114,11 @@ public class DcmAgent {
     }
 
     @Nullable
-    private static PrintWriter getFilePrintWriter(@Nullable List<String> files) throws FileNotFoundException, UnsupportedEncodingException {
+    private static PrintWriter getFilePrintWriter(@Nullable List<String> files) throws FileNotFoundException {
         if (null == files) return null;
 
         FileOutputStream fileOutputStream = new FileOutputStream(files.get(0), false);
-        final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
+        final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
 
         return new PrintWriter(outputStreamWriter, true);
     }
@@ -252,7 +253,7 @@ public class DcmAgent {
     private static synchronized void initAction2Method() throws NoSuchMethodException {
         if (action2Method != null) return;
 
-        Map<String, Method> map = new LinkedHashMap<String, Method>();
+        Map<String, Method> map = new LinkedHashMap<>();
         map.put("set", DnsCacheManipulator.class.getMethod("setDnsCache", String.class, String[].class));
         map.put("get", DnsCacheManipulator.class.getMethod("getDnsCache", String.class));
         map.put("rm", DnsCacheManipulator.class.getMethod("removeDnsCache", String.class));
@@ -266,7 +267,7 @@ public class DcmAgent {
         map.put("setNegativePolicy", DnsCacheManipulator.class.getMethod("setDnsNegativeCachePolicy", int.class));
         map.put("getNegativePolicy", DnsCacheManipulator.class.getMethod("getDnsNegativeCachePolicy"));
 
-        actionList = new ArrayList<String>(map.keySet());
+        actionList = new ArrayList<>(map.keySet());
 
         map.put(FILE_KEY, null); // FAKE KEY
 

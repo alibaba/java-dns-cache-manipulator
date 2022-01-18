@@ -4,12 +4,13 @@ import org.apache.commons.io.IOUtils;
 
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class SocketDemo {
-    private static final Charset encoding = Charset.forName("UTF-8");
+    private static final Charset encoding = StandardCharsets.UTF_8;
 
     public static void main(String[] args) throws Exception {
         Socket client = new Socket("www.bing.com", 80);
