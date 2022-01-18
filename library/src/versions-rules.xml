@@ -6,9 +6,9 @@
 
     <!-- config example: https://github.com/mojohaus/versions-maven-plugin/issues/157#issuecomment-306041074 -->
     <ignoreVersions>
-        <ignoreVersion type="regex">.*-[Aa]lpha-\d+</ignoreVersion>
+        <ignoreVersion type="regex">(?i).*[-.]alpha([-.]?\d+)?</ignoreVersion>
         <!-- ignore like junit 4.13-beta-3, rxkotlin 2.4.0-beta.1, spotbugs-annotations 4.0.0-beta3 -->
-        <ignoreVersion type="regex">.*-[Bb]eta([-.]?\d+)?</ignoreVersion>
+        <ignoreVersion type="regex">(?i).*[-.]beta([-.]?\d+)?</ignoreVersion>
         <ignoreVersion type="regex">(?i).*-eap-\d+</ignoreVersion>
         <!-- ignore like kotlinx-coroutines-core 1.3.0-M1 -->
         <ignoreVersion type="regex">.*-M\d+(-.*)?</ignoreVersion>
@@ -20,20 +20,6 @@
         <ignoreVersion type="regex">.*(-does)?-not-exist</ignoreVersion>
     </ignoreVersions>
     <rules>
-        <rule groupId="commons-io" artifactId="commons-io">
-            <ignoreVersions>
-                <!-- locked to version 2.5, ignore 2.6+ -->
-                <ignoreVersion type="regex">2\.[6-9](\..*)?</ignoreVersion>
-                <ignoreVersion type="regex">2\.\d{2,}(\..*)?</ignoreVersion>
-            </ignoreVersions>
-        </rule>
-        <rule groupId="commons-cli" artifactId="commons-cli">
-            <ignoreVersions>
-                <!-- locked to version 1.4, ignore 1.5+ -->
-                <ignoreVersion type="regex">1\.[5-9](\..*)?</ignoreVersion>
-                <ignoreVersion type="regex">2\.\d{2,}(\..*)?</ignoreVersion>
-            </ignoreVersions>
-        </rule>
         <rule groupId="org.jetbrains.kotlinx">
             <!-- ignore native dependency version like org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5-native-mt -->
             <ignoreVersions>
