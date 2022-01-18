@@ -2,8 +2,8 @@ Java Dns Cache Manipulator Tool
 =================================
 
 <p align="center">
-<a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/master?logo=appveyor&amp;logoColor=white" alt="Build Status"></a>
-<a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=master"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/master?logo=coveralls&amp;logoColor=white" alt="Coveralls branch"></a>
+<a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/v1.7.0?logo=appveyor&amp;logoColor=white" alt="Build Status"></a>
+<a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=v1.7.0"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/v1.7.0?logo=coveralls&amp;logoColor=white" alt="Coveralls branch"></a>
 <a href="https://codeclimate.com/github/alibaba/java-dns-cache-manipulator/maintainability"><img src="https://api.codeclimate.com/v1/badges/80e64dc9160cf6f62080/maintainability" alt="Maintainability"></a>
 <a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-6+-green?logo=java&amp;logoColor=white" alt="JDK support"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97" alt="License"></a>
@@ -17,7 +17,7 @@ Java Dns Cache Manipulator Tool
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/issues"><img src="https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator" alt="GitHub issues"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors"><img src="https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator" alt="GitHub Contributors"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/github/repo-size/alibaba/java-dns-cache-manipulator" alt="GitHub repo size"></a>
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.5/dcm-1.6.5.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.5/dcm-1.6.5.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.0/dcm-1.7.0.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.0/dcm-1.7.0.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
 :point_right: 设置/查看 运行中`JVM`进程的`DNS Cache`，支持`IPv6`。
@@ -52,7 +52,7 @@ Java Dns Cache Manipulator Tool
 下载
 ----------
 
-[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.6.5/dcm-1.6.5.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.6.5/dcm-1.6.5.tar.gz) 下载文件`dcm-x.x.x.tar.gz`。
+[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.0/dcm-1.7.0.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.0/dcm-1.7.0.tar.gz) 下载文件`dcm-x.x.x.tar.gz`。
 
 解压后，运行`bin`目录下的`dcm`。
 
