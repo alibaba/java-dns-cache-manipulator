@@ -90,8 +90,13 @@
 		</dependency>
 		<!-- Testing libs -->
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>io.kotest</groupId>
-			<artifactId>kotest-runner-junit4-jvm</artifactId>
+			<artifactId>kotest-runner-junit5-jvm</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -135,6 +140,11 @@
 				<artifactId>commons-io</artifactId>
 				<version>2.11.0</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.12.0</version>
+			</dependency>
 
 			<!-- QA libs -->
 			<!--
@@ -161,7 +171,7 @@
 			<!-- https://github.com/kotlintest/kotlintest -->
 			<dependency>
 				<groupId>io.kotest</groupId>
-				<artifactId>kotest-runner-junit4-jvm</artifactId>
+				<artifactId>kotest-runner-junit5-jvm</artifactId>
 				<version>${kotest.version}</version>
 				<scope>test</scope>
 			</dependency>
@@ -278,6 +288,9 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
