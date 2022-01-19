@@ -20,8 +20,8 @@ branches:
 
 environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
-  MAVEN_OPTS: "-Xmx768m -XX:MaxPermSize=128m -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2"
-  JAVA_OPTS: "-Xmx768m -XX:MaxPermSize=128m"
+  MAVEN_OPTS: "-Xmx768m -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2"
+  JAVA_OPTS: "-Xmx768m"
 
 for:
   -
