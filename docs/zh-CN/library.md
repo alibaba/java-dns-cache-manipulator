@@ -234,7 +234,7 @@ content = m2.getResponseBodyAsString();
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.6.5</version>
+    <version>1.7.0</version>
 </dependency>
 ```
 
