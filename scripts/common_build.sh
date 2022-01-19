@@ -35,64 +35,23 @@ JAVA_CMD() {
     )
 
     logAndRun "$JAVA_HOME/bin/java" -Xmx128m -Xms128m -server -ea -Duser.language=en -Duser.country=US \
-    ${ENABLE_JAVA_RUN_VERBOSE_CLASS+ -verbose:class} \
-    ${ENABLE_JAVA_RUN_DEBUG+ -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005} \
-    ${additionalOptionsForJava12Plus[@]:+"${additionalOptionsForJava12Plus[@]}"} \
-    "$@"
+        ${ENABLE_JAVA_RUN_VERBOSE_CLASS+ -verbose:class} \
+        ${ENABLE_JAVA_RUN_DEBUG+ -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005} \
+        ${additionalOptionsForJava12Plus[@]:+"${additionalOptionsForJava12Plus[@]}"} \
+        "$@"
 }
 
 #################################################################################
 # maven operation functions
 #################################################################################
 
-
 MVN_CMD() {
-    logAndRun "$ROOT_PROJECT_DIR/mvnw" -V --no-transfer-progress "$@"
-}
-
-mvnClean() {
-    checkNecessityForCallerFunction || return 0
-
     (
         cd "$ROOT_PROJECT_DIR"
-        MVN_CMD clean || die "fail to mvn clean!"
-    )
-}
 
-mvnBuildJar() {
-    checkNecessityForCallerFunction || return 0
-
-    (
-        cd "$ROOT_PROJECT_DIR"
-        if [ -n "${CI_TEST_MODE+YES}" ]; then
-            # Build jar action should have used package instead of install
-            # here use install intended to check release operations.
-            #
-            # De-activate a maven profile from command line
-            # https://stackoverflow.com/questions/25201430
-            MVN_CMD install -DperformRelease -P '!gen-sign' || die "fail to build jar!"
-        else
-            MVN_CMD install -Dmaven.test.skip=true || die "fail to build jar!"
-        fi
-    )
-}
-
-mvnCompileTest() {
-    checkNecessityForCallerFunction || return 0
-
-    (
-        cd "$ROOT_PROJECT_DIR"
-        MVN_CMD test-compile || die "fail to compile test!"
-    )
-}
-
-mvnCopyDependencies() {
-    checkNecessityForCallerFunction || return 0
-
-    (
-        cd "$ROOT_PROJECT_DIR"
-        # https://maven.apache.org/plugins/maven-dependency-plugin/copy-dependencies-mojo.html
-        MVN_CMD dependency:copy-dependencies -DincludeScope=test -DexcludeArtifactIds=jsr305,spotbugs-annotations || die "fail to mvn copy-dependencies!"
+        logAndRun "$ROOT_PROJECT_DIR/mvnw" -V --no-transfer-progress \
+            ${SKIP_GIT_DIRTY_CHECK+ -Dgit.dirty=false} \
+            "$@"
     )
 }
 

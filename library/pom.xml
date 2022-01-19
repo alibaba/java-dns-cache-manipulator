@@ -534,6 +534,21 @@
 			</build>
 		</profile>
 		<profile>
+			<id>add-java-open-options-for-jdk17</id>
+			<activation>
+				<jdk>[17,)</jdk>
+			</activation>
+			<!--
+				Maven Surefire Plugin – surefire:test
+					https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#argLine
+				Append the value of argLine param in maven-surefire-plugin
+					https://stackoverflow.com/questions/46489455
+			-->
+			<properties>
+				<argLine>--add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/sun.net=ALL-UNNAMED</argLine>
+			</properties>
+		</profile>
+		<profile>
 			<id>gen-code-cov</id>
 			<build>
 				<plugins>
