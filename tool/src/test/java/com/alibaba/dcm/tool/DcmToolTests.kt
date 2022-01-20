@@ -1,11 +1,10 @@
 package com.alibaba.dcm.tool
 
-import io.kotest.assertions.withClue
+import io.kotest.assertions.fail
 import io.kotest.core.annotation.EnabledCondition
 import io.kotest.core.annotation.EnabledIf
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.AnnotationSpec
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.SystemUtils
@@ -26,20 +25,15 @@ class DcmToolTests : AnnotationSpec() {
 
     @BeforeAll
     fun prepareAgentFilePath() {
-        val agentFile = findAgentFileFromLibProject() ?: findAgentFileFromMavenLocal()
-        withClue("Not found agent file") {
-            agentFile.shouldNotBeNull()
-        }
+        agentFilePath = findAgentFileFromLibProject() ?: findAgentFileFromMavenLocal()
+                ?: fail("Not found agent file")
 
-        agentFilePath = agentFile!!
         println("Found agent file: $agentFilePath")
     }
 
     @BeforeEach
     fun setUp() {
         val outputFile = File.createTempFile("dcm-output-", ".log")
-        FileUtils.deleteQuietly(outputFile)
-        FileUtils.touch(outputFile)
         outputFile.length() shouldBe 0
 
         val outputFilePath = outputFile.canonicalPath
@@ -64,7 +58,7 @@ class DcmToolTests : AnnotationSpec() {
     }
 
     private fun findAgentFileFromLibProject(): String? {
-        val dcmLibProjectDir = listOf("library", "../library", "../../library")
+        val dcmLibProjectDir: File = listOf("library", "../library", "../../library")
             .asSequence()
             .map { File(it) }
             .filter { it.exists() }
@@ -83,7 +77,7 @@ class DcmToolTests : AnnotationSpec() {
     }
 
     private fun findAgentFileFromMavenLocal(): String? {
-        val home = System.getProperty("user.home")
+        val home: String = System.getProperty("user.home")
         val m2DcmLibDependencyDir = File("$home/.m2/repository/com/alibaba/dns-cache-manipulator")
 
         return FileUtils.streamFiles(m2DcmLibDependencyDir, true, "jar")
@@ -94,7 +88,7 @@ class DcmToolTests : AnnotationSpec() {
     }
 
     private fun isAgentJar(file: File): Boolean {
-        val fileName = file.name
+        val fileName: String = file.name
         if (!fileName.startsWith("dns-cache-manipulator")) return false
 
         val replaced = fileName.replace("dns-cache-manipulator-", "").replace("-SNAPSHOT", "")
