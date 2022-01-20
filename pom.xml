@@ -81,11 +81,6 @@
 		<!-- Testing libs -->
 		<dependency>
 			<groupId>io.kotest</groupId>
-			<artifactId>kotest-runner-junit4-jvm</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.kotest</groupId>
 			<artifactId>kotest-runner-junit5-jvm</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -97,22 +92,6 @@
 		<dependency>
 			<groupId>io.kotest</groupId>
 			<artifactId>kotest-property-jvm</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!--
-			Executing JUnit 4 and JUnit 5 tests in a same build
-				https://stackoverflow.com/a/47158584/922688
-		-->
-		<!--JUnit Jupiter Engine to depend on the JUnit5 engine and JUnit 5 API -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!--JUnit Jupiter Engine to depend on the JUnit4 engine and JUnit 4 API  -->
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -182,12 +161,6 @@
 				testing libs
 			-->
 			<!-- https://github.com/kotlintest/kotlintest -->
-			<dependency>
-				<groupId>io.kotest</groupId>
-				<artifactId>kotest-runner-junit4-jvm</artifactId>
-				<version>${kotest.version}</version>
-				<scope>test</scope>
-			</dependency>
 			<dependency>
 				<groupId>io.kotest</groupId>
 				<artifactId>kotest-runner-junit5-jvm</artifactId>
