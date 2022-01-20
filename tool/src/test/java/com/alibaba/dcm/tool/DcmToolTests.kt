@@ -16,6 +16,8 @@ import kotlin.streams.toList
 
 /**
  * https://kotest.io/docs/framework/testing-styles.html#annotation-spec
+ *
+ * @author Jerry Lee (oldratlee at gmail dot com)
  */
 // Ignore "attach to current VM" test for jdk 9+, since java 9+ does not support
 //     "java.io.IOException: Can not attach to current VM"
@@ -60,21 +62,21 @@ class DcmToolTests : AnnotationSpec() {
 
     private fun findAgentFileFromLibProject(): String? {
         val dcmLibProjectDir: File = listOf("library", "../library", "../../library")
-            .asSequence()
-            .map { File(it) }
-            .filter { it.exists() }
-            .firstOrNull()
-            ?: return null
+                .asSequence()
+                .map { File(it) }
+                .filter { it.exists() }
+                .firstOrNull()
+                ?: return null
 
         val targetDir = File(dcmLibProjectDir, "target")
         if (!targetDir.exists()) return null
         println("Found target dir: ${targetDir.canonicalPath}")
 
         return FileUtils.streamFiles(targetDir, false, "jar")
-            .filter { isAgentJar(it) }
-            .findFirst()
-            .map { it.canonicalPath }
-            .orElse(null)
+                .filter { isAgentJar(it) }
+                .findFirst()
+                .map { it.canonicalPath }
+                .orElse(null)
     }
 
     private fun findAgentFileFromMavenLocal(): String? {
@@ -82,10 +84,10 @@ class DcmToolTests : AnnotationSpec() {
         val m2DcmLibDependencyDir = File("$home/.m2/repository/com/alibaba/dns-cache-manipulator")
 
         return FileUtils.streamFiles(m2DcmLibDependencyDir, true, "jar")
-            .filter { isAgentJar(it) }
-            .map { it.canonicalPath }
-            .toList()
-            .maxWithOrNull(Comparator.comparing { ComparableVersion(it) })
+                .filter { isAgentJar(it) }
+                .map { it.canonicalPath }
+                .toList()
+                .maxWithOrNull(Comparator.comparing { ComparableVersion(it) })
     }
 
     private fun isAgentJar(file: File): Boolean {
