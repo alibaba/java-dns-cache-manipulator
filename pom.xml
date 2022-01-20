@@ -151,6 +151,11 @@
 				<artifactId>commons-lang3</artifactId>
 				<version>3.12.0</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-artifact</artifactId>
+				<version>3.8.4</version>
+			</dependency>
 
 			<!--
 				QA libs

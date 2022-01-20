@@ -8,6 +8,7 @@ import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.SystemUtils
+import org.apache.maven.artifact.versioning.ComparableVersion
 import java.io.File
 import java.net.InetAddress
 import kotlin.reflect.KClass
@@ -84,7 +85,7 @@ class DcmToolTests : AnnotationSpec() {
             .filter { isAgentJar(it) }
             .map { it.canonicalPath }
             .toList()
-            .maxOrNull()
+            .maxWithOrNull(Comparator.comparing { ComparableVersion(it) })
     }
 
     private fun isAgentJar(file: File): Boolean {
