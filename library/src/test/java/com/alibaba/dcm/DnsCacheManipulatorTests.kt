@@ -1,6 +1,12 @@
 package com.alibaba.dcm
 
-import com.alibaba.dcm.Util.*
+import com.alibaba.dcm.Util.shouldBeNotExistedDomain
+import com.alibaba.dcm.Util.shouldContainOnlyOneNegativeCacheWitchExpirationBetween
+import com.alibaba.dcm.Util.lookupAllIps
+import com.alibaba.dcm.Util.lookupIpByName
+import com.alibaba.dcm.Util.shouldBeEqual
+import com.alibaba.dcm.Util.shouldBeEqualAsHostName
+import com.alibaba.dcm.Util.skipOsLookupTimeAfterThenClear
 import com.alibaba.dcm.internal.JavaVersionUtil
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
@@ -8,6 +14,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.longs.shouldBeBetween
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldNotBeSameInstanceAs
@@ -48,6 +55,7 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
     ////////////////////////////////////////////////////////////////////
     // user case test
     ////////////////////////////////////////////////////////////////////
+
     @Test
     fun test_getDnsCache_null_ForNotExistedDomain() {
         val dnsCache = DnsCacheManipulator.getDnsCache(DOMAIN_NOT_EXISTED)
@@ -65,8 +73,8 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         val host = "single.ip.com"
         DnsCacheManipulator.setDnsCache(host, IP1)
 
-        lookupIpByName(host) shouldBe IP1
-        lookupAllIps(host).shouldContainExactly(IP1)
+        host.lookupIpByName() shouldBe IP1
+        host.lookupAllIps().shouldContainExactly(IP1)
     }
 
     @Test
@@ -75,9 +83,9 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         val ips = arrayOf(IP1, IP2)
         DnsCacheManipulator.setDnsCache(host, *ips)
 
-        lookupIpByName(host) shouldBe ips[0]
+        host.lookupIpByName() shouldBe ips.first()
         // relookup the entry order may change
-        lookupAllIps(host).shouldContainExactlyInAnyOrder(*ips)
+        host.lookupAllIps().shouldContainExactlyInAnyOrder(*ips)
     }
 
     @Test
@@ -90,9 +98,9 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         allDnsCacheEntries shouldHaveSize 1
 
         val expected = DnsCacheEntry(host, arrayOf(IP1), Long.MAX_VALUE)
-        val actual = allDnsCacheEntries[0]
+        val actual = allDnsCacheEntries.first()
 
-        assertEqualsDnsCacheEntry(expected, actual)
+        actual shouldBeEqual expected
 
         val another = DnsCacheManipulator.getDnsCache(host)
         val another2 = DnsCacheManipulator.getDnsCache(host)
@@ -108,47 +116,46 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
 
     @Test
     fun test_canSetExistedDomain_canExpire_thenReLookupBack() {
-        val expected = lookupAllIps(EXISTED_DOMAIN)
+        val expected = EXISTED_DOMAIN.lookupAllIps()
 
         DnsCacheManipulator.setDnsCache(20, EXISTED_DOMAIN, IP1)
-        lookupIpByName(EXISTED_DOMAIN) shouldBe IP1
+        EXISTED_DOMAIN.lookupIpByName() shouldBe IP1
 
         Thread.sleep(40)
 
         // relookup the entry order may change
-        lookupAllIps(EXISTED_DOMAIN) shouldContainExactlyInAnyOrder expected
+        EXISTED_DOMAIN.lookupAllIps() shouldContainExactlyInAnyOrder expected
     }
 
     @Test
     fun test_setNotExistedDomain_RemoveThenReLookupAndNotExisted() {
         DnsCacheManipulator.setDnsCache(DOMAIN_NOT_EXISTED, IP1)
-        lookupIpByName(DOMAIN_NOT_EXISTED) shouldBe IP1
+        DOMAIN_NOT_EXISTED.lookupIpByName() shouldBe IP1
 
         DnsCacheManipulator.removeDnsCache(DOMAIN_NOT_EXISTED)
-        assertDomainNotExisted(DOMAIN_NOT_EXISTED)
+        DOMAIN_NOT_EXISTED.shouldBeNotExistedDomain()
         DnsCacheManipulator.listDnsCache().shouldBeEmpty()
 
         val negativeCache = DnsCacheManipulator.listDnsNegativeCache()
         negativeCache shouldHaveSize 1
-        assertEqualsHostName(DOMAIN_NOT_EXISTED, negativeCache[0].host)
-
+        negativeCache.first().host shouldBeEqualAsHostName DOMAIN_NOT_EXISTED
     }
 
     @Test
     fun test_setNotExistedDomain_canExpire_thenReLookupAndNotExisted() {
         DnsCacheManipulator.setDnsCache(20, DOMAIN_NOT_EXISTED, IP1)
 
-        val ip = lookupIpByName(DOMAIN_NOT_EXISTED)
+        val ip = DOMAIN_NOT_EXISTED.lookupIpByName()
         ip shouldBe IP1
 
         Thread.sleep(40)
-        assertDomainNotExisted(DOMAIN_NOT_EXISTED)
+        DOMAIN_NOT_EXISTED.shouldBeNotExistedDomain()
 
         DnsCacheManipulator.listDnsCache().shouldBeEmpty()
 
         val negativeCache = DnsCacheManipulator.listDnsNegativeCache()
         negativeCache shouldHaveSize 1
-        assertEqualsHostName(DOMAIN_NOT_EXISTED, negativeCache[0].host)
+        negativeCache.first().host shouldBeEqualAsHostName DOMAIN_NOT_EXISTED
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -162,7 +169,7 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         //
         // so reduce the lookup operation time,
         // make below time-tracking test code more stability
-        skipOSLookupTimeAfterThenClear(EXISTED_DOMAIN, EXISTED_ANOTHER_DOMAIN)
+        skipOsLookupTimeAfterThenClear(EXISTED_DOMAIN, EXISTED_ANOTHER_DOMAIN)
 
         DnsCacheManipulator.setDnsCachePolicy(1)
         DnsCacheManipulator.getDnsCachePolicy() shouldBe 1
@@ -170,17 +177,16 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         //////////////////////////////////////////////////
         // 0. trigger dns cache by lookup
         //////////////////////////////////////////////////
-        lookupIpByName(EXISTED_DOMAIN)
+        EXISTED_DOMAIN.lookupIpByName()
         val tick = System.currentTimeMillis()
         val dnsCacheEntry = DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN)
-        assertBetween(dnsCacheEntry!!.expiration.time,
-                tick, tick + 1020)
+        dnsCacheEntry!!.expiration.time.shouldBeBetween(tick, tick + 1020)
 
         //////////////////////////////////////////////////
         // 1. lookup before expire
         //////////////////////////////////////////////////
         Thread.sleep(500)
-        lookupIpByName(EXISTED_DOMAIN)
+        EXISTED_DOMAIN.lookupIpByName()
         // get dns cache before expire
         DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN) shouldBe dnsCacheEntry
 
@@ -194,18 +200,17 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         //////////////////////////////////////////////////
         // 3. touch dns cache with external other host operation
         //////////////////////////////////////////////////
-        lookupIpByName(EXISTED_ANOTHER_DOMAIN)
+        EXISTED_ANOTHER_DOMAIN.lookupIpByName()
         DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN).shouldBeNull()
 
         //////////////////////////////////////////////////
         // 4. relookup
         //////////////////////////////////////////////////
-        lookupIpByName(EXISTED_DOMAIN)
+        EXISTED_DOMAIN.lookupIpByName()
         val relookupTick = System.currentTimeMillis()
         // get dns cache after expire
         val relookup = DnsCacheManipulator.getDnsCache(EXISTED_DOMAIN)
-        assertBetween(relookup!!.expiration.time,
-                relookupTick, relookupTick + 1020)
+        relookup!!.expiration.time.shouldBeBetween(relookupTick, relookupTick + 1020)
     }
 
     @Test
@@ -216,31 +221,31 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         //////////////////////////////////////////////////
         // 0. trigger dns cache by lookup
         //////////////////////////////////////////////////
-        assertLookupNotExisted(DOMAIN_NOT_EXISTED)
+        DOMAIN_NOT_EXISTED.shouldBeNotExistedDomain()
         val tick = System.currentTimeMillis()
-        assertOnlyNegativeCache(tick, tick + 1020)
+        shouldContainOnlyOneNegativeCacheWitchExpirationBetween(tick, tick + 1020)
 
         //////////////////////////////////////////////////
         // 1. lookup before expire
         //////////////////////////////////////////////////
         Thread.sleep(500)
-        assertLookupNotExisted(DOMAIN_NOT_EXISTED)
+        DOMAIN_NOT_EXISTED.shouldBeNotExistedDomain()
         // get dns cache before expire
-        assertOnlyNegativeCache(tick, tick + 1020)
+        shouldContainOnlyOneNegativeCacheWitchExpirationBetween(tick, tick + 1020)
 
         //////////////////////////////////////////////////
         // 2. get dns cache after expire
         //////////////////////////////////////////////////
         Thread.sleep(520)
         // get dns cache before expire
-        assertOnlyNegativeCache(tick, tick + 1020)
+        shouldContainOnlyOneNegativeCacheWitchExpirationBetween(tick, tick + 1020)
 
         //////////////////////////////////////////////////
         // 3. touch dns cache with external other host operation
         //////////////////////////////////////////////////
-        lookupIpByName(EXISTED_DOMAIN)
+        EXISTED_DOMAIN.lookupIpByName()
         if (JavaVersionUtil.isJdkAtMost8()) {
-            assertOnlyNegativeCache(tick, tick + 1020)
+            shouldContainOnlyOneNegativeCacheWitchExpirationBetween(tick, tick + 1020)
         } else {
             DnsCacheManipulator.listDnsNegativeCache().shouldBeEmpty()
         }
@@ -248,9 +253,9 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         //////////////////////////////////////////////////
         // 4. relookup
         //////////////////////////////////////////////////
-        assertLookupNotExisted(DOMAIN_NOT_EXISTED)
+        DOMAIN_NOT_EXISTED.shouldBeNotExistedDomain()
         val relookupTick = System.currentTimeMillis()
-        assertOnlyNegativeCache(relookupTick, relookupTick + 1020)
+        shouldContainOnlyOneNegativeCacheWitchExpirationBetween(relookupTick, relookupTick + 1020)
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -259,7 +264,7 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
     @Test
     fun test_loadDnsCacheConfig() {
         DnsCacheManipulator.loadDnsCacheConfig()
-        val ip = lookupIpByName("www.hello1.com")
+        val ip = "www.hello1.com".lookupIpByName()
         ip shouldBe IP1
     }
 
@@ -269,7 +274,7 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         try {
             System.setProperty(key, "customized-dns-cache.properties")
             DnsCacheManipulator.loadDnsCacheConfig()
-            lookupIpByName("www.customized.com") shouldBe IP2
+            "www.customized.com".lookupIpByName() shouldBe IP2
         } finally {
             System.clearProperty(key)
         }
@@ -278,7 +283,7 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
     @Test
     fun test_loadDnsCacheConfig_fromMyConfig() {
         DnsCacheManipulator.loadDnsCacheConfig("my-dns-cache.properties")
-        lookupIpByName("www.hello2.com") shouldBe IP2
+        "www.hello2.com".lookupIpByName() shouldBe IP2
     }
 
     @Test
@@ -289,13 +294,13 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         val expected = DnsCacheEntry(host, arrayOf(IP1, IP2), Long.MAX_VALUE)
 
         val actual = DnsCacheManipulator.getDnsCache(host)
-        assertEqualsDnsCacheEntry(expected, actual)
+        actual shouldBeEqual expected
 
         val hostLoose = "www.hello-multi-ips-loose.com"
         val expectedLoose = DnsCacheEntry(hostLoose, arrayOf(IP1, IP2, IP3, IP4), Long.MAX_VALUE)
 
         val actualLoose = DnsCacheManipulator.getDnsCache(hostLoose)
-        assertEqualsDnsCacheEntry(expectedLoose, actualLoose)
+        actualLoose shouldBeEqual expectedLoose
     }
 
     @Test
