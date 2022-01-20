@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.alibaba.dcm.Util.*;
@@ -79,7 +80,9 @@ public class DnsCacheManipulatorTest {
         DnsCacheManipulator.setDnsCache(host, ips);
 
         assertEquals(ips[0], lookupIpByName(host));
-        assertEquals(Arrays.asList(ips), lookupAllIps(host));
+        // use HashSet for Equals
+        // relookup the entry order may change
+        assertEquals(new HashSet<>(Arrays.asList(ips)), new HashSet<>(lookupAllIps(host)));
     }
 
     @Test
@@ -118,7 +121,9 @@ public class DnsCacheManipulatorTest {
 
         sleep(40);
 
-        assertEquals(expected, lookupAllIps(EXISTED_DOMAIN));
+        // use HashSet for Equals
+        // relookup the entry order may change
+        assertEquals(new HashSet<>(expected), new HashSet<>(lookupAllIps(EXISTED_DOMAIN)));
     }
 
     @Test
