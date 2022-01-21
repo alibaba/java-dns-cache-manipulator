@@ -9,11 +9,8 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import org.apache.commons.io.FileUtils
 import java.io.File
-
-
-private const val UTF8 = "UTF-8"
+import java.nio.charset.StandardCharsets.UTF_8
 
 
 /**
@@ -43,7 +40,7 @@ class DcmAgentTests : AnnotationSpec() {
     fun test_agentmain_file() {
         DcmAgent.agentmain("file $outputFilePath")
 
-        val content = FileUtils.readLines(outputFile, UTF8)
+        val content = outputFile.readLines(UTF_8)
         content.first() shouldContain "No action in agent argument, do nothing!"
     }
 
@@ -60,7 +57,7 @@ class DcmAgentTests : AnnotationSpec() {
 
         DnsCacheManipulator.getDnsCache("bing.com")!!.ip shouldBe "1.2.3.4"
 
-        val content = FileUtils.readLines(outputFile, UTF8)
+        val content = outputFile.readLines(UTF_8)
         content.last() shouldBe DcmAgent.DCM_AGENT_SUCCESS_MARK_LINE
     }
 
@@ -157,7 +154,7 @@ class DcmAgentTests : AnnotationSpec() {
 
         DnsCacheManipulator.getDnsNegativeCachePolicy() shouldBe 1110
 
-        val content = FileUtils.readLines(outputFile, UTF8)
+        val content = outputFile.readLines(UTF_8)
         content.first() shouldContain "Error to do action setNegativePolicy"
         content.first() shouldContain "Action setNegativePolicy need more argument!"
     }
@@ -170,7 +167,7 @@ class DcmAgentTests : AnnotationSpec() {
 
         DnsCacheManipulator.getDnsNegativeCachePolicy() shouldBe 1111
 
-        val content = FileUtils.readLines(outputFile, UTF8)
+        val content = outputFile.readLines(UTF_8)
         content.first() shouldContain "Error to do action setNegativePolicy 737 HaHa"
         content.first() shouldContain "Too many arguments for action setNegativePolicy! arguments: [737, HaHa]"
     }
@@ -179,7 +176,7 @@ class DcmAgentTests : AnnotationSpec() {
     fun test_agentmain_unknownAction() {
         DcmAgent.agentmain("  unknownAction  arg1  arg2   file $outputFilePath")
 
-        val content = FileUtils.readLines(outputFile, UTF8)
+        val content = outputFile.readLines(UTF_8)
         content.first() shouldContain "No action in agent argument, do nothing!"
     }
 }

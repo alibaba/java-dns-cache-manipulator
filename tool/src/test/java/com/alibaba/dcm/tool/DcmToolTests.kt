@@ -5,12 +5,10 @@ import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.core.test.config.TestCaseConfig
 import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.shouldBe
-import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.SystemUtils
 import org.apache.maven.artifact.versioning.ComparableVersion
 import java.io.File
 import java.net.InetAddress
-import kotlin.streams.toList
 
 /**
  * https://kotest.io/docs/framework/testing-styles.html#annotation-spec
@@ -73,21 +71,19 @@ class DcmToolTests : AnnotationSpec() {
         if (!targetDir.exists()) return null
         println("Found target dir: ${targetDir.canonicalPath}")
 
-        return FileUtils.streamFiles(targetDir, false, "jar")
-                .filter { isAgentJar(it) }
-                .findFirst()
+        return targetDir.walk()
+                .filter { it.extension == "jar" && isAgentJar(it) }
                 .map { it.canonicalPath }
-                .orElse(null)
+                .firstOrNull()
     }
 
     private fun findAgentFileFromMavenLocal(): String? {
         val home: String = System.getProperty("user.home")
         val m2DcmLibDependencyDir = File("$home/.m2/repository/com/alibaba/dns-cache-manipulator")
 
-        return FileUtils.streamFiles(m2DcmLibDependencyDir, true, "jar")
-                .filter { isAgentJar(it) }
+        return m2DcmLibDependencyDir.walk()
+                .filter { it.extension == "jar" && isAgentJar(it) }
                 .map { it.canonicalPath }
-                .toList()
                 .maxWithOrNull(Comparator.comparing { ComparableVersion(it) })
     }
 
