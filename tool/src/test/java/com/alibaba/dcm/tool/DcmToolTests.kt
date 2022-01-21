@@ -1,17 +1,14 @@
 package com.alibaba.dcm.tool
 
 import io.kotest.assertions.fail
-import io.kotest.core.annotation.EnabledCondition
-import io.kotest.core.annotation.EnabledIf
-import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.test.config.TestCaseConfig
 import io.kotest.matchers.shouldBe
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.SystemUtils
 import org.apache.maven.artifact.versioning.ComparableVersion
 import java.io.File
 import java.net.InetAddress
-import kotlin.reflect.KClass
 import kotlin.streams.toList
 
 /**
@@ -19,10 +16,13 @@ import kotlin.streams.toList
  *
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
-// Ignore "attach to current VM" test for jdk 9+, since java 9+ does not support
-//     "java.io.IOException: Can not attach to current VM"
-@EnabledIf(Java8Only::class)
 class DcmToolTests : AnnotationSpec() {
+
+    // Ignore "attach to current VM" test for jdk 9+, since java 9+ does not support
+    //     "java.io.IOException: Can not attach to current VM"
+    @Suppress("OverridingDeprecatedMember")
+    override fun defaultTestCaseConfig(): TestCaseConfig =
+            TestCaseConfig(enabled = SystemUtils.IS_JAVA_1_8)
 
     private lateinit var agentFilePath: String
 
@@ -97,11 +97,4 @@ class DcmToolTests : AnnotationSpec() {
         val replaced = fileName.replace("dns-cache-manipulator-", "").replace("-SNAPSHOT", "")
         return !replaced.contains("-")
     }
-}
-
-/**
- * https://kotest.io/docs/framework/conditional/spec-annotations-conditional-evaluation.html
- */
-class Java8Only : EnabledCondition {
-    override fun enabled(kclass: KClass<out Spec>): Boolean = SystemUtils.IS_JAVA_1_8
 }
