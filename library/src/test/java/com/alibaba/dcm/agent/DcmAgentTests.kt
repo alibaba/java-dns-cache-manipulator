@@ -2,6 +2,7 @@ package com.alibaba.dcm.agent
 
 import com.alibaba.dcm.DnsCacheManipulator
 import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
@@ -24,7 +25,7 @@ class DcmAgentTests : AnnotationSpec() {
 
     @Before
     fun setUp() {
-        outputFile = File.createTempFile("dcm-output-", ".log")
+        outputFile = tempfile("dcm-output-", ".log")
         outputFile.length() shouldBe 0
         println("Prepared output file: " + outputFile.absolutePath)
 

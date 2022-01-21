@@ -3,6 +3,7 @@ package com.alibaba.dcm.tool
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.core.test.config.TestCaseConfig
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.shouldBe
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.SystemUtils
@@ -36,7 +37,7 @@ class DcmToolTests : AnnotationSpec() {
 
     @BeforeEach
     fun setUp() {
-        val outputFile = File.createTempFile("dcm-output-", ".log")
+        val outputFile = tempfile("dcm-output-", ".log")
         outputFile.length() shouldBe 0
 
         val outputFilePath = outputFile.canonicalPath
