@@ -17,7 +17,7 @@ final class TimeUtil {
      */
     private static final long NANO_TIME_CHECK_POINT = System.nanoTime();
 
-    private static final long NS_PER_MS = 1000000;
+    private static final long NS_PER_MS = 1_000_000;
 
     /**
      * @see <a href="https://newbedev.com/how-can-i-convert-the-result-of-system-nanotime-to-a-date-in-java">
