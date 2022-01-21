@@ -230,6 +230,22 @@ If you use DCM under Java 17+, add below Java options:
 --add-opens java.base/sun.net=ALL-UNNAMED
 ```
 
+If you use `maven`(e.g. running test), add below config:
+
+```xml
+<profiles>
+    <profile>
+        <id>add-java-open-options-for-jdk17</id>
+        <activation>
+            <jdk>[17,)</jdk>
+        </activation>
+        <properties>
+            <argLine>--add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/sun.net=ALL-UNNAMED</argLine>
+        </properties>
+    </profile>
+</profiles>
+```
+
 #### Domain name case
 
 The domain name is not case-sensitive, and the domain name may be converted to lower case uniformly before entering the DNS Cache.
