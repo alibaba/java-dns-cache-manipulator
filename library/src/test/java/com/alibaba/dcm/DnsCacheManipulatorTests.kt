@@ -244,7 +244,7 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         // 3. touch dns cache with external other host operation
         //////////////////////////////////////////////////
         EXISTED_DOMAIN.lookupIpByName()
-        if (JavaVersionUtil.isJdkAtMost8()) {
+        if (JavaVersionUtil.isJavaVersionAtMost8()) {
             shouldContainOnlyOneNegativeCacheWitchExpirationBetween(tick, tick + 1020)
         } else {
             DnsCacheManipulator.listDnsNegativeCache().shouldBeEmpty()

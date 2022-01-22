@@ -4,6 +4,7 @@ package com.alibaba.dcm.internal;
  * internal time util.
  *
  * @author Jerry Lee (oldratlee at gmail dot com)
+ * @author antfling (ding_zhengang at hithinksoft dot com)
  * @since 1.6.0
  */
 final class TimeUtil {

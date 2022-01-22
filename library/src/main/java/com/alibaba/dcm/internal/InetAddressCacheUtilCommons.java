@@ -24,6 +24,8 @@ public final class InetAddressCacheUtilCommons {
      * {@code Long.MAX_VALUE(~9e18)} nanoseconds is ~292 years.
      * <p>
      * {@code Long.MAX_VALUE / 1e9 / 3600 / 24 / 365 ~= 292.47}.
+     *
+     * @see System#nanoTime()
      */
     public static final long NEVER_EXPIRATION = Long.MAX_VALUE;
 

@@ -1,6 +1,6 @@
 package com.alibaba.dcm
 
-import com.alibaba.dcm.internal.JavaVersionUtil
+import com.alibaba.dcm.internal.JavaVersionUtil.isJavaVersionAtMost8
 import com.alibaba.dcm.internal.TestTimeUtil.NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS
 import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
@@ -63,7 +63,7 @@ object Util {
         val actualExpiration = expiration.time
 
         if (expectedExpiration == Long.MAX_VALUE) {
-            if (JavaVersionUtil.isJdkAtMost8()) {
+            if (isJavaVersionAtMost8()) {
                 actualExpiration shouldBe expectedExpiration
             } else {
                 // hard code test logic for jdk 9+
@@ -75,7 +75,7 @@ object Util {
     }
 
     infix fun String.shouldBeEqualAsHostName(expected: String) {
-        if (JavaVersionUtil.isJdkAtMost8()) {
+        if (isJavaVersionAtMost8()) {
             // java 8-, host name is unified to lower case by InetAddress
             this shouldBeEqualIgnoringCase expected
         } else {

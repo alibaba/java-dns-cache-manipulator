@@ -43,9 +43,9 @@ public final class InetAddressCacheUtilForJava8Minus {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
      */
-    public static void setInetAddressCache(String host, String[] ips, long expireMillis) throws UnknownHostException,
-            IllegalAccessException, InstantiationException, InvocationTargetException,
-            ClassNotFoundException, NoSuchFieldException {
+    public static void setInetAddressCache(String host, String[] ips, long expireMillis)
+            throws UnknownHostException, IllegalAccessException, InstantiationException,
+            InvocationTargetException, ClassNotFoundException, NoSuchFieldException {
         host = host.toLowerCase();
         long expiration = expireMillis == NEVER_EXPIRATION ? NEVER_EXPIRATION : System.currentTimeMillis() + expireMillis;
         Object entry = newCacheEntry(host, ips, expiration);
@@ -57,7 +57,8 @@ public final class InetAddressCacheUtilForJava8Minus {
     }
 
     private static Object newCacheEntry(String host, String[] ips, long expiration)
-            throws UnknownHostException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
+            throws UnknownHostException, ClassNotFoundException, IllegalAccessException,
+            InvocationTargetException, InstantiationException {
         // InetAddress.CacheEntry has only one constructor
         return getConstructorOfInetAddress$CacheEntry().newInstance(toInetAddressArray(host, ips), expiration);
     }
@@ -223,7 +224,8 @@ public final class InetAddressCacheUtilForJava8Minus {
         return new DnsCache(convert(cache), convert(negativeCache));
     }
 
-    private static List<DnsCacheEntry> convert(Map<String, Object> cache) throws IllegalAccessException, ClassNotFoundException {
+    private static List<DnsCacheEntry> convert(Map<String, Object> cache)
+            throws IllegalAccessException, ClassNotFoundException {
         final List<DnsCacheEntry> ret = new ArrayList<>();
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
@@ -236,7 +238,8 @@ public final class InetAddressCacheUtilForJava8Minus {
         return ret;
     }
 
-    private static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry) throws IllegalAccessException, ClassNotFoundException {
+    private static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry)
+            throws IllegalAccessException, ClassNotFoundException {
         initFieldsOfInetAddress$CacheEntry();
 
         final long expiration = expirationFieldOfInetAddress$CacheEntry.getLong(entry);
@@ -262,7 +265,8 @@ public final class InetAddressCacheUtilForJava8Minus {
         final Class<?> cacheEntryClass = Class.forName("java.net.InetAddress$CacheEntry");
         synchronized (InetAddressCacheUtilForJava8Minus.class) {
             // double check
-            if (expirationFieldOfInetAddress$CacheEntry != null && addressesFieldOfInetAddress$CacheEntry != null) return;
+            if (expirationFieldOfInetAddress$CacheEntry != null && addressesFieldOfInetAddress$CacheEntry != null)
+                return;
 
             // InetAddress.CacheEntry has 2 filed:
             // - for jdk 6, address and expiration
@@ -290,7 +294,8 @@ public final class InetAddressCacheUtilForJava8Minus {
         }
     }
 
-    public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+    public static void clearInetAddressCache()
+            throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
         synchronized (getAddressCacheOfInetAddress()) {
             getCache().clear();
             getNegativeCache().clear();

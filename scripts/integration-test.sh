@@ -15,11 +15,11 @@ if [ "${1:-}" != "skipClean" ]; then
     MVN_CMD clean
 fi
 
-# Build jar action should have used package instead of install
-# here use install intended to check release operations.
+# here use `install` and `-D performRelease` intended
+#   to check release operations.
 #
 # De-activate a maven profile from command line
-# https://stackoverflow.com/questions/25201430
+#   https://stackoverflow.com/questions/25201430
 headInfo "test with Java: $JAVA_HOME"
 MVN_CMD -DperformRelease -P '!gen-sign' install
 

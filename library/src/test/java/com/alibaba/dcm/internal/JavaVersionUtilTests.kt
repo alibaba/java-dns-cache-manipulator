@@ -6,7 +6,7 @@ import org.apache.commons.lang3.JavaVersion
 import org.apache.commons.lang3.SystemUtils
 
 class JavaVersionUtilTests : FunSpec({
-    test("isJdkAtMost8") {
-        JavaVersionUtil.isJdkAtMost8() shouldBe SystemUtils.isJavaVersionAtMost(JavaVersion.JAVA_1_8)
+    test("JavaVersionUtil.isJavaVersionAtMost8") {
+        JavaVersionUtil.isJavaVersionAtMost8() shouldBe SystemUtils.isJavaVersionAtMost(JavaVersion.JAVA_1_8)
     }
 })

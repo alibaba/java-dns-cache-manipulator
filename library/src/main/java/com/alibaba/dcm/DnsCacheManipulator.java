@@ -16,7 +16,7 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
-import static com.alibaba.dcm.internal.JavaVersionUtil.isJdkAtMost8;
+import static com.alibaba.dcm.internal.JavaVersionUtil.isJavaVersionAtMost8;
 
 
 /**
@@ -42,7 +42,7 @@ public final class DnsCacheManipulator {
      */
     public static void setDnsCache(String host, String... ips) {
         try {
-            if (isJdkAtMost8()) {
+            if (isJavaVersionAtMost8()) {
                 InetAddressCacheUtilForJava8Minus.setInetAddressCache(host, ips, NEVER_EXPIRATION);
             } else {
                 InetAddressCacheUtilForJava9Plus.setInetAddressCache(host, ips, NEVER_EXPIRATION);
@@ -64,7 +64,7 @@ public final class DnsCacheManipulator {
      */
     public static void setDnsCache(long expireMillis, String host, String... ips) {
         try {
-            if (isJdkAtMost8()) {
+            if (isJavaVersionAtMost8()) {
                 InetAddressCacheUtilForJava8Minus.setInetAddressCache(host, ips, expireMillis);
             } else {
                 InetAddressCacheUtilForJava9Plus.setInetAddressCache(host, ips, expireMillis);
@@ -152,7 +152,7 @@ public final class DnsCacheManipulator {
     @Nullable
     public static DnsCacheEntry getDnsCache(String host) {
         try {
-            if (isJdkAtMost8()) {
+            if (isJavaVersionAtMost8()) {
                 return InetAddressCacheUtilForJava8Minus.getInetAddressCache(host);
             } else {
                 return InetAddressCacheUtilForJava9Plus.getInetAddressCache(host);
@@ -174,7 +174,7 @@ public final class DnsCacheManipulator {
      */
     public static DnsCache getWholeDnsCache() {
         try {
-            if (isJdkAtMost8()) {
+            if (isJavaVersionAtMost8()) {
                 return InetAddressCacheUtilForJava8Minus.listInetAddressCache();
             } else {
                 return InetAddressCacheUtilForJava9Plus.listInetAddressCache();
@@ -235,7 +235,7 @@ public final class DnsCacheManipulator {
      */
     public static void removeDnsCache(String host) {
         try {
-            if (isJdkAtMost8()) {
+            if (isJavaVersionAtMost8()) {
                 InetAddressCacheUtilForJava8Minus.removeInetAddressCache(host);
             } else {
                 InetAddressCacheUtilForJava9Plus.removeInetAddressCache(host);
@@ -253,7 +253,7 @@ public final class DnsCacheManipulator {
      */
     public static void clearDnsCache() {
         try {
-            if (isJdkAtMost8()) {
+            if (isJavaVersionAtMost8()) {
                 InetAddressCacheUtilForJava8Minus.clearInetAddressCache();
             } else {
                 InetAddressCacheUtilForJava9Plus.clearInetAddressCache();

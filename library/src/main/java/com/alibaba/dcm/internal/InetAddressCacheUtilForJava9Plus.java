@@ -46,7 +46,8 @@ public final class InetAddressCacheUtilForJava9Plus {
      * </ul>
      */
     public static void setInetAddressCache(String host, String[] ips, long expireMillis)
-            throws UnknownHostException, IllegalAccessException, InstantiationException, InvocationTargetException, ClassNotFoundException, NoSuchFieldException {
+            throws UnknownHostException, IllegalAccessException, InstantiationException,
+            InvocationTargetException, ClassNotFoundException, NoSuchFieldException {
         long expiration = expireMillis == NEVER_EXPIRATION ? NEVER_EXPIRATION : getNanoTimeAfterMs(expireMillis);
         Object cachedAddresses = newCachedAddresses(host, ips, expiration);
 
@@ -58,7 +59,8 @@ public final class InetAddressCacheUtilForJava9Plus {
      * {@link InetAddress.CachedAddresses#CachedAddresses(String, InetAddress[], long)}
      */
     private static Object newCachedAddresses(String host, String[] ips, long expiration)
-            throws ClassNotFoundException, UnknownHostException, IllegalAccessException, InvocationTargetException, InstantiationException {
+            throws ClassNotFoundException, UnknownHostException, IllegalAccessException,
+            InvocationTargetException, InstantiationException {
         // InetAddress.CachedAddresses has only one constructor
         return getConstructorOfInetAddress$CachedAddresses().newInstance(host, toInetAddressArray(host, ips), expiration);
     }
@@ -100,7 +102,8 @@ public final class InetAddressCacheUtilForJava9Plus {
     /**
      * @see #getExpirySetOfInetAddress()
      */
-    private static void removeHostFromExpirySetOfInetAddress(String host) throws NoSuchFieldException, IllegalAccessException {
+    private static void removeHostFromExpirySetOfInetAddress(String host)
+            throws NoSuchFieldException, IllegalAccessException {
         for (Iterator<Object> iterator = getExpirySetOfInetAddress().iterator(); iterator.hasNext(); ) {
             Object cachedAddresses = iterator.next();
             if (getHostOfInetAddress$CacheAddress(cachedAddresses).equals(host)) {
@@ -114,7 +117,8 @@ public final class InetAddressCacheUtilForJava9Plus {
     /**
      * {@link InetAddress.CachedAddresses.host}
      */
-    private static String getHostOfInetAddress$CacheAddress(Object cachedAddresses) throws NoSuchFieldException, IllegalAccessException {
+    private static String getHostOfInetAddress$CacheAddress(Object cachedAddresses)
+            throws NoSuchFieldException, IllegalAccessException {
         if (hostFieldOfInetAddress$CacheAddress == null) {
             synchronized (InetAddressCacheUtilForJava9Plus.class) {
                 if (hostFieldOfInetAddress$CacheAddress == null) { // double check
@@ -140,7 +144,8 @@ public final class InetAddressCacheUtilForJava9Plus {
      * </ul>
      */
     @SuppressWarnings("unchecked")
-    private static ConcurrentMap<String, Object> getCacheOfInetAddress() throws NoSuchFieldException, IllegalAccessException {
+    private static ConcurrentMap<String, Object> getCacheOfInetAddress()
+            throws NoSuchFieldException, IllegalAccessException {
         return (ConcurrentMap<String, Object>) getCacheAndExpirySetOfInetAddress0()[0];
     }
 
@@ -150,7 +155,8 @@ public final class InetAddressCacheUtilForJava9Plus {
      * type is {@code ConcurrentSkipListSet<CachedAddresses>} and thread-safe.
      */
     @SuppressWarnings("unchecked")
-    private static ConcurrentSkipListSet<Object> getExpirySetOfInetAddress() throws NoSuchFieldException, IllegalAccessException {
+    private static ConcurrentSkipListSet<Object> getExpirySetOfInetAddress()
+            throws NoSuchFieldException, IllegalAccessException {
         return (ConcurrentSkipListSet<Object>) getCacheAndExpirySetOfInetAddress0()[1];
     }
 
@@ -159,7 +165,8 @@ public final class InetAddressCacheUtilForJava9Plus {
     /**
      * @return {@link InetAddress#cache} and {@link InetAddress#expirySet}
      */
-    private static Object[] getCacheAndExpirySetOfInetAddress0() throws NoSuchFieldException, IllegalAccessException {
+    private static Object[] getCacheAndExpirySetOfInetAddress0()
+            throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_EXPIRY_SET != null) return ADDRESS_CACHE_AND_EXPIRY_SET;
 
         synchronized (InetAddressCacheUtilForJava9Plus.class) {

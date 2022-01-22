@@ -6,7 +6,7 @@ package com.alibaba.dcm.internal;
  * @since 1.6.0
  */
 public final class JavaVersionUtil {
-    public static boolean isJdkAtMost8() {
+    public static boolean isJavaVersionAtMost8() {
         return JAVA_SPECIFICATION_VERSION_AS_ENUM.atMost(JavaVersion.JAVA_1_8);
     }
 

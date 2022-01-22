@@ -19,14 +19,14 @@ class IpParserUtilTests : FunSpec({
         val actualIpBytes = IpParserUtil.ip2ByteArray(ip)
 
         actualIpBytes shouldBe byteArrayOf(10, 1, 1, 1)
-        actualIpBytes shouldBe getIpByGetAllByName(ip)
+        actualIpBytes shouldBe getIpByteArrayByGetAllByName(ip)
     }
 
     test("ipv6 to ByteArray") {
         val ip = "2404:6800:4005:80a:0:0:0:200e"
         val bytes = IpParserUtil.ip2ByteArray(ip)
 
-        bytes shouldBe getIpByGetAllByName(ip)
+        bytes shouldBe getIpByteArrayByGetAllByName(ip)
     }
 
     mapOf(
@@ -48,10 +48,11 @@ class IpParserUtilTests : FunSpec({
     }
 })
 
-private fun getIpByGetAllByName(ip: String): ByteArray {
+private fun getIpByteArrayByGetAllByName(ip: String): ByteArray {
     val addresses = InetAddress.getAllByName(ip)
     addresses.shouldHaveSize(1)
-    return addresses[0].address
+
+    return addresses.first().address
 }
 
 private const val INVALID_IP_ADDRESS = ": invalid IP address"

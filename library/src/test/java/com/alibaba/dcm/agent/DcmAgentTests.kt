@@ -18,15 +18,12 @@ import java.nio.charset.StandardCharsets.UTF_8
  */
 class DcmAgentTests : AnnotationSpec() {
     private lateinit var outputFile: File
-    private lateinit var outputFilePath: String
 
     @Before
     fun setUp() {
         outputFile = tempfile("dcm-output-", ".log")
         outputFile.length() shouldBe 0
         println("Prepared output file: " + outputFile.absolutePath)
-
-        outputFilePath = outputFile.absolutePath
 
         DnsCacheManipulator.clearDnsCache()
     }
@@ -38,7 +35,7 @@ class DcmAgentTests : AnnotationSpec() {
 
     @Test
     fun test_agentmain_file() {
-        DcmAgent.agentmain("file $outputFilePath")
+        DcmAgent.agentmain("file ${outputFile.absolutePath}")
 
         val content = outputFile.readLines(UTF_8)
         content.first() shouldContain "No action in agent argument, do nothing!"
@@ -53,7 +50,7 @@ class DcmAgentTests : AnnotationSpec() {
 
     @Test
     fun test_agentmain_set_toFile() {
-        DcmAgent.agentmain("set bing.com 1.2.3.4 file $outputFilePath")
+        DcmAgent.agentmain("set bing.com 1.2.3.4 file ${outputFile.absolutePath}")
 
         DnsCacheManipulator.getDnsCache("bing.com")!!.ip shouldBe "1.2.3.4"
 
@@ -89,7 +86,7 @@ class DcmAgentTests : AnnotationSpec() {
         DnsCacheManipulator.setDnsCache("bing.com", "3.3.3.3")
         DnsCacheManipulator.getDnsCache("bing.com").shouldNotBeNull()
 
-        DcmAgent.agentmain("rm  bing.com file $outputFilePath")
+        DcmAgent.agentmain("rm  bing.com file ${outputFile.absolutePath}")
 
         DnsCacheManipulator.getDnsCache("bing.com").shouldBeNull()
     }
@@ -150,7 +147,7 @@ class DcmAgentTests : AnnotationSpec() {
     fun test_agentmain_actionNeedMoreArgument() {
         DnsCacheManipulator.setDnsNegativeCachePolicy(1110)
 
-        DcmAgent.agentmain("  setNegativePolicy     file $outputFilePath")
+        DcmAgent.agentmain("  setNegativePolicy     file ${outputFile.absolutePath}")
 
         DnsCacheManipulator.getDnsNegativeCachePolicy() shouldBe 1110
 
@@ -163,7 +160,7 @@ class DcmAgentTests : AnnotationSpec() {
     fun test_agentmain_actionTooMoreArgument() {
         DnsCacheManipulator.setDnsNegativeCachePolicy(1111)
 
-        DcmAgent.agentmain("  setNegativePolicy 737 HaHa  file $outputFilePath")
+        DcmAgent.agentmain("  setNegativePolicy 737 HaHa  file ${outputFile.absolutePath}")
 
         DnsCacheManipulator.getDnsNegativeCachePolicy() shouldBe 1111
 
@@ -174,7 +171,7 @@ class DcmAgentTests : AnnotationSpec() {
 
     @Test
     fun test_agentmain_unknownAction() {
-        DcmAgent.agentmain("  unknownAction  arg1  arg2   file $outputFilePath")
+        DcmAgent.agentmain("  unknownAction  arg1  arg2   file ${outputFile.absolutePath}")
 
         val content = outputFile.readLines(UTF_8)
         content.first() shouldContain "No action in agent argument, do nothing!"
