@@ -3,23 +3,22 @@ package com.alibaba.demo;
 import org.apache.commons.io.IOUtils;
 
 import java.net.Socket;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
 public class SocketDemo {
-    private static final Charset encoding = StandardCharsets.UTF_8;
 
     public static void main(String[] args) throws Exception {
         Socket client = new Socket("www.bing.com", 80);
 
         client.setSoTimeout(30 * 1000);
 
-        IOUtils.write("Hello world!", client.getOutputStream(), encoding);
+        IOUtils.write("Hello world!", client.getOutputStream(), UTF_8);
 
-        final String input = IOUtils.toString(client.getInputStream(),encoding);
+        final String input = IOUtils.toString(client.getInputStream(), UTF_8);
         System.out.println(input);
         System.out.println("bye!");
 

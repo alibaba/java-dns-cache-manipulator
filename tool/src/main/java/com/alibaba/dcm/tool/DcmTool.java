@@ -4,12 +4,12 @@ import com.alibaba.dcm.agent.DcmAgent;
 import com.sun.tools.attach.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.cli.*;
-import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Nonnull;
-import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
@@ -109,7 +109,7 @@ public class DcmTool {
     private static boolean printDcmResult(@Nonnull String tmpFile) throws IOException {
         boolean actionSuccess = false;
 
-        final List<String> lines = FileUtils.readLines(new File(tmpFile), UTF_8);
+        final List<String> lines = Files.readAllLines(Paths.get(tmpFile), UTF_8);
 
         final int lastIdx = lines.size() - 1;
         final String lastLine = lines.get(lastIdx);
