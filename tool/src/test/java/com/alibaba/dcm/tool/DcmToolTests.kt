@@ -27,6 +27,8 @@ class DcmToolTests : AnnotationSpec() {
 
     @BeforeAll
     fun prepareAgentFilePath() {
+        println("work dir: ${File("").absolutePath}")
+
         agentFilePath = findAgentFileFromLibProject() ?: findAgentFileFromMavenLocal()
                 ?: fail("Not found agent file")
 
@@ -61,20 +63,20 @@ class DcmToolTests : AnnotationSpec() {
 
     private fun findAgentFileFromLibProject(): String? {
         val dcmLibProjectDir: File = listOf("library", "../library", "../../library")
-                .asSequence()
-                .map { File(it) }
-                .filter { it.exists() }
-                .firstOrNull()
-                ?: return null
+            .asSequence()
+            .map { File(it) }
+            .filter { it.exists() }
+            .firstOrNull()
+            ?: return null
 
         val targetDir = File(dcmLibProjectDir, "target")
         if (!targetDir.exists()) return null
         println("Found target dir: ${targetDir.canonicalPath}")
 
         return targetDir.walk()
-                .filter { it.extension == "jar" && isAgentJar(it) }
-                .map { it.canonicalPath }
-                .firstOrNull()
+            .filter { it.extension == "jar" && isAgentJar(it) }
+            .map { it.canonicalPath }
+            .firstOrNull()
     }
 
     private fun findAgentFileFromMavenLocal(): String? {
@@ -82,9 +84,9 @@ class DcmToolTests : AnnotationSpec() {
         val m2DcmLibDependencyDir = File("$home/.m2/repository/com/alibaba/dns-cache-manipulator")
 
         return m2DcmLibDependencyDir.walk()
-                .filter { it.extension == "jar" && isAgentJar(it) }
-                .map { it.canonicalPath }
-                .maxWithOrNull(Comparator.comparing { ComparableVersion(it) })
+            .filter { it.extension == "jar" && isAgentJar(it) }
+            .map { it.canonicalPath }
+            .maxWithOrNull(Comparator.comparing { ComparableVersion(it) })
     }
 
     private fun isAgentJar(file: File): Boolean {
