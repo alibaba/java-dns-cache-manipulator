@@ -28,4 +28,7 @@ if ($confirmation -ne 'y') {
 $headers = @{}
 $headers['Authorization'] = "Bearer $appveyor_token"
 $headers["Content-type"] = "application/json"
-Invoke-RestMethod -Uri 'https://ci.appveyor.com/api/projects/oldratlee/java-dns-cache-manipulator/buildcache' -Headers $headers -Method Delete
+
+$uri = 'https://ci.appveyor.com/api/projects/oldratlee/java-dns-cache-manipulator/buildcache'
+
+Invoke-RestMethod -Uri $uri -Headers $headers -Method Delete
