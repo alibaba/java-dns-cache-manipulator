@@ -10,12 +10,12 @@ import java.io.*;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * DCM agent.
@@ -118,7 +118,7 @@ public class DcmAgent {
         if (null == files) return null;
 
         FileOutputStream fileOutputStream = new FileOutputStream(files.get(0), false);
-        final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+        final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, UTF_8);
 
         return new PrintWriter(outputStreamWriter, true);
     }

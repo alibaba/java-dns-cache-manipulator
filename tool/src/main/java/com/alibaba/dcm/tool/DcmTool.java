@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * DCM Tool.
@@ -108,7 +109,7 @@ public class DcmTool {
     private static boolean printDcmResult(@Nonnull String tmpFile) throws IOException {
         boolean actionSuccess = false;
 
-        final List<String> lines = FileUtils.readLines(new File(tmpFile), "UTF-8");
+        final List<String> lines = FileUtils.readLines(new File(tmpFile), UTF_8);
 
         final int lastIdx = lines.size() - 1;
         final String lastLine = lines.get(lastIdx);
