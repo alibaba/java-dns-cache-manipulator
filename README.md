@@ -22,9 +22,9 @@
 Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
 
 - [**`DCM` Library**](library)  
-  A simple 0-dependency thread-safe lib for setting/viewing dns programmatically without touching host file, make unit/integration test portable. Support `Java 6/8/11/17`, support `IPv6`.
+  A tiny 0-dependency thread-safe lib for setting/viewing dns programmatically without touching host file, make unit/integration test portable. Support `Java 6/8/11/17`, support `IPv6`.
 - [**`DCM` Tool**](tool)  
-  A tool for setting/viewing dns of running JVM processes.
+  A tiny tool for setting/viewing dns of running JVM processes.
 
 > From `DCM 1.7+` upgrade to `Java 8`.  
 > If you need `Java 6` support, use version `1.6.x` <a href="https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?versionPrefix=1.6.&color=lightgrey&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
