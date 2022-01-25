@@ -1,12 +1,5 @@
 package com.alibaba.dcm
 
-import com.alibaba.dcm.Util.shouldBeNotExistedDomain
-import com.alibaba.dcm.Util.shouldContainOnlyOneNegativeCacheWitchExpirationBetween
-import com.alibaba.dcm.Util.lookupAllIps
-import com.alibaba.dcm.Util.lookupIpByName
-import com.alibaba.dcm.Util.shouldBeEqual
-import com.alibaba.dcm.Util.shouldBeEqualAsHostName
-import com.alibaba.dcm.Util.skipOsLookupTimeAfterThenClear
 import com.alibaba.dcm.internal.JavaVersionUtil
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
