@@ -21,7 +21,7 @@ class DcmToolTests : AnnotationSpec() {
     //     "java.io.IOException: Can not attach to current VM"
     @Suppress("OverridingDeprecatedMember")
     override fun defaultTestCaseConfig(): TestCaseConfig =
-            TestCaseConfig(enabled = SystemUtils.IS_JAVA_1_8)
+        TestCaseConfig(enabled = SystemUtils.IS_JAVA_1_8)
 
     private lateinit var agentFilePath: String
 
@@ -86,14 +86,16 @@ class DcmToolTests : AnnotationSpec() {
         return m2DcmLibDependencyDir.walk()
             .filter { it.extension == "jar" && isAgentJar(it) }
             .map { it.canonicalPath }
-            .maxWithOrNull(Comparator.comparing { ComparableVersion(it) })
+            .maxWithOrNull(Comparator.comparing { ComparableVersion(it.trimToVersion()) })
     }
 
     private fun isAgentJar(file: File): Boolean {
         val fileName: String = file.name
-        if (!fileName.startsWith("dns-cache-manipulator")) return false
+        if (!fileName.startsWith("dns-cache-manipulator-")) return false
 
-        val replaced = fileName.replace("dns-cache-manipulator-", "").replace("-SNAPSHOT", "")
-        return !replaced.contains("-")
+        return !fileName.trimToVersion().removeSuffix("-SNAPSHOT").contains("-")
     }
+
+    private fun String.trimToVersion() = substringAfterLast('/')
+        .removePrefix("dns-cache-manipulator-").removeSuffix(".jar")
 }
