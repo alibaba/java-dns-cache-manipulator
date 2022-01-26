@@ -78,6 +78,11 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>org.checkerframework</groupId>
+			<artifactId>checker-qual</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
 			<optional>true</optional>
@@ -160,6 +165,15 @@
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>jsr305</artifactId>
 				<version>3.0.2</version>
+				<optional>true</optional>
+			</dependency>
+			<!--
+				https://checkerframework.org/manual/
+			-->
+			<dependency>
+				<groupId>org.checkerframework</groupId>
+				<artifactId>checker-qual</artifactId>
+				<version>3.21.1</version>
 				<optional>true</optional>
 			</dependency>
 			<dependency>
@@ -658,6 +672,112 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<!--
+			profiles for checkerframework
+			https://checkerframework.org/manual/#maven
+		-->
+		<profile>
+			<id>checkerframework</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
+							<compilerArguments>
+								<Xmaxerrs>10000</Xmaxerrs>
+								<Xmaxwarns>10000</Xmaxwarns>
+							</compilerArguments>
+							<annotationProcessorPaths>
+								<path>
+									<groupId>org.checkerframework</groupId>
+									<artifactId>checker</artifactId>
+									<version>3.21.1</version>
+								</path>
+							</annotationProcessorPaths>
+							<annotationProcessors>
+								<!-- Add all the checkers you want to enable here -->
+								<annotationProcessor>
+									org.checkerframework.checker.nullness.NullnessChecker
+								</annotationProcessor>
+							</annotationProcessors>
+							<compilerArgs>
+								<!-- <arg>-Awarns</arg> --> <!-- -Awarns turns type-checking errors into warnings. -->
+							</compilerArgs>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>checkerframework-for-jdk8</id>
+			<activation>
+				<jdk>1.8</jdk>
+			</activation>
+			<!-- using github.com/google/error-prone-javac is required when running on JDK 8 -->
+			<properties>
+				<google.javac.version>9+181-r4173-1</google.javac.version>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.google.errorprone</groupId>
+					<artifactId>javac</artifactId>
+					<version>${google.javac.version}</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<fork>true</fork>
+							<compilerArgs combine.children="append">
+								<arg>-Xbootclasspath/p:${annotatedJdk}</arg>
+								<arg>
+									-J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${google.javac.version}/javac-${google.javac.version}.jar
+								</arg>
+							</compilerArgs>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>checkerframework-for-jdk9+</id>
+			<activation>
+				<jdk>[9,)</jdk>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<fork>true</fork>
+							<compilerArgs combine.children="append">
+								<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+								<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+								<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
+								<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
+								<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
+								<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+								<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+								<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+								<arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+							</compilerArgs>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<!-- Needed for animal-sniffer-maven-plugin version 1.19 (version 1.20 is fixed). -->
+				<animal.sniffer.skip>true</animal.sniffer.skip>
+			</properties>
 		</profile>
 	</profiles>
 </project>
