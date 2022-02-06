@@ -13,18 +13,11 @@ import java.net.UnknownHostException
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
  */
-fun String.lookupIpByName(): String {
-    return InetAddress.getByName(this).hostAddress
-}
+fun String.lookupIpByName(): String =
+    InetAddress.getByName(this).hostAddress
 
-fun String.lookupAllIps(): List<String> {
-    val allByName = InetAddress.getAllByName(this)
-    val all: MutableList<String> = ArrayList()
-    for (inetAddress in allByName) {
-        all.add(inetAddress.hostAddress)
-    }
-    return all
-}
+fun String.lookupAllIps(): List<String> =
+    InetAddress.getAllByName(this).map { it.hostAddress }
 
 fun skipOsLookupTimeAfterThenClear(vararg domains: String) {
     for (domain in domains) {
@@ -57,26 +50,27 @@ infix fun DnsCacheEntry?.shouldBeEqual(expected: DnsCacheEntry?) {
 
     host shouldBeEqualAsHostName expected.host
     ips shouldBe expected.ips
-
-    val expectedExpiration = expected.expiration.time
-    val actualExpiration = expiration.time
-
-    if (expectedExpiration == Long.MAX_VALUE) {
-        if (isJavaVersionAtMost8()) {
-            actualExpiration shouldBe expectedExpiration
-        } else {
-            // hard code test logic for jdk 9+
-            actualExpiration.shouldBeEqualsWithTolerance(NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS, 5)
-        }
-    } else {
-        actualExpiration shouldBe expectedExpiration
-    }
+    expiration.time shouldBeEqualAsExpiration expected.expiration.time
 }
 
 infix fun String.shouldBeEqualAsHostName(expected: String) {
     if (isJavaVersionAtMost8()) {
-        // java 8-, host name is unified to lower case by InetAddress
+        // hard-coded test logic for jdk 8-
+        //   host name is unified to lower case by InetAddress
         this shouldBeEqualIgnoringCase expected
+    } else {
+        this shouldBe expected
+    }
+}
+
+private infix fun Long.shouldBeEqualAsExpiration(expected: Long) {
+    if (expected == Long.MAX_VALUE) {
+        if (isJavaVersionAtMost8()) {
+            this shouldBe expected
+        } else {
+            // hard-coded test logic for jdk 9+
+            this.shouldBeEqualsWithTolerance(NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS, 5)
+        }
     } else {
         this shouldBe expected
     }
