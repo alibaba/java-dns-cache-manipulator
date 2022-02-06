@@ -45,9 +45,9 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
         - [Clear JVM DNS cache](#clear-jvm-dns-cache)
         - [Set/View the default DNS cache time of JVM](#setview-the-default-dns-cache-time-of-jvm)
         - [Precautions for use](#precautions-for-use)
-            - [JVM settings for Java 17+](#jvm-settings-for-java-17)
+            - [JVM settings for Java 16+](#jvm-settings-for-java-16)
             - [Domain name case](#domain-name-case)
-            - [Domain resolvation cache](#domain-resolvation-cache)
+            - [Domain resolution cache](#domain-resolution-cache)
         - [More detailed functions](#more-detailed-functions)
     - [🔌 Java API Docs](#-java-api-docs)
     - [🍪 Dependency](#-dependency)
@@ -221,9 +221,9 @@ DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 
 ### Precautions for use
 
-#### JVM settings for Java 17+
+#### JVM settings for Java 16+
 
-If you use DCM under Java 17+, add below Java options:
+With the release of Java 16 the access control of the new Jigsaw module system is starting to be enforced by the JVM. If you use DCM under Java 16+, add below Java options:
 
 ```java
 --add-opens java.base/java.net=ALL-UNNAMED
@@ -235,12 +235,15 @@ If you use `maven`(e.g. running test), add below config:
 ```xml
 <profiles>
     <profile>
-        <id>add-java-open-options-for-jdk17</id>
+        <id>add-java-open-options-for-jdk16+</id>
         <activation>
-            <jdk>[17,)</jdk>
+            <jdk>[16,)</jdk>
         </activation>
         <properties>
-            <argLine>--add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/sun.net=ALL-UNNAMED</argLine>
+            <argLine>
+                --add-opens java.base/java.net=ALL-UNNAMED
+                --add-opens java.base/sun.net=ALL-UNNAMED
+            </argLine>
         </properties>
     </profile>
 </profiles>
@@ -252,7 +255,7 @@ The domain name is not case-sensitive, and the domain name may be converted to l
 
 One of the causes is that the case of the domain name in the DNS query result will be different from the case of the entered domain name, if the entered domain name has uppercase letters.
 
-#### Domain resolvation cache
+#### Domain resolution cache
 
 - For the logic that has been resolved and saved the IP, setting the JVM DNS cache will not take effect! The connection can be re-created or the Client can be resolved.
 
@@ -328,7 +331,7 @@ You can view the latest version at [search.maven.org](https://search.maven.org/a
 
 ### Download
 
-[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.1/dcm-1.7.1.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.1/dcm-1.7.1.tar.gz) download the file `dcm-x.x.x.tar.gz`.
+[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.1/dcm-1.7.1.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.1/dcm-1.7.1.tar.gz) download the file `dcm-x.y.z.tar.gz`.
 
 After decompression, run `dcm` in the `bin` directory.
 

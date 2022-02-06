@@ -52,7 +52,7 @@ Java Dns Cache Manipulator Tool
 下载
 ----------
 
-[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.1/dcm-1.7.1.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.1/dcm-1.7.1.tar.gz) 下载文件`dcm-x.x.x.tar.gz`。
+[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.1/dcm-1.7.1.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.1/dcm-1.7.1.tar.gz) 下载文件`dcm-x.y.z.tar.gz`。
 
 解压后，运行`bin`目录下的`dcm`。
 
