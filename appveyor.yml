@@ -34,10 +34,10 @@ for:
 
     test_script:
       - git submodule update --init --recursive
-      - sh: ./scripts/integration-test.sh
+      - sh: ./scripts/integration_test
 
     after_test:
-      - sh: ./scripts/codecov.sh
+      - sh: ./scripts/codecov
       - sh: rm -rf $HOME/.m2/repository/com/alibaba/dns-cache-manipulator*
       - sh: rm -rf $HOME/.sdkman/archives/*
 
