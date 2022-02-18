@@ -268,6 +268,15 @@ public final class InetAddressCacheUtilForJava9Plus {
     // Fields of InetAddress$NameServiceAddresses
     /**
      * {@link InetAddress.NameServiceAddresses.reqAddr}
+     * <p>
+     * code in jdk 9:
+     * https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l813
+     * code in jdk 11:
+     * https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l817
+     * code in jdk 17:
+     * https://github.com/openjdk/jdk17u/blob/jdk-17+35/src/java.base/share/classes/java/net/InetAddress.java#L822
+     * code in jdk 18:
+     * https://github.com/openjdk/jdk18u/blob/jdk-18+33/src/java.base/share/classes/java/net/InetAddress.java#L969
      */
     private static volatile Field reqAddrFieldOfInetAddress$NameServiceAddress = null;
 
