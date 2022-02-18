@@ -33,6 +33,7 @@ for:
         - image: Ubuntu2004
 
     test_script:
+      - git submodule update --init --recursive
       - sh: ./scripts/integration-test.sh
 
     after_test:

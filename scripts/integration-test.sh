@@ -2,35 +2,67 @@
 set -eEuo pipefail
 cd "$(dirname "$(readlink -f "$0")")"
 
-export CI_TEST_MODE=true
-export DCM_AGENT_SUPRESS_EXCEPTION_STACK=true
+source bash-buddy/lib/trap_error_info.sh
+source bash-buddy/lib/common_utils.sh
 
-source ./prepare_jdk.sh
-source ./common_build.sh
+################################################################################
+# prepare
+################################################################################
 
-# default jdk 11, do build and test
-switch_to_jdk 11
+# shellcheck disable=SC2034
+PREPARE_JDKS_INSTALL_BY_SDKMAN=(
+    8.322.06.2-amzn
+    11.0.14-ms
+    17.0.2.8.1-amzn
+)
 
-if [ "${1:-}" != "skipClean" ]; then
-    MVN_CMD clean
-fi
+source bash-buddy/lib/prepare_jdks.sh
+
+source bash-buddy/lib/java_build_utils.sh
 
 # here use `install` and `-D performRelease` intended
 #   to check release operations.
 #
 # De-activate a maven profile from command line
 #   https://stackoverflow.com/questions/25201430
-headInfo "test with Java: $JAVA_HOME"
-MVN_CMD -DperformRelease -P '!gen-sign' install
+#
+# shellcheck disable=SC2034
+JVB_MVN_OPTS=(
+    "${JVB_DEFAULT_MVN_OPTS[@]}"
+    -DperformRelease -P'!gen-sign'
+)
 
-# test multi-version java home env
+################################################################################
+# ci build logic
+################################################################################
+
+cd ..
+
+########################################
+# default jdk 11, do build and test
+########################################
+
+export CI_TEST_MODE=true
+export DCM_AGENT_SUPRESS_EXCEPTION_STACK=true
+
+default_build_jdk_version=11
+
+prepare_jdks::switch_java_home_to_jdk "$default_build_jdk_version"
+
+cu::head_line_echo "build and test with Java: $JAVA_HOME"
+jvb::mvn_cmd clean install
+
+########################################
+# test multi-version java
 # shellcheck disable=SC2154
-for jhome in "${java_home_var_names[@]}"; do
+########################################
+for jhome_var_name in "${JDK_HOME_VAR_NAMES[@]}"; do
     # already tested by above `mvn install`
-    [ "JDK11_HOME" = "$jhome" ] && continue
+    [ "JDK${default_build_jdk_version}_HOME" = "$jhome_var_name" ] && continue
 
-    export JAVA_HOME=${!jhome}
+    prepare_jdks::switch_java_home_to_jdk "${!jhome_var_name}"
 
-    headInfo "test with Java: $JAVA_HOME"
-    MVN_CMD surefire:test
+    cu::head_line_echo "test with Java: $JAVA_HOME"
+    # just test without build
+    jvb::mvn_cmd surefire:test
 done
