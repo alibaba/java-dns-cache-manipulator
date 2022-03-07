@@ -1,3 +1,6 @@
+# appveyor.yml Reference
+# https://www.appveyor.com/docs/appveyor-yml/
+#
 # How to use AppVeyor to build a multi-arch Docker image for Linux and Windows
 # https://stefanscherer.github.io/use-appveyor-to-build-multi-arch-docker-image/
 #
@@ -15,7 +18,6 @@ build: false
 clone_depth: 50
 branches:
   except:
-    - travis-ci
     - gh-pages
 
 environment:
@@ -32,14 +34,15 @@ for:
       only:
         - image: Ubuntu2004
 
+    install:
+      - git submodule update --init
     test_script:
-      - git submodule update --init --recursive
-      - sh: ./scripts/integration_test
+      - scripts/integration_test
 
     after_test:
-      - sh: ./scripts/codecov
-      - sh: rm -rf $HOME/.m2/repository/com/alibaba/dns-cache-manipulator*
-      - sh: rm -rf $HOME/.sdkman/archives/*
+      - ./scripts/codecov
+      - rm -rf $HOME/.m2/repository/com/alibaba/dns-cache-manipulator*
+      - rm -rf $HOME/.sdkman/archives/*
 
     cache:
       # if cache size is exceed appveyor limit:
@@ -57,15 +60,15 @@ for:
     install:
       - ps: "ls 'C:/Program Files/Java/jdk*'"
       - ps: "ls 'C:/Program Files (x86)/Java/jdk*'"
-      - cmd: echo JAVA_HOME=%JAVA_HOME%, HOMEPATH=%HOMEPATH%, PATH=%PATH%
+      - echo JAVA_HOME=%JAVA_HOME%, HOMEPATH=%HOMEPATH%, PATH=%PATH%
 
     test_script:
       # test under java 11
-      - cmd: set JAVA_HOME=C:\Program Files\Java\jdk11
-      - ./mvnw.cmd -V --no-transfer-progress clean install
+      - set JAVA_HOME=C:\Program Files\Java\jdk11
+      - ./mvnw.cmd -DperformRelease -P!gen-sign -V --no-transfer-progress clean install
       # test under java 8
-      - cmd: set JAVA_HOME=C:\Program Files\Java\jdk1.8.0
-      - ./mvnw.cmd -V --no-transfer-progress surefire:test
+      - set JAVA_HOME=C:\Program Files\Java\jdk1.8.0
+      - ./mvnw.cmd -DperformRelease -P!gen-sign -V --no-transfer-progress surefire:test
 
     after_test:
       - ps: Remove-Item -r -fo $home\.m2\repository\com\alibaba\dns-cache-manipulator*
