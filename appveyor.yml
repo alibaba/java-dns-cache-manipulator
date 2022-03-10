@@ -41,7 +41,11 @@ for:
 
     after_test:
       - ./scripts/codecov
+      # remove self maven install
       - rm -rf $HOME/.m2/repository/com/alibaba/dns-cache-manipulator*
+      # remove maven install file
+      - rm -rf $HOME/.m2/wrapper/dists/*/*/*.zip
+      # # remove sdkman install file
       - rm -rf $HOME/.sdkman/archives/*
 
     cache:
@@ -71,7 +75,10 @@ for:
       - ./mvnw.cmd -DperformRelease -P!gen-sign -V --no-transfer-progress surefire:test
 
     after_test:
+      # remove self maven install
       - ps: Remove-Item -r -fo $home\.m2\repository\com\alibaba\dns-cache-manipulator*
+      # remove maven install file
+      - ps: Remove-Item -Path $HOME\.m2\wrapper\dists\*\*\*.zip
 
     cache:
       # https://www.appveyor.com/docs/build-cache/
