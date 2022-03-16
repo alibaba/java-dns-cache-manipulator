@@ -22,7 +22,7 @@
 Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
 
 - [**`DCM` Library**](library)  
-  A tiny 0-dependency thread-safe lib for setting/viewing dns programmatically without touching host file, make unit/integration test portable. Support `Java 6/8/11/17`, support `IPv6`.
+  A tiny 0-dependency thread-safe lib for setting/viewing dns programmatically without touching host file, make unit/integration test portable. Support `Java 8/11/17`, support `IPv6`.
 - [**`DCM` Tool**](tool)  
   A tiny tool for setting/viewing dns of running JVM processes.
 
@@ -41,7 +41,7 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
         - [Set directly](#set-directly)
         - [Batch configuration through the `dns-cache.properties` file](#batch-configuration-through-the-dns-cacheproperties-file)
         - [View JVM DNS cache](#view-jvm-dns-cache)
-        - [Delete a DNS cache](#delete-a-dns-cache)
+        - [Remove a DNS cache](#remove-a-dns-cache)
         - [Clear JVM DNS cache](#clear-jvm-dns-cache)
         - [Set/View the default DNS cache time of JVM](#setview-the-default-dns-cache-time-of-jvm)
         - [Precautions for use](#precautions-for-use)
@@ -59,7 +59,7 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
         - [Download](#download)
         - [Set/reset a DNS cache entry](#setreset-a-dns-cache-entry)
         - [View DNS cache entry content](#view-dns-cache-entry-content)
-        - [Delete a DNS Cache](#delete-a-dns-cache)
+        - [Remove a DNS Cache](#remove-a-dns-cache)
         - [Clear DNS Cache](#clear-dns-cache)
         - [Set/View DNS cache time of `JVM`](#setview-dns-cache-time-of-jvm)
     - [📚 Related information](#-related-information)
@@ -73,23 +73,23 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
 ## 🔧 Features
 
 - Set/reset a DNS cache entry (won't lookup DNS afterwards)
-    - set a single `DNS` record
+    - set a single `DNS record`
     - or batch setting through a `Properties` file
 - View DNS cache entry content (positive dns cache and/or negative dns cache)
-- Delete a DNS cache entry (ie lookup DNS again)
+- Remove a DNS cache entry (i.e. lookup DNS again)
 - Clear the DNS Cache (re-Lookup DNS for all domain names)
 - Set/View DNS cache time of `JVM` (positive dns cache and negative dns cache)
 
 ## 🎨 Requirement Scenario
 
 1. The domain name is hard-coded in some libraries, and have to modify the `host file` binding to do the test(e.g. unit test, integration test). Turn out:
-    - Generally, developers do not have the permission to modify the `host file` on the continuous integration machine, which leads to the continuous integration of the project fail.
+    - Generally, developers do not have the permission to modify the `host file` on the continuous integration machine, which leads to the continuous integration fail.
         - In fact, because of this, the demand for this library was born. 😣 🔫
         - Unit testing requires each developer to do some host binding on the development machine, which increases configuration operations and is tedious and repetitive.
 2. Some functions require domain names instead of IPs as input parameters, such as HTTP gateways or web applications with domain name restrictions.
     - In this case, you need a domain name to connect to the IP of the test machine; Or need use a test domain name that does not exist yet, but you do not want to or can not configure the DNS.
 3. In the performance test,
-    - want to skip lookup DNS through network (bypass the DNS resolution consumption), so that stress testing pays more attention to server response, and stress testing can fully reflect the performance of the core implementation code.
+    - want to skip DNS lookup through network (bypass the DNS resolution consumption), so that stress testing pays more attention to server response, and stress testing can fully reflect the performance of the core implementation code.
     - DNS cache can be set dynamically instead of inflexible ways such as modifying host files and http links.
     - A `JVM` process can have a set of domain name binding without affecting other JVM, be able to run stress testing with multi-scenario and multi-domain binding.
 4. When opening the `SecurityManager` in `Java` (such as a web application in the Web container `Tomcat`), `Java`'s DNS will not be expired by default. If the IP bound to the domain name changes, you can reset the DNS through this library.
@@ -109,8 +109,9 @@ DnsCacheManipulator.setDnsCache("hello.com", "192.168.1.1");
 // support IPv6
 DnsCacheManipulator.setDnsCache("world.com", "1234:5678:0:0:0:0:0:200e");
 
-// The above settings take effect globally, and then all the domain name resolution logic in Java will be the IP set above.
-// Let's use a simple method to get the IP corresponding to the domain name to demonstrate:
+// The above settings take effect globally, 
+// and then all the domain name resolution logic in Java will be the IP set above.
+// Let's use a simple method to get the IP of the domain name to demonstrate:
 
 String ip = InetAddress.getByName("hello.com").getHostAddress();
 // ip = "192.168.1.1"
@@ -118,14 +119,13 @@ String ipv6 = InetAddress.getByName("world.com").getHostAddress();
 // ipv6 = "1234:5678:0:0:0:0:0:200e"
 
 
-// set multiple IP
+// set multiple IPs
 DnsCacheManipulator.setDnsCache("hello-world.com", "192.168.2.1", "192.168.2.2");
 
 String ipHw = InetAddress.getByName("hello-world.com").getHostAddress();
 // ipHw = 192.168.2.1, read the first IP
 InetAddress[] allIps = InetAddress.getAllByName("hello-world.com");
 // Read the multiple IP setting
-InetAddress[] allIps = InetAddress.getAllByName("hello-world.com");
 
 
 // Set the expiration time, unit is milliseconds
@@ -150,17 +150,19 @@ foo.com=192.168.1.2,192.168.1.3
 bar.com=1234:5678:0:0:0:0:0:200e
 ```
 
+Then complete the batch setting with the following code:
+
+```java
+DnsCacheManipulator.loadDnsCacheConfig();
+```
+
 > NOTE:
 >
 > The default configuration file name is `dns-cache.properties`.
 > and the configuration file name used can be modified through the `-D` option `dcm.config.filename` of the `JVM`: `-Ddcm.config.filename=my-dns-cache.properties`.
 
-Then complete the batch setting with the following line of code:
-
 ```java
-DnsCacheManipulator.loadDnsCacheConfig();
-
-// or load the batch setting from the specified file name
+// or load the batch setting from the specified file name explicitly
 DnsCacheManipulator.loadDnsCacheConfig("my-dns-cache.properties");
 ```
 
@@ -191,7 +193,7 @@ List<DnsCacheEntry> positiveEntries = DnsCacheManipulator.getWholeDnsCache();
 List<DnsCacheEntry> positiveEntries = DnsCacheManipulator.getWholeDnsCache();
 ```
 
-### Delete a DNS cache
+### Remove a DNS cache
 
 aka. relookup DNS later.
 
@@ -223,7 +225,7 @@ DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 
 #### JVM settings for Java 16+
 
-With the release of Java 16 the access control of the new Jigsaw module system is starting to be enforced by the JVM. If you use DCM under Java 16+, add below Java options:
+With the release of Java 16 the access control of the new Jigsaw module system is starting to be enforced by the JVM. If you use `DCM` under Java 16+, add below Java options:
 
 ```java
 --add-opens java.base/java.net=ALL-UNNAMED
@@ -251,13 +253,15 @@ If you use `maven`(e.g. running test), add below config:
 
 #### Domain name case
 
-The domain name is not case-sensitive, and the domain name may be converted to lower case uniformly before entering the DNS Cache.
+The domain name is not case-sensitive.
+
+The domain name may be converted to lower case uniformly before entering the `JVM` DNS Cache.
 
 One of the causes is that the case of the domain name in the DNS query result will be different from the case of the entered domain name, if the entered domain name has uppercase letters.
 
 #### Domain resolution cache
 
-- For the logic that has been resolved and saved the IP, setting the JVM DNS cache will not take effect! The connection can be re-created or the Client can be resolved.
+- For the logic that has been resolved and saved the IP, setting the JVM DNS cache will not take effect! This can be resolved by re-creating the connection or the client.
 
 For `HttpClient`:
 
@@ -323,7 +327,7 @@ You can view the latest version at [search.maven.org](https://search.maven.org/a
 
 - Set/reset a DNS cache entry
 - View DNS cache entry content
-- Delete a DNS Cache
+- Remove a DNS Cache
 - Clear DNS Cache
 - Set/View DNS cache time of `JVM`
 
@@ -380,10 +384,10 @@ Dns negative cache:
 # In the above example, Negative Cache is empty.
 ```
 
-### Delete a DNS Cache
+### Remove a DNS Cache
 
 ```bash
-# Delete a DNS
+# Remove a DNS
 $ dcm -p 12345 rm bing.com
 ```
 
