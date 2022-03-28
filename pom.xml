@@ -7,7 +7,7 @@
 	<version>1.8.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
-	<description>🌏 A tiny lib/tool for /viewing java dns.</description>
+	<description>🌏 A tiny lib/tool for setting/viewing java dns.</description>
 	<url>https://github.com/alibaba/java-dns-cache-manipulator</url>
 	<inceptionYear>2015</inceptionYear>
 
@@ -62,7 +62,7 @@
 
 		<!-- testing dependencies versions -->
 		<junit5.version>5.8.2</junit5.version>
-		<kotest.version>5.1.0</kotest.version>
+		<kotest.version>5.2.2</kotest.version>
 	</properties>
 
 	<dependencies>
@@ -133,7 +133,7 @@
 			<dependency>
 				<groupId>org.apache.maven</groupId>
 				<artifactId>maven-artifact</artifactId>
-				<version>3.8.4</version>
+				<version>3.8.5</version>
 			</dependency>
 
 			<!--
@@ -148,7 +148,7 @@
 			<dependency>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-annotations</artifactId>
-				<version>4.5.3</version>
+				<version>4.6.0</version>
 				<optional>true</optional>
 			</dependency>
 			<dependency>
@@ -258,7 +258,7 @@
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.8</version>
+				<version>1.6.12</version>
 				<extensions>true</extensions>
 				<configuration>
 					<serverId>ossrh</serverId>
@@ -300,7 +300,7 @@
 				-->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.9.0</version>
+				<version>2.10.0</version>
 				<configuration>
 					<rulesUri>file://${maven.multiModuleProjectDirectory}/library/src/versions-rules.xml</rulesUri>
 					<generateBackupPoms>false</generateBackupPoms>
@@ -327,11 +327,11 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.9.0</version>
+					<version>3.10.1</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.3.1</version>
+					<version>3.3.2</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
@@ -343,7 +343,7 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.10.0</version>
+					<version>3.11.0</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-install-plugin</artifactId>
