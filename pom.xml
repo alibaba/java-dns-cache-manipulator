@@ -57,7 +57,7 @@
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<kotlin.version>1.6.10</kotlin.version>
+		<kotlin.version>1.6.20</kotlin.version>
 		<kotlin.compiler.jvmTarget>${maven.compiler.source}</kotlin.compiler.jvmTarget>
 
 		<!-- testing dependencies versions -->
@@ -311,7 +311,7 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.2.0</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-resources-plugin</artifactId>
@@ -573,7 +573,7 @@
 							<dependency>
 								<groupId>javax.xml.bind</groupId>
 								<artifactId>jaxb-api</artifactId>
-								<version>2.2.3</version>
+								<version>2.3.1</version>
 							</dependency>
 						</dependencies>
 					</plugin>
@@ -583,7 +583,7 @@
 						<!-- plugin docs: http://eclemma.org/jacoco/trunk/doc/ -->
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>0.8.7</version>
+						<version>0.8.8</version>
 						<executions>
 							<execution>
 								<goals>
