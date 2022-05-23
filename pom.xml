@@ -300,7 +300,7 @@
 				-->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.10.0</version>
+				<version>2.11.0</version>
 				<configuration>
 					<rulesUri>file://${maven.multiModuleProjectDirectory}/library/src/versions-rules.xml</rulesUri>
 					<generateBackupPoms>false</generateBackupPoms>
