@@ -19,6 +19,10 @@
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.1/dcm-1.7.1.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.1/dcm-1.7.1.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
+[📖 English Documentation](../../README.md) | 📖 中文文档
+
+----------------------------------------
+
 Java Dns Cache Manipulator(`DCM`) 包含子工程：
 
 - [Java Dns Cache Manipulator Library](library.md)  
