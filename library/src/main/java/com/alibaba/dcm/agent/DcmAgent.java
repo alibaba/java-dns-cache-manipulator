@@ -3,6 +3,7 @@ package com.alibaba.dcm.agent;
 import com.alibaba.dcm.DnsCache;
 import com.alibaba.dcm.DnsCacheEntry;
 import com.alibaba.dcm.DnsCacheManipulator;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,6 +40,7 @@ public class DcmAgent {
     /**
      * Entrance method of DCM Java Agent.
      */
+    @SuppressFBWarnings("THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION")
     public static void agentmain(@Nonnull String agentArgument) throws Exception {
         logger.info(format("%s: attached with agent argument: %s.%n", DcmAgent.class.getName(), agentArgument));
 
@@ -280,6 +282,7 @@ public class DcmAgent {
      * @since 1.6.0
      */
     @SuppressWarnings("unchecked")
+    @SuppressFBWarnings("THROWS_METHOD_THROWS_RUNTIMEEXCEPTION")
     public static List<String> getActionList() {
         try {
             initAction2Method();

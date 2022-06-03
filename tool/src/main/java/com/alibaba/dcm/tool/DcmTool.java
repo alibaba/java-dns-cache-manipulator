@@ -33,6 +33,7 @@ public class DcmTool {
     /**
      * entry main method.
      */
+    @SuppressFBWarnings("THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION")
     public static void main(@Nonnull String[] args) throws Exception {
         final CommandLine cmd = parseCommandLine(args);
 
