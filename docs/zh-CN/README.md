@@ -16,7 +16,7 @@
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors"><img src="https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator" alt="GitHub Contributors"></a>
 <a href="https://gitpod.io/#https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/badge/Gitpod-ready--to--code-green?label=gitpod&logo=gitpod&logoColor=white" alt="gitpod: Ready to Code"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/github/repo-size/alibaba/java-dns-cache-manipulator" alt="GitHub repo size"></a>
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.1/dcm-1.7.1.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.1/dcm-1.7.1.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.2/dcm-1.7.2.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.2/dcm-1.7.2.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
 [📖 English Documentation](../../README.md) | 📖 中文文档
