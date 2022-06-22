@@ -30,7 +30,7 @@ test_script:
   - scripts/integration_test
 
 after_test:
-  - ./scripts/codecov
+  - ./scripts/codecov -s
   # remove self maven install
   - rm -rf $HOME/.m2/repository/com/alibaba/dns-cache-manipulator*
   # remove maven install file

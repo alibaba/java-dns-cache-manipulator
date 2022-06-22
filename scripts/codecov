@@ -21,12 +21,12 @@ cd ..
 export DCM_AGENT_SUPRESS_EXCEPTION_STACK=true
 
 prepare_jdks::switch_to_jdk 11
-jvb::mvn_cmd -Pgen-code-cov clean test
+
+if [ "${1:-}" = "-s" ]; then
+  jvb::mvn_cmd -Pgen-code-cov jacoco:prepare-agent surefire:test jacoco:report
+else
+  jvb::mvn_cmd -Pgen-code-cov clean test
+fi
 
 prepare_jdks::switch_to_jdk 8
-# use -Dmaven.main.skip option fix below problem of jacoco-maven-plugin:report :
-#
-# [WARNING] Classes in bundle 'Java Dns Cache Manipulator(DCM) Lib' do not match with execution data.
-#           For report generation the same class files must be used as at runtime.
-# [WARNING] Execution data for class com/alibaba/xxx/Yyy does not match.
-jvb::mvn_cmd -Pgen-code-cov -Dmaven.main.skip test coveralls:report
+jvb::mvn_cmd -Pgen-code-cov jacoco:prepare-agent surefire:test jacoco:report coveralls:report
