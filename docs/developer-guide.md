@@ -61,7 +61,7 @@ In the [`InetAddressCacheUtilForJava8Minus`](../library/src/main/java/com/alibab
 
 The implementation of this library uses the non-public API of the `JDK`, and different `JDK` implementations will be different, that is, compatible logic is required, and different versions of `JDK` are tested to ensure functionality.
 
-The current tested LTS `JDK` versions 6/8/11/17, other `JDK` versions should work properly.
+The current tested LTS `JDK` versions 8/11/17/18/19, other `JDK` versions should work properly.
 
 
 ## 📚 Related Resources
