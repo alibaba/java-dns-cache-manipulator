@@ -238,10 +238,8 @@ public final class InetAddressCacheUtilForJava9Plus {
             long expiryTimeNanos = expiryTimeFieldOfInetAddress$CacheAddress.getLong(addresses);
             expiration = convertNanoTimeToTimeMillis(expiryTimeNanos);
         } else if (addressesClassName.equals(inetAddress$NameServiceAddresses_ClassName)) {
-            InetAddress inetAddress = (InetAddress) reqAddrFieldOfInetAddress$NameServiceAddress.get(addresses);
-            inetAddresses = new InetAddress[]{inetAddress};
-
-            expiration = NEVER_EXPIRATION;
+            throw new IllegalStateException("child class " + addressesClassName +
+                    " for class InetAddress.Addresses should never happens, report issue for dns-cache-manipulator lib!");
         } else {
             throw new IllegalStateException("JDK add new child class " + addressesClassName +
                     " for class InetAddress.Addresses, report issue for dns-cache-manipulator lib!");
@@ -265,26 +263,11 @@ public final class InetAddressCacheUtilForJava9Plus {
      */
     private static volatile Field expiryTimeFieldOfInetAddress$CacheAddress = null;
 
-    // Fields of InetAddress$NameServiceAddresses
-    /**
-     * {@link InetAddress.NameServiceAddresses.reqAddr}
-     * <p>
-     * code in jdk 9:
-     * https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l813
-     * code in jdk 11:
-     * https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l817
-     * code in jdk 17:
-     * https://github.com/openjdk/jdk17u/blob/jdk-17+35/src/java.base/share/classes/java/net/InetAddress.java#L822
-     * code in jdk 18:
-     * https://github.com/openjdk/jdk18u/blob/jdk-18+33/src/java.base/share/classes/java/net/InetAddress.java#L969
-     */
-    private static volatile Field reqAddrFieldOfInetAddress$NameServiceAddress = null;
-
     private static void initFieldsOfAddresses() throws ClassNotFoundException, NoSuchFieldException {
-        if (reqAddrFieldOfInetAddress$NameServiceAddress != null) return;
+        if (inetAddressesFieldOfInetAddress$CacheAddress != null) return;
 
         synchronized (InetAddressCacheUtilForJava9Plus.class) {
-            if (reqAddrFieldOfInetAddress$NameServiceAddress != null) return;
+            if (inetAddressesFieldOfInetAddress$CacheAddress != null) return;
 
             ///////////////////////////////////////////////
             // Fields of InetAddress$CachedAddresses
@@ -298,15 +281,6 @@ public final class InetAddressCacheUtilForJava9Plus {
             final Field expiryTimeFiled = cachedAddresses_Class.getDeclaredField("expiryTime");
             expiryTimeFiled.setAccessible(true);
             expiryTimeFieldOfInetAddress$CacheAddress = expiryTimeFiled;
-
-            ///////////////////////////////////////////////
-            // Fields of InetAddress$NameServiceAddresses
-            ///////////////////////////////////////////////
-            final Class<?> nameServiceAddresses_Class = Class.forName(inetAddress$NameServiceAddresses_ClassName);
-
-            final Field reqAddrFiled = nameServiceAddresses_Class.getDeclaredField("reqAddr");
-            reqAddrFiled.setAccessible(true);
-            reqAddrFieldOfInetAddress$NameServiceAddress = reqAddrFiled;
         }
     }
 
