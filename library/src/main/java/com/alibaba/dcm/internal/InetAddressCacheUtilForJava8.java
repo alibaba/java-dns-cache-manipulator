@@ -39,7 +39,7 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
  */
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
-public final class InetAddressCacheUtilForJava8Minus {
+public final class InetAddressCacheUtilForJava8 {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
      */
@@ -80,7 +80,7 @@ public final class InetAddressCacheUtilForJava8Minus {
 
             // InetAddress.CacheEntry has only one constructor:
             // - for jdk 6, constructor signature is CacheEntry(Object address, long expiration)
-            // - for jdk 7/8, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
+            // - for jdk 7/8+, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
             //
             // code in jdk 6:
             //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
@@ -134,7 +134,7 @@ public final class InetAddressCacheUtilForJava8Minus {
     private static Map<String, Object> getCacheOfInetAddress$Cache0(Object inetAddressCache)
             throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
         if (cacheMapFieldOfInetAddress$Cache == null) {
-            synchronized (InetAddressCacheUtilForJava8Minus.class) {
+            synchronized (InetAddressCacheUtilForJava8.class) {
                 if (cacheMapFieldOfInetAddress$Cache == null) { // double check
                     final Class<?> clazz = Class.forName("java.net.InetAddress$Cache");
                     final Field f = clazz.getDeclaredField("cache");
@@ -172,7 +172,7 @@ public final class InetAddressCacheUtilForJava8Minus {
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
 
-        synchronized (InetAddressCacheUtilForJava8Minus.class) {
+        synchronized (InetAddressCacheUtilForJava8.class) {
             // double check
             if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
 
@@ -225,7 +225,7 @@ public final class InetAddressCacheUtilForJava8Minus {
     }
 
     private static List<DnsCacheEntry> convert(Map<String, Object> cache)
-            throws IllegalAccessException, ClassNotFoundException {
+            throws IllegalAccessException, ClassNotFoundException, NoSuchFieldException {
         final List<DnsCacheEntry> ret = new ArrayList<>();
         for (Map.Entry<String, Object> entry : cache.entrySet()) {
             final String host = entry.getKey();
@@ -239,7 +239,7 @@ public final class InetAddressCacheUtilForJava8Minus {
     }
 
     private static DnsCacheEntry inetAddress$CacheEntry2DnsCacheEntry(String host, Object entry)
-            throws IllegalAccessException, ClassNotFoundException {
+            throws IllegalAccessException, ClassNotFoundException, NoSuchFieldException {
         initFieldsOfInetAddress$CacheEntry();
 
         final long expiration = expirationFieldOfInetAddress$CacheEntry.getLong(entry);
@@ -255,15 +255,15 @@ public final class InetAddressCacheUtilForJava8Minus {
      */
     private static volatile Field expirationFieldOfInetAddress$CacheEntry = null;
     /**
-     * {@link InetAddress.CacheEntry.expiration}
+     * {@link InetAddress.CacheEntry.addresses}
      */
     private static volatile Field addressesFieldOfInetAddress$CacheEntry = null;
 
-    private static void initFieldsOfInetAddress$CacheEntry() throws ClassNotFoundException {
+    private static void initFieldsOfInetAddress$CacheEntry() throws ClassNotFoundException, NoSuchFieldException {
         if (expirationFieldOfInetAddress$CacheEntry != null && addressesFieldOfInetAddress$CacheEntry != null) return;
 
-        final Class<?> cacheEntryClass = Class.forName("java.net.InetAddress$CacheEntry");
-        synchronized (InetAddressCacheUtilForJava8Minus.class) {
+        synchronized (InetAddressCacheUtilForJava8.class) {
+            final Class<?> cacheEntryClass = Class.forName("java.net.InetAddress$CacheEntry");
             // double check
             if (expirationFieldOfInetAddress$CacheEntry != null && addressesFieldOfInetAddress$CacheEntry != null)
                 return;
@@ -271,26 +271,21 @@ public final class InetAddressCacheUtilForJava8Minus {
             // InetAddress.CacheEntry has 2 filed:
             // - for jdk 6, address and expiration
             // - for jdk 7+, addresses(*renamed*!) and expiration
+            //
             // code in jdk 6:
             //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
             // code in jdk 7:
             //   https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742
             // code in jdk 8:
             //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
-            final Field[] fields = cacheEntryClass.getDeclaredFields();
-            for (Field field : fields) {
-                final String name = field.getName();
-                if (name.equals("expiration")) {
-                    field.setAccessible(true);
-                    expirationFieldOfInetAddress$CacheEntry = field;
-                } else if (name.startsWith("address")) { // use startWith so works for jdk 6 and jdk 7+
-                    field.setAccessible(true);
-                    addressesFieldOfInetAddress$CacheEntry = field;
-                } else {
-                    throw new IllegalStateException("JDK add new Field " + name +
-                            " for class InetAddress.CacheEntry, report issue for dns-cache-manipulator lib!");
-                }
-            }
+
+            Field expirationField = cacheEntryClass.getDeclaredField("expiration");
+            expirationField.setAccessible(true);
+            expirationFieldOfInetAddress$CacheEntry = expirationField;
+
+            Field addressesField = cacheEntryClass.getDeclaredField("addresses");
+            addressesField.setAccessible(true);
+            addressesFieldOfInetAddress$CacheEntry = addressesField;
         }
     }
 
@@ -302,6 +297,6 @@ public final class InetAddressCacheUtilForJava8Minus {
         }
     }
 
-    private InetAddressCacheUtilForJava8Minus() {
+    private InetAddressCacheUtilForJava8() {
     }
 }
