@@ -4,7 +4,7 @@
 
 	<groupId>com.alibaba</groupId>
 	<artifactId>dns-cache-manipulator-parent</artifactId>
-	<version>1.8.0-SNAPSHOT</version>
+	<version>1.8.0-RC1</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 	<description>🌏 A tiny lib/tool for setting/viewing java dns.</description>
