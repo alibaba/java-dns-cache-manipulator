@@ -93,7 +93,9 @@ class DcmToolTests : AnnotationSpec() {
         val fileName: String = file.name
         if (!fileName.startsWith("dns-cache-manipulator-")) return false
 
-        return !fileName.trimToVersion().removeSuffix("-SNAPSHOT").contains("-")
+        val version = fileName.trimToVersion()
+
+        return !(version.endsWith("-javadoc") || version.endsWith("-sources"))
     }
 
     private fun String.trimToVersion() = substringAfterLast('/')
