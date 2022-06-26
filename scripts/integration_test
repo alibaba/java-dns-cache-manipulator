@@ -16,6 +16,7 @@ readonly PREPARE_JDKS_INSTALL_BY_SDKMAN=(
   8
   "$default_build_jdk_version"
   17
+  18
 )
 
 source bash-buddy/lib/prepare_jdks.sh
@@ -30,8 +31,8 @@ source bash-buddy/lib/java_build_utils.sh
 #
 # shellcheck disable=SC2034
 JVB_MVN_OPTS=(
-    "${JVB_DEFAULT_MVN_OPTS[@]}"
-    -DperformRelease -P'!gen-sign'
+  "${JVB_DEFAULT_MVN_OPTS[@]}"
+  -DperformRelease -P'!gen-sign'
 )
 
 ################################################################################
@@ -56,12 +57,12 @@ jvb::mvn_cmd clean install
 # test multi-version java
 ########################################
 for jdk in "${PREPARE_JDKS_INSTALL_BY_SDKMAN[@]}"; do
-    # already tested by above `mvn install`
+  # already tested by above `mvn install`
   [ "$default_build_jdk_version" = "$jdk" ] && continue
 
   prepare_jdks::switch_to_jdk "$jdk"
 
-    cu::head_line_echo "test with Java: $JAVA_HOME"
-    # just test without build
-    jvb::mvn_cmd surefire:test
+  cu::head_line_echo "test with Java: $JAVA_HOME"
+  # just test without build
+  jvb::mvn_cmd surefire:test
 done
