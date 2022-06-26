@@ -95,8 +95,8 @@ public final class InetAddressCacheUtilForJava9Plus {
     }
 
     public static void removeInetAddressCache(String host) throws NoSuchFieldException, IllegalAccessException {
-        getCacheOfInetAddress().remove(host);
         removeHostFromExpirySetOfInetAddress(host);
+        getCacheOfInetAddress().remove(host);
     }
 
     /**
@@ -311,8 +311,8 @@ public final class InetAddressCacheUtilForJava9Plus {
     }
 
     public static void clearInetAddressCache() throws NoSuchFieldException, IllegalAccessException {
-        getCacheOfInetAddress().clear();
         getExpirySetOfInetAddress().clear();
+        getCacheOfInetAddress().clear();
     }
 
     private InetAddressCacheUtilForJava9Plus() {
