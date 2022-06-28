@@ -46,7 +46,7 @@ cd ..
 ########################################
 
 export CI_TEST_MODE=true
-export DCM_AGENT_SUPRESS_EXCEPTION_STACK=true
+export DCM_AGENT_SUPPRESS_EXCEPTION_STACK=true
 
 prepare_jdks::switch_to_jdk "$default_build_jdk_version"
 

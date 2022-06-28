@@ -33,7 +33,7 @@ public class DcmAgent {
 
     private static final String FILE_KEY = "file";
 
-    private static final String DCM_AGENT_SUPRESS_EXCEPTION_STACK = "DCM_AGENT_SUPRESS_EXCEPTION_STACK";
+    private static final String DCM_AGENT_SUPPRESS_EXCEPTION_STACK = "DCM_AGENT_SUPPRESS_EXCEPTION_STACK";
 
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
@@ -143,7 +143,7 @@ public class DcmAgent {
         } catch (Exception e) {
             final String exString = throwable2StackString(e);
             final String sdtoutExString;
-            if (isDcmAgentSupressExceptionStack()) {
+            if (isDcmAgentSuppressExceptionStack()) {
                 sdtoutExString = e.toString();
             } else {
                 sdtoutExString = exString;
@@ -158,14 +158,14 @@ public class DcmAgent {
         }
     }
 
-    private static boolean isDcmAgentSupressExceptionStack() {
-        String supressException = getConfig(DCM_AGENT_SUPRESS_EXCEPTION_STACK);
-        if (supressException == null) return false;
+    private static boolean isDcmAgentSuppressExceptionStack() {
+        String suppressException = getConfig(DCM_AGENT_SUPPRESS_EXCEPTION_STACK);
+        if (suppressException == null) return false;
 
-        supressException = supressException.trim();
-        if (supressException.length() == 0) return false;
+        suppressException = suppressException.trim();
+        if (suppressException.length() == 0) return false;
 
-        return "true".equalsIgnoreCase(supressException);
+        return "true".equalsIgnoreCase(suppressException);
     }
 
     private static Object invokeAction(String action, String[] arguments) throws InvocationTargetException, IllegalAccessException {
