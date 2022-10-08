@@ -17,6 +17,7 @@ readonly PREPARE_JDKS_INSTALL_BY_SDKMAN=(
   "$default_build_jdk_version"
   17
   18
+  19
 )
 
 source bash-buddy/lib/prepare_jdks.sh
