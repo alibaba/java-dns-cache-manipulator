@@ -62,7 +62,7 @@
 
 		<!-- testing dependencies versions -->
 		<junit5.version>5.9.1</junit5.version>
-		<kotest.version>5.5.1</kotest.version>
+		<kotest.version>5.5.2</kotest.version>
 	</properties>
 
 	<dependencies>
