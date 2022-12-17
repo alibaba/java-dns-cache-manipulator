@@ -1,7 +1,7 @@
 # <div align="center"><a href="#dummy"><img src="docs/logo-red.png" alt="🌏 Java Dns Cache Manipulator(DCM)"></a></div>
 
 <p align="center">
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/actions/workflows/ci.yaml"><img src="https://img.shields.io/github/workflow/status/alibaba/java-dns-cache-manipulator/CI/main?logo=github&logoColor=white" alt="Github Workflow Build Status"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/actions/workflows/ci.yaml"><img src="https://img.shields.io/github/actions/workflow/status/alibaba/java-dns-cache-manipulator/ci.yaml?branch=main&logo=github&logoColor=white" alt="Github Workflow Build Status"></a>
 <a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/main?logo=appveyor&logoColor=white" alt="Appveyor Build Status"></a>
 <a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=main"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/main?logo=coveralls&logoColor=white" alt="Coveralls branch"></a>
 <a href="https://codeclimate.com/github/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/codeclimate/maintainability/alibaba/java-dns-cache-manipulator?logo=code-climate" alt="Maintainability"></a>
