@@ -5,7 +5,7 @@
 <a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/main?logo=appveyor&logoColor=white" alt="Appveyor Build Status"></a>
 <a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=main"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/main?logo=coveralls&logoColor=white" alt="Coveralls branch"></a>
 <a href="https://codeclimate.com/github/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/codeclimate/maintainability/alibaba/java-dns-cache-manipulator?logo=code-climate" alt="Maintainability"></a>
-<a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-8+-green?logo=java&logoColor=white" alt="Java support"></a>
+<a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-8+-green?logo=openjdk&logoColor=white" alt="Java support"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97&logo=apache" alt="License"></a>
 <a href="https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?color=2d545e&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/releases"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg" alt="GitHub release"></a>
@@ -17,7 +17,7 @@
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors"><img src="https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator" alt="GitHub Contributors"></a>
 <a href="https://gitpod.io/#https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/badge/Gitpod-ready--to--code-green?label=gitpod&logo=gitpod&logoColor=white" alt="gitpod: Ready to Code"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/github/repo-size/alibaba/java-dns-cache-manipulator" alt="GitHub repo size"></a>
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.2/dcm-1.7.2.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.2/dcm-1.7.2.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.8.0/dcm-1.8.0.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.8.0/dcm-1.8.0.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
 ## How to set the DNS Cache of `JVM` safely
@@ -26,8 +26,8 @@ The DNS Cache of the JVM is maintained in the private field of the InetAddress c
 
 
 - [`InetAddressCacheUtilCommons.java`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilCommons.java)
-- [`InetAddressCacheUtilForJava8Minus.java`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava8Minus.java)
-- [`InetAddressCacheUtilForJava9Plus.java`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava9Plus.java)
+- [`InetAddressCacheUtilForOld.java`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForOld.java)
+- [`InetAddressCacheUtilForNew.java`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForNew.java)
 
 Pay attention to the thread safety of setting the DNS Cache of JVM
 The DNS Cache of the JVM is obviously shared globally, so the setting is guaranteed to be thread-safe and there is no concurrency problem.
@@ -55,7 +55,7 @@ private static void cacheAddresses(String hostname,
 }
 ```
 
-In the [`InetAddressCacheUtilForJava8Minus`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava8Minus.java) class, the read and write to the DNS Cache also consistently adds a synchronized block with `addressCache` field as the lock to ensure thread safety.
+In the [`InetAddressCacheUtilForOld`](../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForOld.java) class, the read and write to the DNS Cache also consistently adds a synchronized block with `addressCache` field as the lock to ensure thread safety.
 
 ## Need test different `JDK` versions
 

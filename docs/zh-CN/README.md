@@ -1,10 +1,11 @@
 # <div align="center"><a href="#dummy"><img src="docs/logo-red.png" alt="🌏 Java Dns Cache Manipulator(DCM)"></a></div>
 
 <p align="center">
-<a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/main?logo=appveyor&logoColor=white" alt="Build Status"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/actions/workflows/ci.yaml"><img src="https://img.shields.io/github/actions/workflow/status/alibaba/java-dns-cache-manipulator/ci.yaml?branch=main&logo=github&logoColor=white" alt="Github Workflow Build Status"></a>
+<a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/main?logo=appveyor&logoColor=white" alt="Appveyor Build Status"></a>
 <a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=main"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/main?logo=coveralls&logoColor=white" alt="Coveralls branch"></a>
 <a href="https://codeclimate.com/github/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/codeclimate/maintainability/alibaba/java-dns-cache-manipulator?logo=code-climate" alt="Maintainability"></a>
-<a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-8+-green?logo=java&logoColor=white" alt="Java support"></a>
+<a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-8+-green?logo=openjdk&logoColor=white" alt="Java support"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97&logo=apache" alt="License"></a>
 <a href="https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?color=2d545e&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/releases"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg" alt="GitHub release"></a>
@@ -16,7 +17,7 @@
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors"><img src="https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator" alt="GitHub Contributors"></a>
 <a href="https://gitpod.io/#https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/badge/Gitpod-ready--to--code-green?label=gitpod&logo=gitpod&logoColor=white" alt="gitpod: Ready to Code"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/github/repo-size/alibaba/java-dns-cache-manipulator" alt="GitHub repo size"></a>
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.2/dcm-1.7.2.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.2/dcm-1.7.2.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.8.0/dcm-1.8.0.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.8.0/dcm-1.8.0.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
 [📖 English Documentation](../../README.md) | 📖 中文文档

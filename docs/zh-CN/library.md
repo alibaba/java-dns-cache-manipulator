@@ -5,7 +5,7 @@ Java Dns Cache Manipulator(DCM) Library
 <a href="https://ci.appveyor.com/project/oldratlee/java-dns-cache-manipulator"><img src="https://img.shields.io/appveyor/ci/oldratlee/java-dns-cache-manipulator/main?logo=appveyor&logoColor=white" alt="Build Status"></a>
 <a href="https://coveralls.io/github/alibaba/java-dns-cache-manipulator?branch=main"><img src="https://img.shields.io/coveralls/github/alibaba/java-dns-cache-manipulator/main?logo=coveralls&logoColor=white" alt="Coveralls branch"></a>
 <a href="https://codeclimate.com/github/alibaba/java-dns-cache-manipulator/maintainability"><img src="https://api.codeclimate.com/v1/badges/80e64dc9160cf6f62080/maintainability" alt="Maintainability"></a>
-<a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-6+-green?logo=java&logoColor=white" alt="JDK support"></a>
+<a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-6+-green?logo=openjdk&logoColor=white" alt="JDK support"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97" alt="License"></a>
 <a href="https://alibaba.github.io/java-dns-cache-manipulator/apidocs/"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator?label=javadoc&color=3d7c47&logo=microsoft-academic&logoColor=white" alt="Javadocs"></a>
 <a href="https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?color=2d545e&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
@@ -218,7 +218,7 @@ content = m2.getResponseBodyAsString();
 更多详细功能
 ----------------------------------
 
-参见类[`DnsCacheManipulator`](src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
+参见类[`DnsCacheManipulator`](../../library/src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
 
 :electric_plug: Java API Docs
 =====================================
@@ -234,7 +234,7 @@ content = m2.getResponseBodyAsString();
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>dns-cache-manipulator</artifactId>
-    <version>1.7.2</version>
+    <version>1.8.0</version>
 </dependency>
 ```
 
@@ -271,8 +271,8 @@ PS：
 `JVM`的`DNS Cache`维护在类`InetAddress`的私有字段中，通过反射来设置，具体实现参见
 
 - [`InetAddressCacheUtilCommons.java`](../../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilCommons.java)
-- [`InetAddressCacheUtilForJava9Plus.java`](../../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava8Minus.java)
-- [`InetAddressCacheUtilForJava9Plus.java`](../../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJava9Plus.java)
+- [`InetAddressCacheUtilForOld.java`](../../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForOld.java)
+- [`InetAddressCacheUtilForNew.java`](../../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForNew.java)
 
 注意设置`JVM`的`DNS Cache`的线程安全问题
 ----------------------------------
@@ -302,7 +302,7 @@ private static void cacheAddresses(String hostname,
 }
 ```
 
-[`InetAddressCacheUtilForJdk8Minus`](src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForJdk8Minus.java)类中对`DNS Cache`的读写也一致地加了以`addressCache`为锁的`synchronized`块，以保证线程安全。
+[`InetAddressCacheUtilForOld`](../../library/src/main/java/com/alibaba/dcm/internal/InetAddressCacheUtilForOld.java)类中对`DNS Cache`的读写也一致地加了以`addressCache`为锁的`synchronized`块，以保证线程安全。
 
 需要测试不同版本`JDK`
 ----------------------------------
