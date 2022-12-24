@@ -1,6 +1,6 @@
 package com.alibaba.dcm
 
-import com.alibaba.dcm.internal.JavaVersionUtil
+import com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isNewInetAddressImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -31,9 +31,11 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         // System Properties
         // https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
         println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        System.out.printf("Env info:%njava home: %s%njdk version: %s%n",
-                System.getProperty("java.home"),
-                System.getProperty("java.version"))
+        System.out.printf(
+            "Env info:%njava home: %s%njdk version: %s%n",
+            System.getProperty("java.home"),
+            System.getProperty("java.version")
+        )
         println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     }
 
@@ -237,10 +239,10 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
         // 3. touch dns cache with external other host operation
         //////////////////////////////////////////////////
         EXISTED_DOMAIN.lookupIpByName()
-        if (JavaVersionUtil.isJavaVersionAtMost8()) {
-            shouldContainOnlyOneNegativeCacheWitchExpirationBetween(tick, tick + 1020)
-        } else {
+        if (isNewInetAddressImpl()) {
             DnsCacheManipulator.listDnsNegativeCache().shouldBeEmpty()
+        } else {
+            shouldContainOnlyOneNegativeCacheWitchExpirationBetween(tick, tick + 1020)
         }
 
         //////////////////////////////////////////////////

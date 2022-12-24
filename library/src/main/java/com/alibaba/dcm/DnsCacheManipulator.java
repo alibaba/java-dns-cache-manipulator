@@ -1,8 +1,8 @@
 package com.alibaba.dcm;
 
 import com.alibaba.dcm.internal.InetAddressCacheUtilCommons;
-import com.alibaba.dcm.internal.InetAddressCacheUtilForJava8;
-import com.alibaba.dcm.internal.InetAddressCacheUtilForJava9Plus;
+import com.alibaba.dcm.internal.InetAddressCacheUtilForOld;
+import com.alibaba.dcm.internal.InetAddressCacheUtilForNew;
 import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import sun.net.InetAddressCachePolicy;
 
@@ -16,7 +16,7 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
-import static com.alibaba.dcm.internal.JavaVersionUtil.isJavaVersionAtMost8;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isNewInetAddressImpl;
 
 
 /**
@@ -42,10 +42,10 @@ public final class DnsCacheManipulator {
      */
     public static void setDnsCache(String host, String... ips) {
         try {
-            if (isJavaVersionAtMost8()) {
-                InetAddressCacheUtilForJava8.setInetAddressCache(host, ips, NEVER_EXPIRATION);
+            if (isNewInetAddressImpl()) {
+                InetAddressCacheUtilForNew.setInetAddressCache(host, ips, NEVER_EXPIRATION);
             } else {
-                InetAddressCacheUtilForJava9Plus.setInetAddressCache(host, ips, NEVER_EXPIRATION);
+                InetAddressCacheUtilForOld.setInetAddressCache(host, ips, NEVER_EXPIRATION);
             }
         } catch (Exception e) {
             final String message = String.format("Fail to setDnsCache for host %s ip %s, cause: %s",
@@ -64,10 +64,10 @@ public final class DnsCacheManipulator {
      */
     public static void setDnsCache(long expireMillis, String host, String... ips) {
         try {
-            if (isJavaVersionAtMost8()) {
-                InetAddressCacheUtilForJava8.setInetAddressCache(host, ips, expireMillis);
+            if (isNewInetAddressImpl()) {
+                InetAddressCacheUtilForNew.setInetAddressCache(host, ips, expireMillis);
             } else {
-                InetAddressCacheUtilForJava9Plus.setInetAddressCache(host, ips, expireMillis);
+                InetAddressCacheUtilForOld.setInetAddressCache(host, ips, expireMillis);
             }
         } catch (Exception e) {
             final String message = String.format("Fail to setDnsCache for host %s ip %s expireMillis %s, cause: %s",
@@ -152,10 +152,10 @@ public final class DnsCacheManipulator {
     @Nullable
     public static DnsCacheEntry getDnsCache(String host) {
         try {
-            if (isJavaVersionAtMost8()) {
-                return InetAddressCacheUtilForJava8.getInetAddressCache(host);
+            if (isNewInetAddressImpl()) {
+                return InetAddressCacheUtilForNew.getInetAddressCache(host);
             } else {
-                return InetAddressCacheUtilForJava9Plus.getInetAddressCache(host);
+                return InetAddressCacheUtilForOld.getInetAddressCache(host);
             }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to getDnsCache, cause: " + e, e);
@@ -174,10 +174,10 @@ public final class DnsCacheManipulator {
      */
     public static DnsCache getWholeDnsCache() {
         try {
-            if (isJavaVersionAtMost8()) {
-                return InetAddressCacheUtilForJava8.listInetAddressCache();
+            if (isNewInetAddressImpl()) {
+                return InetAddressCacheUtilForNew.listInetAddressCache();
             } else {
-                return InetAddressCacheUtilForJava9Plus.listInetAddressCache();
+                return InetAddressCacheUtilForOld.listInetAddressCache();
             }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to getWholeDnsCache, cause: " + e, e);
@@ -235,10 +235,10 @@ public final class DnsCacheManipulator {
      */
     public static void removeDnsCache(String host) {
         try {
-            if (isJavaVersionAtMost8()) {
-                InetAddressCacheUtilForJava8.removeInetAddressCache(host);
+            if (isNewInetAddressImpl()) {
+                InetAddressCacheUtilForNew.removeInetAddressCache(host);
             } else {
-                InetAddressCacheUtilForJava9Plus.removeInetAddressCache(host);
+                InetAddressCacheUtilForOld.removeInetAddressCache(host);
             }
         } catch (Exception e) {
             final String message = String.format("Fail to removeDnsCache for host %s, cause: %s", host, e);
@@ -253,10 +253,10 @@ public final class DnsCacheManipulator {
      */
     public static void clearDnsCache() {
         try {
-            if (isJavaVersionAtMost8()) {
-                InetAddressCacheUtilForJava8.clearInetAddressCache();
+            if (isNewInetAddressImpl()) {
+                InetAddressCacheUtilForNew.clearInetAddressCache();
             } else {
-                InetAddressCacheUtilForJava9Plus.clearInetAddressCache();
+                InetAddressCacheUtilForOld.clearInetAddressCache();
             }
         } catch (Exception e) {
             throw new DnsCacheManipulatorException("Fail to clearDnsCache, cause: " + e, e);

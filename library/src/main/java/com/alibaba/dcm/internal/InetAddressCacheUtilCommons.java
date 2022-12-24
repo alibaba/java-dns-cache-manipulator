@@ -1,6 +1,7 @@
 package com.alibaba.dcm.internal;
 
 import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import org.jetbrains.annotations.ApiStatus;
 import sun.net.InetAddressCachePolicy;
 
 import javax.annotation.Nullable;
@@ -17,6 +18,7 @@ import java.net.UnknownHostException;
  */
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
+@ApiStatus.Internal
 public final class InetAddressCacheUtilCommons {
     /**
      * We never really have "never".
@@ -178,6 +180,30 @@ public final class InetAddressCacheUtilCommons {
             }
             f.setAccessible(true);
             negativeSetOfInetAddressCachePolicy = f;
+        }
+    }
+
+    private static volatile Boolean isNew;
+
+    /**
+     * Check the new or old implementation of {@link InetAddress}
+     * by whether the field {@link InetAddress.expirySet} is existed or not.
+     */
+    public static boolean isNewInetAddressImpl() {
+        if (isNew != null) return isNew;
+
+        synchronized (InetAddressCacheUtilCommons.class) {
+            // double check
+            if (isNew != null) return isNew;
+
+            try {
+                InetAddress.class.getDeclaredField("expirySet");
+                isNew = true;
+            } catch (NoSuchFieldException e) {
+                isNew = false;
+            }
+
+            return isNew;
         }
     }
 
