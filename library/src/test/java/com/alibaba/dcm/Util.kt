@@ -1,6 +1,6 @@
 package com.alibaba.dcm
 
-import com.alibaba.dcm.internal.JavaVersionUtil.isJavaVersionAtMost8
+import com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isInetAddressImplOld
 import com.alibaba.dcm.internal.TestTimeUtil.NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS
 import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
@@ -54,7 +54,7 @@ infix fun DnsCacheEntry?.shouldBeEqual(expected: DnsCacheEntry?) {
 }
 
 infix fun String.shouldBeEqualAsHostName(expected: String) {
-    if (isJavaVersionAtMost8()) {
+    if (isInetAddressImplOld()) {
         // hard-coded test logic for jdk 8-
         //   host name is unified to lower case by InetAddress
         this shouldBeEqualIgnoringCase expected
@@ -65,7 +65,7 @@ infix fun String.shouldBeEqualAsHostName(expected: String) {
 
 private infix fun Long.shouldBeEqualAsExpiration(expected: Long) {
     if (expected == Long.MAX_VALUE) {
-        if (isJavaVersionAtMost8()) {
+        if (isInetAddressImplOld()) {
             this shouldBe expected
         } else {
             // hard-coded test logic for jdk 9+
