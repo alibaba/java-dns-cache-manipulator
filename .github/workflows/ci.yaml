@@ -2,31 +2,31 @@
 # https://docs.github.com/en/actions/quickstart
 
 name: CI
-on: [ push, pull_request ]
+on: [ push, pull_request, workflow_dispatch ]
+
 jobs:
+
   test:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
-        java: [ 8, 11, 17, 18, 19, 20-ea ]
+        java: [ 8.0.345, 8, 11, 17, 19, 20-ea ]
       fail-fast: false
       max-parallel: 64
-    name: Test JDK ${{ matrix.java }}, ${{ matrix.os }}
+    name: Test on JDK ${{ matrix.java }} OS ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'zulu'
-          cache: 'maven'
-      - name: Build with Maven
-        run: ./mvnw -V --no-transfer-progress -Pgen-code-cov clean package
-      - name: Upload coverage to Codecov
-        # https://github.com/marketplace/actions/codecov
-        uses: codecov/codecov-action@v3
+          distribution: zulu
+          cache: maven
+      - run: ./mvnw -V --no-transfer-progress -Pgen-code-cov clean package
+      # https://github.com/marketplace/actions/codecov
+      - uses: codecov/codecov-action@v3
         with:
           name: codecov-umbrella
           token: ${{ secrets.CODECOV_TOKEN }}
