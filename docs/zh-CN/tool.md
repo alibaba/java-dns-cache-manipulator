@@ -17,7 +17,7 @@ Java Dns Cache Manipulator Tool
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/issues"><img src="https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator" alt="GitHub issues"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors"><img src="https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator" alt="GitHub Contributors"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/github/repo-size/alibaba/java-dns-cache-manipulator" alt="GitHub repo size"></a>
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.2/dcm-1.7.2.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.2/dcm-1.7.2.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.8.0/dcm-1.8.0.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.8.0/dcm-1.8.0.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
 :point_right: 设置/查看 运行中`JVM`进程的`DNS Cache`，支持`IPv6`。
@@ -52,7 +52,7 @@ Java Dns Cache Manipulator Tool
 下载
 ----------
 
-[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.7.2/dcm-1.7.2.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.7.2/dcm-1.7.2.tar.gz) 下载文件`dcm-x.y.z.tar.gz`。
+[![GitHub release download - dcm.tar.gz)](https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.8.0/dcm-1.8.0.tar.gz.svg?logoColor=white&logo=DocuSign)](https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.8.0/dcm-1.8.0.tar.gz) 下载文件`dcm-x.y.z.tar.gz`。
 
 解压后，运行`bin`目录下的`dcm`。
 
