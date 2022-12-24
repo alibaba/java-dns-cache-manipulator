@@ -181,27 +181,27 @@ public final class InetAddressCacheUtilCommons {
         }
     }
 
-    private static volatile Boolean isOld;
+    private static volatile Boolean isNew;
 
     /**
      * Check the new or old implementation of {@link InetAddress}
      * by whether the field {@link InetAddress.expirySet} is existed or not.
      */
-    public static boolean isInetAddressImplOld() {
-        if (isOld != null) return isOld;
+    public static boolean isNewInetAddressImpl() {
+        if (isNew != null) return isNew;
 
         synchronized (InetAddressCacheUtilCommons.class) {
             // double check
-            if (isOld != null) return isOld;
+            if (isNew != null) return isNew;
 
             try {
                 InetAddress.class.getDeclaredField("expirySet");
-                isOld = false;
+                isNew = true;
             } catch (NoSuchFieldException e) {
-                isOld = true;
+                isNew = false;
             }
 
-            return isOld;
+            return isNew;
         }
     }
 

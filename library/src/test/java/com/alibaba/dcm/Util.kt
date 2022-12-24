@@ -1,6 +1,6 @@
 package com.alibaba.dcm
 
-import com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isInetAddressImplOld
+import com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isNewInetAddressImpl
 import com.alibaba.dcm.internal.TestTimeUtil.NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS
 import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
@@ -54,22 +54,22 @@ infix fun DnsCacheEntry?.shouldBeEqual(expected: DnsCacheEntry?) {
 }
 
 infix fun String.shouldBeEqualAsHostName(expected: String) {
-    if (isInetAddressImplOld()) {
-        // hard-coded test logic for jdk 8-
+    if (isNewInetAddressImpl()) {
+        this shouldBe expected
+    } else {
+        // hard-coded test logic for old jdk 8-
         //   host name is unified to lower case by InetAddress
         this shouldBeEqualIgnoringCase expected
-    } else {
-        this shouldBe expected
     }
 }
 
 private infix fun Long.shouldBeEqualAsExpiration(expected: Long) {
     if (expected == Long.MAX_VALUE) {
-        if (isInetAddressImplOld()) {
-            this shouldBe expected
-        } else {
-            // hard-coded test logic for jdk 9+
+        if (isNewInetAddressImpl()) {
+            // hard-coded test logic for new jdk 9+
             this.shouldBeEqualsWithTolerance(NEVER_EXPIRATION_NANO_TIME_TO_TIME_MILLIS, 5)
+        } else {
+            this shouldBe expected
         }
     } else {
         this shouldBe expected
