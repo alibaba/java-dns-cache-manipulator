@@ -414,7 +414,6 @@
 							<docencoding>UTF-8</docencoding>
 							<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/examples/exclude-package-names.html -->
 							<excludePackageNames>${javadoc.default.exclude.packages}</excludePackageNames>
-							<overview>src/api/overview.html</overview>
 							<doclint>all,-missing</doclint>
 							<additionalJOptions>
 								<!--
@@ -541,7 +540,7 @@
 						<version>4.7.2.1</version>
 						<executions>
 							<execution>
-								<phase>test-compile</phase>
+								<phase>verify</phase>
 								<goals>
 									<goal>check</goal>
 								</goals>
