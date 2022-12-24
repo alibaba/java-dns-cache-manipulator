@@ -3,6 +3,7 @@ package com.alibaba.dcm.internal;
 import com.alibaba.dcm.DnsCache;
 import com.alibaba.dcm.DnsCacheEntry;
 import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -20,7 +21,7 @@ import java.util.Map;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
 
 /**
- * Util class to manipulate dns cache for {@code JDK 8-}.
+ * Util class to manipulate dns cache for old {@code JDK 8-}.
  * <p>
  * dns cache is {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}.
  * <p>
@@ -39,7 +40,8 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
  */
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
-public final class InetAddressCacheUtilForJava8 {
+@ApiStatus.Internal
+public final class InetAddressCacheUtilForOld {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
      */
@@ -134,7 +136,7 @@ public final class InetAddressCacheUtilForJava8 {
     private static Map<String, Object> getCacheOfInetAddress$Cache0(Object inetAddressCache)
             throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
         if (cacheMapFieldOfInetAddress$Cache == null) {
-            synchronized (InetAddressCacheUtilForJava8.class) {
+            synchronized (InetAddressCacheUtilForOld.class) {
                 if (cacheMapFieldOfInetAddress$Cache == null) { // double check
                     final Class<?> clazz = Class.forName("java.net.InetAddress$Cache");
                     final Field f = clazz.getDeclaredField("cache");
@@ -172,7 +174,7 @@ public final class InetAddressCacheUtilForJava8 {
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
 
-        synchronized (InetAddressCacheUtilForJava8.class) {
+        synchronized (InetAddressCacheUtilForOld.class) {
             // double check
             if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
 
@@ -262,7 +264,7 @@ public final class InetAddressCacheUtilForJava8 {
     private static void initFieldsOfInetAddress$CacheEntry() throws ClassNotFoundException, NoSuchFieldException {
         if (expirationFieldOfInetAddress$CacheEntry != null && addressesFieldOfInetAddress$CacheEntry != null) return;
 
-        synchronized (InetAddressCacheUtilForJava8.class) {
+        synchronized (InetAddressCacheUtilForOld.class) {
             final Class<?> cacheEntryClass = Class.forName("java.net.InetAddress$CacheEntry");
             // double check
             if (expirationFieldOfInetAddress$CacheEntry != null && addressesFieldOfInetAddress$CacheEntry != null)
@@ -297,6 +299,6 @@ public final class InetAddressCacheUtilForJava8 {
         }
     }
 
-    private InetAddressCacheUtilForJava8() {
+    private InetAddressCacheUtilForOld() {
     }
 }

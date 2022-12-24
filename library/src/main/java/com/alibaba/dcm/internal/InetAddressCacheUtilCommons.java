@@ -1,6 +1,7 @@
 package com.alibaba.dcm.internal;
 
 import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import org.jetbrains.annotations.ApiStatus;
 import sun.net.InetAddressCachePolicy;
 
 import javax.annotation.Nullable;
@@ -17,6 +18,7 @@ import java.net.UnknownHostException;
  */
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
+@ApiStatus.Internal
 public final class InetAddressCacheUtilCommons {
     /**
      * We never really have "never".

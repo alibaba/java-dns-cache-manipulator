@@ -3,6 +3,7 @@ package com.alibaba.dcm.internal;
 import com.alibaba.dcm.DnsCache;
 import com.alibaba.dcm.DnsCacheEntry;
 import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -23,7 +24,7 @@ import static com.alibaba.dcm.internal.TimeUtil.convertNanoTimeToTimeMillis;
 import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
 
 /**
- * Util class to manipulate dns cache for {@code JDK 9+}.
+ * Util class to manipulate dns cache for new {@code JDK 9+}.
  * <p>
  * dns cache is {@link InetAddress#cache}.
  *
@@ -33,7 +34,8 @@ import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
  */
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
-public final class InetAddressCacheUtilForJava9Plus {
+@ApiStatus.Internal
+public final class InetAddressCacheUtilForNew {
     /**
      * {@link InetAddress.CachedAddresses}
      * <p>
@@ -120,7 +122,7 @@ public final class InetAddressCacheUtilForJava9Plus {
     private static String getHostOfInetAddress$CacheAddress(Object cachedAddresses)
             throws NoSuchFieldException, IllegalAccessException {
         if (hostFieldOfInetAddress$CacheAddress == null) {
-            synchronized (InetAddressCacheUtilForJava9Plus.class) {
+            synchronized (InetAddressCacheUtilForNew.class) {
                 if (hostFieldOfInetAddress$CacheAddress == null) { // double check
                     final Field f = cachedAddresses.getClass().getDeclaredField("host");
                     f.setAccessible(true);
@@ -169,7 +171,7 @@ public final class InetAddressCacheUtilForJava9Plus {
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_EXPIRY_SET != null) return ADDRESS_CACHE_AND_EXPIRY_SET;
 
-        synchronized (InetAddressCacheUtilForJava9Plus.class) {
+        synchronized (InetAddressCacheUtilForNew.class) {
             if (ADDRESS_CACHE_AND_EXPIRY_SET != null) return ADDRESS_CACHE_AND_EXPIRY_SET;
 
             final Field cacheField = InetAddress.class.getDeclaredField("cache");
@@ -266,7 +268,7 @@ public final class InetAddressCacheUtilForJava9Plus {
     private static void initFieldsOfAddresses() throws ClassNotFoundException, NoSuchFieldException {
         if (inetAddressesFieldOfInetAddress$CacheAddress != null) return;
 
-        synchronized (InetAddressCacheUtilForJava9Plus.class) {
+        synchronized (InetAddressCacheUtilForNew.class) {
             if (inetAddressesFieldOfInetAddress$CacheAddress != null) return;
 
             ///////////////////////////////////////////////
@@ -289,6 +291,6 @@ public final class InetAddressCacheUtilForJava9Plus {
         getCacheOfInetAddress().clear();
     }
 
-    private InetAddressCacheUtilForJava9Plus() {
+    private InetAddressCacheUtilForNew() {
     }
 }

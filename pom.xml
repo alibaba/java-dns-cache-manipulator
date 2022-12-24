@@ -77,6 +77,13 @@
 			<artifactId>jsr305</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<!-- https://www.jetbrains.com/help/idea/annotating-source-code.html -->
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>23.1.0</version>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- Testing libs -->
 		<dependency>
