@@ -12,6 +12,7 @@
 			<excludes>
 				<exclude>com.github.spotbugs:*</exclude>
 				<exclude>com.google.code.findbugs:*</exclude>
+				<exclude>org.jetbrains:annotations:*</exclude>
 			</excludes>
 			<outputDirectory>dependencies</outputDirectory>
 		</dependencySet>
