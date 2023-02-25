@@ -14,7 +14,7 @@
 	<description>
 		🌏 a tiny 0-dependency thread-safe Java™ lib
 		for setting/viewing dns programmatically without touching host file,
-		make unit/integration test portable. support Java 8/11/17/18/19, support IPv6.
+		make unit/integration test portable. support Java 8~20, support IPv6.
 	</description>
 	<url>https://github.com/alibaba/java-dns-cache-manipulator</url>
 	<inceptionYear>2015</inceptionYear>
