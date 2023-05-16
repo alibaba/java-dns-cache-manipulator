@@ -93,7 +93,7 @@
 					https://maven.apache.org/plugins/maven-assembly-plugin/assembly.html
 				-->
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.5.0</version>
+				<version>3.6.0</version>
 				<configuration>
 					<finalName>dcm-${project.version}</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
