@@ -19,7 +19,7 @@ class DcmToolTests : AnnotationSpec() {
 
     // Ignore "attach to current VM" test for jdk 9+, since java 9+ does not support
     //     "java.io.IOException: Can not attach to current VM"
-    @Suppress("OverridingDeprecatedMember")
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun defaultTestCaseConfig(): TestCaseConfig =
         TestCaseConfig(enabled = SystemUtils.IS_JAVA_1_8)
 
