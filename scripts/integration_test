@@ -55,6 +55,7 @@ readonly CI_JDKS=(
   "$default_build_jdk_version"
   17
   20
+  21
 )
 
 # here use `install` and `-D performRelease` intended
