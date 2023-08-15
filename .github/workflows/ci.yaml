@@ -1,21 +1,20 @@
 # Quickstart for GitHub Actions
 # https://docs.github.com/en/actions/quickstart
-
-name: CI
+name: Fast CI
 on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
 
   test:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 5
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
         java: [ 8.0.345, 8, 11, 17, 20 ]
       fail-fast: false
       max-parallel: 64
-    name: Test on JDK ${{ matrix.java }} OS ${{ matrix.os }}
+    name: Fast Test on Java ${{ matrix.java }} OS ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
@@ -24,9 +23,4 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: zulu
           cache: maven
-      - run: ./mvnw -V --no-transfer-progress -Pgen-code-cov clean package
-      # https://github.com/marketplace/actions/codecov
-      - uses: codecov/codecov-action@v3
-        with:
-          name: codecov-umbrella
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - run: ./mvnw -V --no-transfer-progress clean package

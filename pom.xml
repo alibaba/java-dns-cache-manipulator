@@ -607,22 +607,6 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.eluder.coveralls</groupId>
-						<artifactId>coveralls-maven-plugin</artifactId>
-						<version>4.3.0</version>
-						<configuration>
-							<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
-						</configuration>
-						<!-- https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
-						<dependencies>
-							<dependency>
-								<groupId>javax.xml.bind</groupId>
-								<artifactId>jaxb-api</artifactId>
-								<version>2.3.1</version>
-							</dependency>
-						</dependencies>
-					</plugin>
-					<plugin>
 						<!-- for codecov.io -->
 						<!-- config example: https://github.com/codecov/example-java -->
 						<!-- plugin docs: http://eclemma.org/jacoco/trunk/doc/ -->
