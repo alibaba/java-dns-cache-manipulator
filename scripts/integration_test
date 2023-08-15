@@ -2,27 +2,60 @@
 set -eEuo pipefail
 cd "$(dirname "$(readlink -f "$0")")"
 
-source bash-buddy/lib/trap_error_info.sh
-source bash-buddy/lib/common_utils.sh
+BASH_BUDDY_ROOT="$(readlink -f bash-buddy)"
+readonly BASH_BUDDY_ROOT
+source "$BASH_BUDDY_ROOT/lib/trap_error_info.sh"
+source "$BASH_BUDDY_ROOT/lib/common_utils.sh"
+source "$BASH_BUDDY_ROOT/lib/java_utils.sh"
+source "$BASH_BUDDY_ROOT/lib/maven_utils.sh"
 
 ################################################################################
-# prepare
+# ci build logic
 ################################################################################
+
+_findJdk8_0_345() {
+  local JDK_8_LATEST
+
+  # GITHUB_ACTIONS
+  #   Always set to true when GitHub Actions is running the workflow.
+  #   You can use this variable to differentiate when tests are being run locally or by GitHub Actions.
+  # https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+  if [ true = "${GITHUB_ACTIONS:-}" ]; then
+    JAVA8_0_345_HOME="$(
+      d="$(echo "$JAVA8_HOME/../.."/8.0.345*/x64)" || cu::die "Fail to get java home of v8.0.345!"
+      cd "$d" || cu::die "Fail to cd java home of v8.0.345($d)!"
+      pwd
+    )"
+
+    JDK_8_LATEST="$(
+      # shellcheck disable=SC2012
+      d="$(ls -v -d "$JAVA8_HOME/../.."/8.* | tail -n 1)" || cu::die "Fail to get latest java 8 home!"
+      cd "$d" || cu::die "Fail to cd java8 home"
+      pwd
+    )/x64"
+
+    [ "$JDK_8_LATEST" != "$JAVA8_0_345_HOME" ] || cu::die "JDK_8_LATEST($JDK_8_LATEST) is same as JAVA8_0_345_HOME($JAVA8_0_345_HOME), NOT newer java 8 version!"
+    export JAVA8_HOME="$JDK_8_LATEST"
+  else
+    JAVA8_0_345_HOME=$(
+      cd "$JAVA8_HOME/.."/8.0.345*
+      pwd
+    )
+  fi
+  export JAVA8_0_345_HOME
+}
+_findJdk8_0_345
 
 readonly default_build_jdk_version=11
 
 # shellcheck disable=SC2034
-readonly PREPARE_JDKS_INSTALL_BY_SDKMAN=(
-  8.0.345
+readonly CI_JDKS=(
+  "$JAVA8_0_345_HOME"
   8
   "$default_build_jdk_version"
   17
-  19
+  20
 )
-
-source bash-buddy/lib/prepare_jdks.sh
-
-source bash-buddy/lib/java_build_utils.sh
 
 # here use `install` and `-D performRelease` intended
 #   to check release operations.
@@ -31,40 +64,48 @@ source bash-buddy/lib/java_build_utils.sh
 #   https://stackoverflow.com/questions/25201430
 #
 # shellcheck disable=SC2034
-JVB_MVN_OPTS=(
-  "${JVB_DEFAULT_MVN_OPTS[@]}"
-  -DperformRelease -P'!gen-sign'
+readonly MVU_MVN_OPTS=(
+  "${MVU_DEFAULT_MVN_OPTS[@]}"
+  -DperformRelease -P'!gen-sign' -Pgen-code-cov
+  # Maven Plugin Validation
+  # https://maven.apache.org/guides/plugins/validation/index.html
+  -Dmaven.plugin.validation=NONE
   ${CI_MORE_MVN_OPTS:+${CI_MORE_MVN_OPTS}}
 )
-
-################################################################################
-# ci build logic
-################################################################################
 
 cd ..
 
 ########################################
-# default jdk 11, do build and test
+# build and test by default version jdk
 ########################################
 
 export CI_TEST_MODE=true
 export DCM_AGENT_SUPPRESS_EXCEPTION_STACK=true
 
-prepare_jdks::switch_to_jdk "$default_build_jdk_version"
+jvu::switch_to_jdk "$default_build_jdk_version"
 
-cu::head_line_echo "build and test with Java: $JAVA_HOME"
-jvb::mvn_cmd clean install
+# shellcheck disable=SC2153
+cu::head_line_echo "build and test with Java $default_build_jdk_version: $JAVA_HOME"
+mvu::mvn_cmd clean install
 
 ########################################
-# test multi-version java
+# test by multi-version jdk
 ########################################
-for jdk in "${PREPARE_JDKS_INSTALL_BY_SDKMAN[@]}"; do
+
+# about CI env var
+#   https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+if [ "${CI:-}" = true ]; then
+  readonly CI_MORE_BEGIN_OPTS=jacoco:prepare-agent CI_MORE_END_OPTS=jacoco:report
+fi
+
+for jdk in "${CI_JDKS[@]}"; do
   # already tested by above `mvn install`
-  [ "$default_build_jdk_version" = "$jdk" ] && continue
+  [ "$jdk" = "$default_build_jdk_version" ] && continue
 
-  prepare_jdks::switch_to_jdk "$jdk"
+  jvu::switch_to_jdk "$jdk"
 
   cu::head_line_echo "test with Java: $JAVA_HOME"
   # just test without build
-  jvb::mvn_cmd surefire:test
+  # shellcheck disable=SC2086
+  mvu::mvn_cmd ${CI_MORE_BEGIN_OPTS:-} surefire:test ${CI_MORE_END_OPTS:-}
 done
