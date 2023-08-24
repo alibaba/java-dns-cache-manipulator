@@ -59,7 +59,7 @@
 		<!-- need argLine to use `@{argLine}`(e.g. `maven-surefire-plugin`) -->
 		<argLine/>
 
-		<kotlin.version>1.9.0</kotlin.version>
+		<kotlin.version>1.9.10</kotlin.version>
 		<kotlin.compiler.jvmTarget>${maven.compiler.source}</kotlin.compiler.jvmTarget>
 
 		<!-- testing dependencies versions -->
