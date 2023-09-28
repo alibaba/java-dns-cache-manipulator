@@ -184,7 +184,7 @@ public static void beforeClass() throws Exception {
 
 ```java
 // Get a dns cache entry by host
-DnsCacheEntry entry = DnsCacheManipulator.getDnsCache();
+DnsCacheEntry entry = DnsCacheManipulator.getDnsCache("bing.com");
 
 // get whole dns cache info DnsCache including cache and negative cache.
 DnsCache dnsCache = DnsCacheManipulator.getWholeDnsCache();
