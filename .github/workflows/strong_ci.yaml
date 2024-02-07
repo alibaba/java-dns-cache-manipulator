@@ -15,33 +15,20 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup Java 8
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: 8
+          # https://github.com/actions/setup-java?tab=readme-ov-file#install-multiple-jdks
+          #
+          # do NOT move old version 8.0.345 before 8, because the old version satified version 8
+          java-version: |
+            8
+            8.0.345
+            11
+            17
+            20
           distribution: zulu
-          # only first java setup need enable cache
           cache: maven
-      - name: Setup Java 8.0.345
-        uses: actions/setup-java@v4
-        with:
-          java-version: 8.0.345
-          distribution: zulu
-      - name: Setup Java 11
-        uses: actions/setup-java@v4
-        with:
-          java-version: 11
-          distribution: microsoft
-      - name: Setup Java 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: microsoft
-      - name: Setup Java 20
-        uses: actions/setup-java@v4
-        with:
-          java-version: 20
-          distribution: zulu
 
       - name: Run integration test
         run: scripts/integration_test
