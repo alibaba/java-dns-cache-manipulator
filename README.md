@@ -10,13 +10,13 @@
 <a href="https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?color=2d545e&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/releases"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg" alt="GitHub release"></a>
 <a href="https://alibaba.github.io/java-dns-cache-manipulator/apidocs/"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator?label=javadoc&color=339933&logo=microsoft-academic&logoColor=white" alt="Javadocs"></a>
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/stargazers"><img src="https://img.shields.io/github/stars/alibaba/java-dns-cache-manipulator" alt="GitHub Stars"></a>
-<a href="https://github.com/alibaba/java-dns-cache-manipulator/fork"><img src="https://img.shields.io/github/forks/alibaba/java-dns-cache-manipulator" alt="GitHub Forks"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/stargazers"><img src="https://img.shields.io/github/stars/alibaba/java-dns-cache-manipulator?style=flat" alt="GitHub Stars"></a>
+<a href="https://github.com/alibaba/java-dns-cache-manipulator/fork"><img src="https://img.shields.io/github/forks/alibaba/java-dns-cache-manipulator?style=flat" alt="GitHub Forks"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/issues"><img src="https://img.shields.io/github/issues/alibaba/java-dns-cache-manipulator" alt="GitHub issues"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/network/dependents"><img src="https://badgen.net/github/dependents-repo/alibaba/java-dns-cache-manipulator?label=user%20repos" alt="user repos"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/graphs/contributors"><img src="https://img.shields.io/github/contributors/alibaba/java-dns-cache-manipulator" alt="GitHub Contributors"></a>
-<a href="https://gitpod.io/#https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/badge/Gitpod-ready to code-339933?label=gitpod&logo=gitpod&logoColor=white" alt="gitpod: Ready to Code"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/github/repo-size/alibaba/java-dns-cache-manipulator" alt="GitHub repo size"></a>
+<a href="https://gitpod.io/#https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/badge/Gitpod-ready to code-339933?label=gitpod&logo=gitpod&logoColor=white" alt="gitpod: Ready to Code"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/releases/download/v1.8.1/dcm-1.8.1.tar.gz"><img src="https://img.shields.io/github/downloads/alibaba/java-dns-cache-manipulator/v1.8.1/dcm-1.8.1.tar.gz.svg?logoColor=white&logo=DocuSign" alt="GitHub release download - dcm.tar.gz)"></a>
 </p>
 
@@ -31,8 +31,9 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
 - [**`DCM` Tool**](tool)  
   A tiny tool for setting/viewing dns of running JVM processes.
 
-> From `DCM 1.7+` upgrade to `Java 8`.  
-> If you need `Java 6` support, use version `1.6.x` <a href="https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?versionPrefix=1.6.&color=lightgrey&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
+> [!NOTE]
+> Start from `DCM 1.7+` upgrade to `Java 8` 🚀  
+> If you need `Java 6` support, use version `1.6.x` <a href="https://central.sonatype.com/artifact/com.alibaba/dns-cache-manipulator/versions"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?versionPrefix=1.6.&color=lightgrey&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
 
 ----------------------------------------
 
