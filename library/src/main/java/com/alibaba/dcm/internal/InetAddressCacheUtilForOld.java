@@ -41,6 +41,7 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
 @ApiStatus.Internal
+@SuppressWarnings("JavadocReference")
 public final class InetAddressCacheUtilForOld {
     /**
      * Need convert host to lowercase, see {@link InetAddress#cacheAddresses(String, InetAddress[], boolean)}.
@@ -170,6 +171,7 @@ public final class InetAddressCacheUtilForOld {
     /**
      * @return {@link InetAddress#addressCache} and {@link InetAddress#negativeCache}
      */
+    @SuppressWarnings("JavaReflectionMemberAccess")
     private static Object[] getAddressCacheAndNegativeCacheOfInetAddress0()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;

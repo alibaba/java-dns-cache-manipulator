@@ -31,6 +31,7 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isNewInetAddr
  */
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
+@SuppressWarnings("JavadocReference")
 public final class DnsCacheManipulator {
     /**
      * Set a <b>never expired</b> dns cache entry.

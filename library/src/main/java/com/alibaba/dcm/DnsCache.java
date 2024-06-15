@@ -55,10 +55,7 @@ public final class DnsCache implements Serializable {
      */
     @Override
     public String toString() {
-        return "DnsCache{" +
-                "cache=" + cache +
-                ", negativeCache=" + negativeCache +
-                '}';
+        return "DnsCache{cache=" + cache + ", negativeCache=" + negativeCache + '}';
     }
 
     /**

@@ -133,10 +133,10 @@ public class DcmTool {
     @Nonnull
     private static String getConfig(@Nonnull String name) {
         String var = System.getenv(name);
-        if (var == null || var.trim().length() == 0) {
+        if (var == null || var.trim().isEmpty()) {
             var = System.getProperty(name);
         }
-        if (var == null || var.trim().length() == 0) {
+        if (var == null || var.trim().isEmpty()) {
             throw new IllegalStateException("fail to var " + name + ", is absent or blank string!");
         }
 

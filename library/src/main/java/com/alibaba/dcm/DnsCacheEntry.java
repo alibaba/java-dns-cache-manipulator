@@ -91,11 +91,8 @@ public final class DnsCacheEntry implements Serializable {
     public String toString() {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-        return "DnsCacheEntry{" +
-                "host='" + host + '\'' +
-                ", ips=" + Arrays.toString(ips) +
-                ", expiration=" + dateFormat.format(expiration) +
-                '}';
+        return "DnsCacheEntry{host='" + host + '\'' + ", ips=" + Arrays.toString(ips) +
+                ", expiration=" + dateFormat.format(expiration) + '}';
     }
 
     /**
@@ -120,7 +117,7 @@ public final class DnsCacheEntry implements Serializable {
     public int hashCode() {
         int result = host != null ? host.hashCode() : 0;
         result = 31 * result + Arrays.hashCode(ips);
-        result = 31 * result + (int) (expiration ^ (expiration >>> 32));
+        result = 31 * result + Long.hashCode(expiration);
         return result;
     }
 }

@@ -79,4 +79,4 @@ The LTS `JDK` versions(8/11/17) and recent versions are tested , other `JDK` ver
     - [FileOutput Node - Java DNS caching pitfall - quick clarification and tips](https://www.ibm.com/developerworks/community/blogs/aimsupport/entry/fileoutput_node_dns_caching_pitfall?lang=en)
 - The [`javahost`](https://github.com/tanhaichao/javahost) project of [`@tanhaichao`](https://github.com/tanhaichao) (Thanks for your work!)
     - [the documentation](http://leopard.io/modules/javahost) of the project.
-    - The solution of how to set up Java DNS Cache in this project comes from this project. When I first encountered the host binding problem in the continuous integration project, I also used the project to solve it 👍
+    - The solution of how to set up Java DNS Cache comes from this project. When I first encountered the host binding problem in the continuous integration project, I also used the project to solve it 👍

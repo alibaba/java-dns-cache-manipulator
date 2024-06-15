@@ -163,7 +163,7 @@ public class DcmAgent {
         if (suppressException == null) return false;
 
         suppressException = suppressException.trim();
-        if (suppressException.length() == 0) return false;
+        if (suppressException.isEmpty()) return false;
 
         return "true".equalsIgnoreCase(suppressException);
     }
@@ -300,7 +300,7 @@ public class DcmAgent {
     @Nullable
     private static String getConfig(@Nonnull String name) {
         String var = System.getenv(name);
-        if (var == null || var.trim().length() == 0) {
+        if (var == null || var.trim().isEmpty()) {
             var = System.getProperty(name);
         }
         return var;

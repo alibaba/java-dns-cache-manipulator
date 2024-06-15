@@ -35,6 +35,7 @@ import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
 @ApiStatus.Internal
+@SuppressWarnings("JavadocReference")
 public final class InetAddressCacheUtilForNew {
     /**
      * {@link InetAddress.CachedAddresses}

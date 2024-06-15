@@ -19,6 +19,7 @@ import java.net.UnknownHostException;
 @ParametersAreNonnullByDefault
 @ReturnValuesAreNonnullByDefault
 @ApiStatus.Internal
+@SuppressWarnings("JavadocReference")
 public final class InetAddressCacheUtilCommons {
     /**
      * We never really have "never".

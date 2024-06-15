@@ -74,7 +74,7 @@ Java Dns Cache Manipulator(DCM) Library
     - 一个`JVM`进程可以对应一套域名绑定，相互之间不影响，可以实现多场景，多域名绑定的需求压测。
 1. 打开`Java`中的`SecurityManager`时（如在`Web`容器`Tomcat`中的`Web`应用），`Java`的`DNS`缺省是不会失效的。
     如果域名绑定的`IP`变了，可以通过这个库重置`DNS`。
-    - 通过[`Java Dns Cache Manipulator Tool`](../tool)设置运行中`JVM DNS Cache`。  
+    - 通过[`Java Dns Cache Manipulator Tool`](../../tool)设置运行中`JVM DNS Cache`。  
         **无需** 应用包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
     - 或通过执行入口调用`Java Dns Cache Manipulator Library`的方法，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。  
         ***需要*** 应用已经包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
@@ -170,7 +170,7 @@ DnsCacheManipulator.removeDnsCache("aliyun.com");
 ----------------------------------
 
 ```java
-DnsCache dnsCache = DnsCacheManipulator.getWholeDnsCache()
+DnsCache dnsCache = DnsCacheManipulator.getWholeDnsCache();
 System.out.println(dnsCache);
 ```
 
@@ -184,7 +184,7 @@ int cachePolicy = DnsCacheManipulator.getDnsCachePolicy();
 DnsCacheManipulator.setDnsCachePolicy(2);
 
 // 查看未命中条目的缓存时间
-DnsCacheManipulator.getDnsNegativeCachePolicy()
+DnsCacheManipulator.getDnsNegativeCachePolicy();
 // 设置未命中条目的缓存时间
 DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 ```

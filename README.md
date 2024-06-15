@@ -222,7 +222,7 @@ int cachePolicy = DnsCacheManipulator.getDnsCachePolicy();
 DnsCacheManipulator.setDnsCachePolicy(2);
 
 // View the cache time of missed entries(negative entries)
-DnsCacheManipulator.getDnsNegativeCachePolicy()
+DnsCacheManipulator.getDnsNegativeCachePolicy();
 // Set the cache time of missed entries
 DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 ```
@@ -233,7 +233,7 @@ DnsCacheManipulator.setDnsNegativeCachePolicy(0);
 
 With the release of Java 16 the access control of the new Jigsaw module system is starting to be enforced by the JVM. If you use `DCM` under Java 16+, add below Java options:
 
-```java
+```sh
 --add-opens java.base/java.net=ALL-UNNAMED
 --add-opens java.base/sun.net=ALL-UNNAMED
 ```

@@ -10,6 +10,7 @@ final class IpParserUtil {
     /**
      * source code is dug from {@link java.net.InetAddress#getAllByName(java.lang.String, java.net.InetAddress)}
      */
+    @SuppressWarnings("JavadocReference")
     static byte[] ip2ByteArray(String ip) {
         boolean ipv6Expected = false;
         if (ip.charAt(0) == '[') {
