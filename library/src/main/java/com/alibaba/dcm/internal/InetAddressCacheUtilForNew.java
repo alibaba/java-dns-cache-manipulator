@@ -79,7 +79,15 @@ public final class InetAddressCacheUtilForNew {
             // double check
             if (constructorOfInetAddress$CachedAddresses != null) return constructorOfInetAddress$CachedAddresses;
 
-            final Class<?> clazz = Class.forName(inetAddress$CachedAddresses_ClassName);
+            Class<?> clazz;
+
+            try {
+                clazz = Class.forName(inetAddress$CachedAddresses_ClassName);
+            } catch (ClassNotFoundException e) {
+                // jdk 21 support
+                // due to https://github.com/openjdk/jdk/commit/8b127262a3dff9c4420945e902f6a688f8d05e2e
+                clazz = Class.forName(inetAddress$CachedLookup_ClassName);
+            }
 
             // InetAddress.CacheEntry has only one constructor:
             //
@@ -88,6 +96,8 @@ public final class InetAddressCacheUtilForNew {
             //   https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783
             // code in jdk 11:
             //   https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787
+            // code in jdk 21:
+            //   https://github.com/openjdk/jdk/blob/jdk-21-ga/src/java.base/share/classes/java/net/InetAddress.java#L979
             final Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
             constructor.setAccessible(true);
 
@@ -234,7 +244,10 @@ public final class InetAddressCacheUtilForNew {
 
         final InetAddress[] inetAddresses;
         final long expiration;
-        if (addressesClassName.equals(inetAddress$CachedAddresses_ClassName)) {
+        if (addressesClassName.equals(inetAddress$CachedAddresses_ClassName)
+                // jdk 21 support
+                || addressesClassName.equals(inetAddress$CachedLookup_ClassName)) {
+
             inetAddresses = (InetAddress[]) inetAddressesFieldOfInetAddress$CacheAddress.get(addresses);
 
             long expiryTimeNanos = expiryTimeFieldOfInetAddress$CacheAddress.getLong(addresses);
@@ -253,6 +266,7 @@ public final class InetAddressCacheUtilForNew {
     }
 
     private static final String inetAddress$CachedAddresses_ClassName = "java.net.InetAddress$CachedAddresses";
+    private static final String inetAddress$CachedLookup_ClassName = "java.net.InetAddress$CachedLookup";
     private static final String inetAddress$NameServiceAddresses_ClassName = "java.net.InetAddress$NameServiceAddresses";
 
     // Fields of InetAddress$CachedAddresses
@@ -274,7 +288,14 @@ public final class InetAddressCacheUtilForNew {
             ///////////////////////////////////////////////
             // Fields of InetAddress$CachedAddresses
             ///////////////////////////////////////////////
-            final Class<?> cachedAddresses_Class = Class.forName(inetAddress$CachedAddresses_ClassName);
+            Class<?> cachedAddresses_Class;
+
+            try {
+                cachedAddresses_Class = Class.forName(inetAddress$CachedAddresses_ClassName);
+            } catch (ClassNotFoundException e) {
+                // jdk 21 support
+                cachedAddresses_Class = Class.forName(inetAddress$CachedLookup_ClassName);
+            }
 
             final Field inetAddressesFiled = cachedAddresses_Class.getDeclaredField("inetAddresses");
             inetAddressesFiled.setAccessible(true);
