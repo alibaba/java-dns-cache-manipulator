@@ -27,7 +27,7 @@
 Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
 
 - [**`DCM` Library**](library)  
-  A tiny 0-dependency thread-safe lib for setting/viewing dns programmatically without touching host file, make unit/integration test portable. Support `Java 8~20`, support `IPv6`.
+  A tiny 0-dependency thread-safe lib for setting/viewing dns programmatically without touching host file, make unit/integration test portable. Support `Java 8~21`, support `IPv6`.
 - [**`DCM` Tool**](tool)  
   A tiny tool for setting/viewing dns of running JVM processes.
 
