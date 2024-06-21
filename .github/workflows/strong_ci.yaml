@@ -20,7 +20,7 @@ jobs:
         with:
           # https://github.com/actions/setup-java?tab=readme-ov-file#install-multiple-jdks
           #
-          # do NOT move old version 8.0.345 before 8, because the old version satified version 8
+          # do NOT move old version 8.0.345 before 8, because the old version satisfied version 8
           java-version: |
             8
             8.0.345
@@ -28,6 +28,7 @@ jobs:
             17
             20
             21
+            22
           distribution: zulu
           cache: maven
 
