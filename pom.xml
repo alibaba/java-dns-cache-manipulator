@@ -59,11 +59,11 @@
 		<!-- need argLine to use `@{argLine}`(e.g. `maven-surefire-plugin`) -->
 		<argLine/>
 
-		<kotlin.version>1.9.24</kotlin.version>
+		<kotlin.version>2.0.0</kotlin.version>
 		<kotlin.compiler.jvmTarget>${maven.compiler.source}</kotlin.compiler.jvmTarget>
 
 		<!-- testing dependencies versions -->
-		<junit5.version>5.10.2</junit5.version>
+		<junit5.version>5.10.3</junit5.version>
 		<kotest.version>5.8.0</kotest.version>
 	</properties>
 
@@ -588,7 +588,7 @@
 					<plugin>
 						<groupId>com.github.spotbugs</groupId>
 						<artifactId>spotbugs-maven-plugin</artifactId>
-						<version>4.8.5.0</version>
+						<version>4.8.6.1</version>
 						<executions>
 							<execution>
 								<phase>verify</phase>
