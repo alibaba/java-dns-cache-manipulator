@@ -8,6 +8,7 @@ import sun.net.InetAddressCachePolicy;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -142,6 +143,27 @@ public final class DnsCacheManipulator {
                     propertiesFileName, e);
             throw new DnsCacheManipulatorException(message, e);
         }
+    }
+
+    /**
+     * Load dns config from the specified properties file in filesystem, then set dns cache.
+     *
+     * @param propertiesFileName specified properties file name in filesystem.
+     * @throws DnsCacheManipulatorException Operation fail
+     * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
+     */
+    public static void loadDnsCacheConfigFromFileSystem(String propertiesFileName) {
+      try {
+        InputStream inputStream = new FileInputStream(propertiesFileName);
+        Properties properties = new Properties();
+        properties.load(inputStream);
+        inputStream.close();
+        setDnsCache(properties);
+      } catch (Exception e) {
+        final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
+            propertiesFileName, e);
+        throw new DnsCacheManipulatorException(message, e);
+      }
     }
 
     /**

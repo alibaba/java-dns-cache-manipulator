@@ -421,6 +421,23 @@ $ dcm -p 12345 getNegativePolicy
 $ dcm -p 12345 setNegativePolicy 0
 ```
 
+### Load Cache Entries from File
+
+```bash
+$ dcm -p 12345 load /foo/bar/my-cache.properties
+```
+
+### Manipulate cache with a command line option at JVM startup
+
+To manipulate dns entries at jvm startup, add the following jvm-options:
+
+```bash
+# Set individual entry
+java -javaagent:<path to jar>="set foo.com 1.1.1.1" --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/sun.net=ALL-UNNAMED ...
+# Load entries from file
+java -javaagent:<path to jar>="load my-cache.properties" --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/sun.net=ALL-UNNAMED ...
+```
+
 ## 📚 Related information
 
 * [Java Agent Specification](http://docs.oracle.com/javase/7/docs/api/java/lang/instrument/package-summary.html)
