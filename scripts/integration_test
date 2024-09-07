@@ -54,7 +54,6 @@ readonly CI_JDKS=(
   8
   "$default_build_jdk_version"
   17
-  20
   21
   22
 )
