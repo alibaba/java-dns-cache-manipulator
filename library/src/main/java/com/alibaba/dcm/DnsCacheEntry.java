@@ -1,9 +1,7 @@
 package com.alibaba.dcm;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -18,8 +16,6 @@ import java.util.Objects;
  * @see DnsCache
  */
 @Immutable
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
 public final class DnsCacheEntry implements Serializable {
     private static final long serialVersionUID = -7476648934387757732L;
 
@@ -114,6 +110,7 @@ public final class DnsCacheEntry implements Serializable {
      * {@inheritDoc}
      */
     @Override
+    @SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
     public int hashCode() {
         int result = host != null ? host.hashCode() : 0;
         result = 31 * result + Arrays.hashCode(ips);

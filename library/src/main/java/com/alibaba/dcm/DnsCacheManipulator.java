@@ -1,13 +1,11 @@
 package com.alibaba.dcm;
 
 import com.alibaba.dcm.internal.InetAddressCacheUtilCommons;
-import com.alibaba.dcm.internal.InetAddressCacheUtilForOld;
 import com.alibaba.dcm.internal.InetAddressCacheUtilForNew;
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
+import com.alibaba.dcm.internal.InetAddressCacheUtilForOld;
 import sun.net.InetAddressCachePolicy;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -30,8 +28,6 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isNewInetAddr
  * @see DnsCacheEntry
  * @see DnsCacheManipulatorException
  */
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
 @SuppressWarnings("JavadocReference")
 public final class DnsCacheManipulator {
     /**

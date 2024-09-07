@@ -2,11 +2,9 @@ package com.alibaba.dcm.internal;
 
 import com.alibaba.dcm.DnsCache;
 import com.alibaba.dcm.DnsCacheEntry;
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.GuardedBy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -18,7 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.getIpFromInetAddress;
+import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
 
 /**
  * Util class to manipulate dns cache for old {@code JDK 8-}.
@@ -38,8 +38,6 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.*;
  * @see InetAddress#cacheInitIfNeeded()
  * @see InetAddress#cacheAddresses(String, InetAddress[], boolean)
  */
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
 @ApiStatus.Internal
 @SuppressWarnings("JavadocReference")
 public final class InetAddressCacheUtilForOld {

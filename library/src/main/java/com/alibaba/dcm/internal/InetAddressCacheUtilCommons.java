@@ -1,11 +1,9 @@
 package com.alibaba.dcm.internal;
 
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
 import org.jetbrains.annotations.ApiStatus;
 import sun.net.InetAddressCachePolicy;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,8 +14,6 @@ import java.net.UnknownHostException;
  * @author Jerry Lee (oldratlee at gmail dot com)
  * @since 1.6.0
  */
-@ParametersAreNonnullByDefault
-@ReturnValuesAreNonnullByDefault
 @ApiStatus.Internal
 @SuppressWarnings("JavadocReference")
 public final class InetAddressCacheUtilCommons {
