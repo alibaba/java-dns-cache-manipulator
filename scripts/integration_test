@@ -1,12 +1,19 @@
 #!/bin/bash
 set -eEuo pipefail
-cd "$(dirname "$(readlink -f "$0")")"
+# the canonical path of this script
+SELF_PATH=$(realpath -- "$0")
+readonly SELF_PATH SELF_DIR=${SELF_PATH%/*}
+# cd to script dir
+cd "$SELF_DIR"
 
-BASH_BUDDY_ROOT="$(readlink -f bash-buddy)"
-readonly BASH_BUDDY_ROOT
+readonly BASH_BUDDY_ROOT="$SELF_DIR/bash-buddy"
+# shellcheck disable=SC1091
 source "$BASH_BUDDY_ROOT/lib/trap_error_info.sh"
+# shellcheck disable=SC1091
 source "$BASH_BUDDY_ROOT/lib/common_utils.sh"
+# shellcheck disable=SC1091
 source "$BASH_BUDDY_ROOT/lib/java_utils.sh"
+# shellcheck disable=SC1091
 source "$BASH_BUDDY_ROOT/lib/maven_utils.sh"
 
 ################################################################################
@@ -93,11 +100,11 @@ mvu::mvn_cmd clean install
 # test by multi-version jdk
 ########################################
 
+SUREFIRE_TEST_GOAL=(surefire:test)
 # about CI env var
 #   https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
-if [ "${CI:-}" = true ]; then
-  readonly CI_MORE_BEGIN_OPTS=jacoco:prepare-agent CI_MORE_END_OPTS=jacoco:report
-fi
+[ "${CI:-}" = true ] && SUREFIRE_TEST_GOAL=(jacoco:prepare-agent "${SUREFIRE_TEST_GOAL[@]}" jacoco:report)
+readonly SUREFIRE_TEST_GOAL
 
 for jdk in "${CI_JDKS[@]}"; do
   # already tested by above `mvn install`
@@ -108,5 +115,5 @@ for jdk in "${CI_JDKS[@]}"; do
   cu::head_line_echo "test with Java: $JAVA_HOME"
   # just test without build
   # shellcheck disable=SC2086
-  mvu::mvn_cmd ${CI_MORE_BEGIN_OPTS:-} surefire:test ${CI_MORE_END_OPTS:-}
+  mvu::mvn_cmd "${SUREFIRE_TEST_GOAL[@]}"
 done
