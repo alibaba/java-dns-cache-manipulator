@@ -38,7 +38,14 @@ public class DcmAgent {
     static final String DCM_AGENT_SUCCESS_MARK_LINE = "!!DCM SUCCESS!!";
 
     /**
-     * Entrance method of DCM Java Agent.
+     * Entrance method of DCM Java Agent when used through a jvm command line option.
+     */
+    public static void premain(@Nonnull String agentArgument) throws Exception {
+      agentmain(agentArgument);
+    }
+
+    /**
+     * Entrance method of DCM Java Agent when connecting to a running jvm.
      */
     @SuppressFBWarnings("THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION")
     public static void agentmain(@Nonnull String agentArgument) throws Exception {
@@ -263,6 +270,8 @@ public class DcmAgent {
         map.put("list", DnsCacheManipulator.class.getMethod("getWholeDnsCache"));
         map.put("ls", DnsCacheManipulator.class.getMethod("getWholeDnsCache"));
         map.put("clear", DnsCacheManipulator.class.getMethod("clearDnsCache"));
+
+        map.put("load", DnsCacheManipulator.class.getMethod("loadDnsCacheConfigFromFileSystem", String.class));
 
         map.put("setPolicy", DnsCacheManipulator.class.getMethod("setDnsCachePolicy", int.class));
         map.put("getPolicy", DnsCacheManipulator.class.getMethod("getDnsCachePolicy"));

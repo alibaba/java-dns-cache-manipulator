@@ -3,15 +3,12 @@ package com.alibaba.dcm
 import com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isNewInetAddressImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
-import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.*
 import io.kotest.matchers.longs.shouldBeBetween
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldNotBeSameInstanceAs
-
+import kotlin.io.path.writeText
 
 private const val IP1 = "42.42.42.1"
 private const val IP2 = "42.42.42.2"
@@ -276,13 +273,13 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
     }
 
     @Test
-    fun test_loadDnsCacheConfig_fromMyConfig() {
+    fun test_loadDnsCacheConfig_fromMyConfigClassPath() {
         DnsCacheManipulator.loadDnsCacheConfig("my-dns-cache.properties")
         "www.hello2.com".lookupIpByName() shouldBe IP2
     }
 
     @Test
-    fun test_multi_ips_in_config_file() {
+    fun test_multi_ips_in_config_file_classpath() {
         DnsCacheManipulator.loadDnsCacheConfig("dns-cache-multi-ips.properties")
 
         val host = "www.hello-multi-ips.com"
@@ -299,11 +296,32 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
     }
 
     @Test
-    fun test_configNotFound() {
+    fun test_configNotFound_classpath() {
         val ex = shouldThrow<DnsCacheManipulatorException> {
             DnsCacheManipulator.loadDnsCacheConfig("not-existed.properties")
         }
 
         ex.message shouldBe "Fail to find not-existed.properties on classpath!"
+    }
+
+    @Test
+    fun test_loadDnsCacheConfig_fromMyConfigFileSystem() {
+        val tempFile = kotlin.io.path.createTempFile("dns-cache-test", ".properties")
+        tempFile.writeText("www.hello2.com $IP2")
+        tempFile.toFile().deleteOnExit()
+
+        DnsCacheManipulator.loadDnsCacheConfigFromFileSystem(tempFile.toAbsolutePath().toString())
+        "www.hello2.com".lookupIpByName() shouldBe IP2
+    }
+
+    @Test
+    fun test_configNotFound_fileSystem() {
+        val ex = shouldThrow<DnsCacheManipulatorException> {
+            DnsCacheManipulator.loadDnsCacheConfigFromFileSystem("not-existed.properties")
+        }
+
+        ex.message shouldBeIn arrayOf(
+            "Fail to loadDnsCacheConfig from not-existed.properties, cause: java.io.FileNotFoundException: not-existed.properties (No such file or directory)",
+            "Fail to loadDnsCacheConfig from not-existed.properties, cause: java.io.FileNotFoundException: not-existed.properties (The system cannot find the file specified)")
     }
 }
