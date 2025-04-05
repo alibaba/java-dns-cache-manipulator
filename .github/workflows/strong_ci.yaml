@@ -28,6 +28,7 @@ jobs:
             17
             21
             23
+            24
           distribution: zulu
           cache: maven
 

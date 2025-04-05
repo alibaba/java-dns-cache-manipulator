@@ -63,6 +63,7 @@ readonly CI_JDKS=(
   17
   21
   23
+  24
 )
 
 # here use `install` and `-D performRelease` intended
