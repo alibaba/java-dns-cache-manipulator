@@ -63,7 +63,7 @@
 		<kotlin.compiler.jvmTarget>${maven.compiler.source}</kotlin.compiler.jvmTarget>
 
 		<!-- testing dependencies versions -->
-		<junit5.version>5.13.4</junit5.version>
+		<junit5.version>6.0.0</junit5.version>
 		<kotest.version>5.8.0</kotest.version>
 	</properties>
 
