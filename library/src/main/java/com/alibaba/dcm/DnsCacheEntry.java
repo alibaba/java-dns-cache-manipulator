@@ -59,7 +59,8 @@ public final class DnsCacheEntry implements Serializable {
      * @deprecated use {@link #DnsCacheEntry(String, String[], long)} instead
      */
     @Deprecated
-    public DnsCacheEntry(String host, @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips, Date expiration) {
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
+    public DnsCacheEntry(String host, String[] ips, Date expiration) {
         this.host = host;
         this.ips = ips;
         this.expiration = expiration.getTime();
@@ -70,7 +71,8 @@ public final class DnsCacheEntry implements Serializable {
      *
      * @since 1.6.0
      */
-    public DnsCacheEntry(String host, @SuppressFBWarnings("EI_EXPOSE_REP2") String[] ips, long expiration) {
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
+    public DnsCacheEntry(String host, String[] ips, long expiration) {
         this.host = host;
         this.ips = ips;
         this.expiration = expiration;

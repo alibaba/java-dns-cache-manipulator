@@ -24,8 +24,8 @@ public final class DnsCache implements Serializable {
     /**
      * Construct a {@link DnsCache}.
      */
-    public DnsCache(@SuppressFBWarnings("EI_EXPOSE_REP2") List<DnsCacheEntry> cache,
-                    @SuppressFBWarnings("EI_EXPOSE_REP2") List<DnsCacheEntry> negativeCache) {
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
+    public DnsCache(List<DnsCacheEntry> cache, List<DnsCacheEntry> negativeCache) {
         this.cache = cache;
         this.negativeCache = negativeCache;
     }
