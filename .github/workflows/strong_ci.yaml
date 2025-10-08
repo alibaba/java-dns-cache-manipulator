@@ -20,13 +20,10 @@ jobs:
         with:
           # https://github.com/actions/setup-java?tab=readme-ov-file#install-multiple-jdks
           #
-          # do NOT move old version 8.0.345 before 8, because the old version satisfied version 8
+          # image(ubuntu-latest/ubuntu-24.04) included Java 8/11/17/21/25
+          #   https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md#java
           java-version: |
-            8
             8.0.345
-            11
-            17
-            21
             23
           distribution: zulu
           cache: maven

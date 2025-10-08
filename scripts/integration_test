@@ -29,18 +29,12 @@ _findJdk8_0_345() {
   # https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
   if [ true = "${GITHUB_ACTIONS:-}" ]; then
     JAVA8_0_345_HOME="$(
-      d="$(echo "$JAVA8_HOME/../.."/8.0.345*/x64)" || cu::die "Fail to get java home of v8.0.345!"
+      d="$(echo /opt/hostedtoolcache/*/8.0.345*/x64)" || cu::die "Fail to get java home of v8.0.345!"
       cd "$d" || cu::die "Fail to cd java home of v8.0.345($d)!"
       pwd
     )"
 
-    JDK_8_LATEST="$(
-      # shellcheck disable=SC2012
-      d="$(ls -v -d "$JAVA8_HOME/../.."/8.* | tail -n 1)" || cu::die "Fail to get latest java 8 home!"
-      cd "$d" || cu::die "Fail to cd java8 home"
-      pwd
-    )/x64"
-
+    JDK_8_LATEST="$(echo /usr/lib/jvm/*-8-jdk-*)"
     [ "$JDK_8_LATEST" != "$JAVA8_0_345_HOME" ] || cu::die "JDK_8_LATEST($JDK_8_LATEST) is same as JAVA8_0_345_HOME($JAVA8_0_345_HOME), NOT newer java 8 version!"
     export JAVA8_HOME="$JDK_8_LATEST"
   else
