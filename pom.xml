@@ -59,7 +59,7 @@
 		<!-- need argLine to use `@{argLine}`(e.g. `maven-surefire-plugin`) -->
 		<argLine/>
 
-		<kotlin.version>2.2.21</kotlin.version>
+		<kotlin.version>2.3.0</kotlin.version>
 		<kotlin.compiler.jvmTarget>${maven.compiler.source}</kotlin.compiler.jvmTarget>
 
 		<!-- testing dependencies versions -->
@@ -358,7 +358,6 @@
 					<configuration>
 						<args>
 							<arg>-Werror</arg>
-							<arg>-Xjvm-default=all</arg>
 							<arg>-Xjsr305=warn</arg>
 						</args>
 					</configuration>
