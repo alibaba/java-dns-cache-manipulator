@@ -118,10 +118,14 @@ public final class InetAddressCacheUtilCommons {
         synchronized (InetAddressCachePolicy.class) { // static synchronized method!
             if (isNegative) {
                 negativeCachePolicyFiledOfInetAddressCachePolicy.setInt(null, seconds);
-                negativeSetOfInetAddressCachePolicy.setBoolean(null, true);
+                if (negativeSetOfInetAddressCachePolicy != null) {
+                    negativeSetOfInetAddressCachePolicy.setBoolean(null, true);
+                }
             } else {
                 cachePolicyFiledOfInetAddressCachePolicy.setInt(null, seconds);
-                setFiledOfInetAddressCachePolicy.setBoolean(null, true);
+                if (setFiledOfInetAddressCachePolicy != null) {
+                    setFiledOfInetAddressCachePolicy.setBoolean(null, true);
+                }
             }
         }
     }
@@ -164,18 +168,30 @@ public final class InetAddressCacheUtilCommons {
 
             try {
                 f = clazz.getDeclaredField("propertySet");
+                f.setAccessible(true);
             } catch (NoSuchFieldException e) {
-                f = clazz.getDeclaredField("set");
+                try {
+                    f = clazz.getDeclaredField("set");
+                    f.setAccessible(true);
+                } catch (NoSuchFieldException ex) {
+                    // Java 25 does not have 'set' field, leave it as null
+                    f = null;
+                }
             }
-            f.setAccessible(true);
             setFiledOfInetAddressCachePolicy = f;
 
             try {
                 f = clazz.getDeclaredField("propertyNegativeSet");
+                f.setAccessible(true);
             } catch (NoSuchFieldException e) {
-                f = clazz.getDeclaredField("negativeSet");
+                try {
+                    f = clazz.getDeclaredField("negativeSet");
+                    f.setAccessible(true);
+                } catch (NoSuchFieldException ex) {
+                    // Java 25 does not have 'negativeSet' field, leave it as null
+                    f = null;
+                }
             }
-            f.setAccessible(true);
             negativeSetOfInetAddressCachePolicy = f;
         }
     }

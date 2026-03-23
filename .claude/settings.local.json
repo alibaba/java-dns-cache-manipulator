@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(JAVA_HOME=/Users/jerry/.sdkman/candidates/java/21.0.10-tem /Users/jerry/.sdkman/candidates/java/21.0.10-tem/bin/java --add-opens java.base/sun.net=ALL-UNNAMED -cp target/test-classes:target/classes com.alibaba.dcm.internal.TestJava25CachePolicy)",
+      "Bash(JAVA_HOME=/Users/jerry/.sdkman/candidates/java/25.0.2-tem /Users/jerry/.sdkman/candidates/maven/3.9.14/bin/mvn clean test)",
+      "Bash(JAVA_HOME=/Users/jerry/.sdkman/candidates/java/21.0.10-tem /Users/jerry/.sdkman/candidates/maven/3.9.14/bin/mvn clean test)"
+    ]
+  }
+}
