@@ -3,10 +3,14 @@ package com.alibaba.dcm
 import com.alibaba.dcm.internal.InetAddressCacheUtilCommons.isNewInetAddressImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
-import io.kotest.matchers.collections.*
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.longs.shouldBeBetween
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.throwable.shouldHaveMessage
 import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 import kotlin.io.path.writeText
 
@@ -297,11 +301,9 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
 
     @Test
     fun test_configNotFound_classpath() {
-        val ex = shouldThrow<DnsCacheManipulatorException> {
+        shouldThrow<DnsCacheManipulatorException> {
             DnsCacheManipulator.loadDnsCacheConfig("not-existed.properties")
-        }
-
-        ex.message shouldBe "Fail to find not-existed.properties on classpath!"
+        } shouldHaveMessage "Fail to find not-existed.properties on classpath!"
     }
 
     @Test
@@ -316,12 +318,8 @@ class DnsCacheManipulatorTests : AnnotationSpec() {
 
     @Test
     fun test_configNotFound_fileSystem() {
-        val ex = shouldThrow<DnsCacheManipulatorException> {
+        shouldThrow<DnsCacheManipulatorException> {
             DnsCacheManipulator.loadDnsCacheConfigFromFileSystem("not-existed.properties")
-        }
-
-        ex.message shouldBeIn arrayOf(
-            "Fail to loadDnsCacheConfig from not-existed.properties, cause: java.io.FileNotFoundException: not-existed.properties (No such file or directory)",
-            "Fail to loadDnsCacheConfig from not-existed.properties, cause: java.io.FileNotFoundException: not-existed.properties (The system cannot find the file specified)")
+        }.shouldHaveMessage("Fail to loadDnsCacheConfig from not-existed.properties, cause: java.nio.file.NoSuchFileException: not-existed.properties")
     }
 }

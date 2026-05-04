@@ -58,14 +58,10 @@ public class DcmAgent {
         }
 
         initAction2Method();
-
-        PrintWriter filePrinter = null;
-        try {
-            final Map<String, List<String>> action2Arguments = parseAgentArgument(agentArgument);
-
-            // Extract file argument, set file printer if needed
-            filePrinter = getFilePrintWriter(action2Arguments.remove(FILE_KEY));
-
+        final Map<String, List<String>> action2Arguments = parseAgentArgument(agentArgument);
+        // extract the file argument of the internal FILE_KEY action from the parsed agent arguments,
+        //   and prepare a PrintWriter for output to a file if specified.
+        try (PrintWriter filePrinter = getFilePrintWriter(action2Arguments.remove(FILE_KEY))) {
             if (action2Arguments.isEmpty()) {
                 logger.info(DcmAgent.class.getName() + ": No action in agent argument, do nothing!");
                 if (filePrinter != null) {
@@ -85,14 +81,6 @@ public class DcmAgent {
 
             if (allSuccess && filePrinter != null) {
                 filePrinter.println(DCM_AGENT_SUCCESS_MARK_LINE);
-            }
-        } finally {
-            if (filePrinter != null) {
-                try {
-                    filePrinter.close();
-                } catch (Exception e) {
-                    // do nothing!
-                }
             }
         }
     }

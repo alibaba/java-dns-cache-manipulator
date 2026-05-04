@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.throwable.shouldHaveMessage
 import java.net.InetAddress
 
 /**
@@ -42,7 +43,7 @@ class IpParserUtilTests : FunSpec({
         test("test $caseName") {
             shouldThrow<IllegalArgumentException> {
                 IpParserUtil.ip2ByteArray(ip)
-            }.message shouldBe ip + INVALID_IP_ADDRESS
+            }.shouldHaveMessage(ip + INVALID_IP_ADDRESS)
         }
 
     }

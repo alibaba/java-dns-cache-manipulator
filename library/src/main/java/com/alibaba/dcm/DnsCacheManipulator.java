@@ -6,8 +6,9 @@ import com.alibaba.dcm.internal.InetAddressCacheUtilForOld;
 import sun.net.InetAddressCachePolicy;
 
 import javax.annotation.Nullable;
-import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,7 @@ public final class DnsCacheManipulator {
      *
      * @param properties input properties.<br>
      *                   e.g. {@code www.example.com=42.42.42.42}, <br>
-     *                   or value is multiply ips seperated by {@code comma}
+     *                   or value is multiply ips separated by {@code comma}
      *                   {@code www.example.com=42.42.42.42,43.43.43.43}
      * @throws DnsCacheManipulatorException Operation fail
      */
@@ -121,6 +122,20 @@ public final class DnsCacheManipulator {
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      */
     public static void loadDnsCacheConfig(String propertiesFileName) {
+        try (InputStream inputStream = getConfigStream(propertiesFileName)) {
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            setDnsCache(properties);
+        } catch (DnsCacheManipulatorException e) {
+            throw e;
+        } catch (Exception e) {
+            final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
+                    propertiesFileName, e);
+            throw new DnsCacheManipulatorException(message, e);
+        }
+    }
+
+    private static InputStream getConfigStream(String propertiesFileName) {
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propertiesFileName);
         if (inputStream == null) {
             inputStream = DnsCacheManipulator.class.getClassLoader().getResourceAsStream(propertiesFileName);
@@ -128,17 +143,7 @@ public final class DnsCacheManipulator {
         if (inputStream == null) {
             throw new DnsCacheManipulatorException("Fail to find " + propertiesFileName + " on classpath!");
         }
-
-        try {
-            Properties properties = new Properties();
-            properties.load(inputStream);
-            inputStream.close();
-            setDnsCache(properties);
-        } catch (Exception e) {
-            final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
-                    propertiesFileName, e);
-            throw new DnsCacheManipulatorException(message, e);
-        }
+        return inputStream;
     }
 
     /**
@@ -149,12 +154,12 @@ public final class DnsCacheManipulator {
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      */
     public static void loadDnsCacheConfigFromFileSystem(String propertiesFileName) {
-        try {
-            InputStream inputStream = new FileInputStream(propertiesFileName);
+        try (InputStream inputStream = Files.newInputStream(Paths.get(propertiesFileName))) {
             Properties properties = new Properties();
             properties.load(inputStream);
-            inputStream.close();
             setDnsCache(properties);
+        } catch (DnsCacheManipulatorException e) {
+            throw e;
         } catch (Exception e) {
             final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
                     propertiesFileName, e);
