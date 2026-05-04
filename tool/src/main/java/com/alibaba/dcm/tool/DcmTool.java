@@ -5,7 +5,6 @@ import com.sun.tools.attach.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.cli.*;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
@@ -34,7 +33,7 @@ public class DcmTool {
      * entry main method.
      */
     @SuppressFBWarnings("THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION")
-    public static void main(@Nonnull String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         final CommandLine cmd = parseCommandLine(args);
 
         final String[] arguments = cmd.getArgs();
@@ -58,8 +57,7 @@ public class DcmTool {
         doDcmActionViaAgent(action, arguments, pid);
     }
 
-    @Nonnull
-    private static CommandLine parseCommandLine(@Nonnull String[] args) throws ParseException {
+    private static CommandLine parseCommandLine(String[] args) throws ParseException {
         final Options options = new Options();
         options.addOption("p", "pid", true, "java process id to attach");
         options.addOption("h", "help", false, "show help");
@@ -76,7 +74,7 @@ public class DcmTool {
         return cmd;
     }
 
-    private static void doDcmActionViaAgent(@Nonnull String action, @Nonnull String[] arguments, @Nonnull String pid)
+    private static void doDcmActionViaAgent(String action, String[] arguments, String pid)
             throws AttachNotSupportedException, IOException, AgentLoadException, AgentInitializationException {
         final String tmpFile = getConfig(DCM_TOOLS_TMP_FILE_KEY);
         final String agentJar = getConfig(DCM_TOOLS_AGENT_JAR_KEY);
@@ -107,7 +105,7 @@ public class DcmTool {
         }
     }
 
-    private static boolean printDcmResult(@Nonnull String tmpFile) throws IOException {
+    private static boolean printDcmResult(String tmpFile) throws IOException {
         boolean actionSuccess = false;
 
         final List<String> lines = Files.readAllLines(Paths.get(tmpFile), UTF_8);
@@ -130,8 +128,7 @@ public class DcmTool {
     // util methods
     ///////////////////////////////////////////////
 
-    @Nonnull
-    private static String getConfig(@Nonnull String name) {
+    private static String getConfig(String name) {
         String var = System.getenv(name);
         if (var == null || var.trim().isEmpty()) {
             var = System.getProperty(name);
@@ -143,7 +140,6 @@ public class DcmTool {
         return var;
     }
 
-    @Nonnull
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     private static String selectProcess() {
         System.out.println("Which java process to attache:");
@@ -173,7 +169,6 @@ public class DcmTool {
         }
     }
 
-    @Nonnull
     static String pid() {
         final String name = ManagementFactory.getRuntimeMXBean().getName();
         final int idx = name.indexOf("@");

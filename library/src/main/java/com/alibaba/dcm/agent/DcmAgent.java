@@ -5,7 +5,6 @@ import com.alibaba.dcm.DnsCacheEntry;
 import com.alibaba.dcm.DnsCacheManipulator;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.lang.instrument.Instrumentation;
@@ -40,15 +39,16 @@ public class DcmAgent {
     /**
      * Entrance method of DCM Java Agent when used through a jvm command line option.
      */
-    public static void premain(@Nonnull String agentArgument) throws Exception {
-      agentmain(agentArgument);
+    @SuppressWarnings("unused")
+    public static void premain(String agentArgument) throws Exception {
+        agentmain(agentArgument);
     }
 
     /**
      * Entrance method of DCM Java Agent when connecting to a running jvm.
      */
     @SuppressFBWarnings("THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION")
-    public static void agentmain(@Nonnull String agentArgument) throws Exception {
+    public static void agentmain(String agentArgument) throws Exception {
         logger.info(format("%s: attached with agent argument: %s.%n", DcmAgent.class.getName(), agentArgument));
 
         agentArgument = agentArgument.trim();
@@ -84,8 +84,7 @@ public class DcmAgent {
         }
     }
 
-    @Nonnull
-    private static Map<String, List<String>> parseAgentArgument(@Nonnull String argument) {
+    private static Map<String, List<String>> parseAgentArgument(String argument) {
         final String[] split = argument.split("\\s+");
 
         int idx = 0;
@@ -112,6 +111,7 @@ public class DcmAgent {
     @Nullable
     private static PrintWriter getFilePrintWriter(@Nullable List<String> files) throws FileNotFoundException {
         if (null == files) return null;
+        // TODO assert files.size() == 1 and report error
 
         FileOutputStream fileOutputStream = new FileOutputStream(files.get(0), false);
         final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, UTF_8);
@@ -119,7 +119,7 @@ public class DcmAgent {
         return new PrintWriter(outputStreamWriter, true);
     }
 
-    private static boolean doAction(final String action, final List<String> arguments, final PrintWriter filePrinter) {
+    private static boolean doAction(final String action, final List<String> arguments, @Nullable final PrintWriter filePrinter) {
         final String argumentString = join(arguments);
 
         if (!action2Method.containsKey(action)) {
@@ -209,7 +209,7 @@ public class DcmAgent {
         return methodArgs;
     }
 
-    private static void printActionResult(String action, Object result, PrintWriter writer) {
+    private static void printActionResult(String action, @Nullable Object result, @Nullable PrintWriter writer) {
         if (writer == null) return;
 
         final Method method = action2Method.get(action);
@@ -294,7 +294,8 @@ public class DcmAgent {
     ///////////////////////////////////////////////
 
     @Nullable
-    private static String getConfig(@Nonnull String name) {
+    @SuppressWarnings("SameParameterValue")
+    private static String getConfig(String name) {
         String var = System.getenv(name);
         if (var == null || var.trim().isEmpty()) {
             var = System.getProperty(name);
@@ -302,13 +303,11 @@ public class DcmAgent {
         return var;
     }
 
-    @Nonnull
-    private static String join(@Nonnull List<String> list) {
+    private static String join(List<String> list) {
         return join(list, " ");
     }
 
-    @Nonnull
-    private static String join(@Nonnull List<String> list, @Nonnull String separator) {
+    private static String join(List<String> list, String separator) {
         StringBuilder ret = new StringBuilder();
         for (String argument : list) {
             if (ret.length() > 0) {
@@ -319,8 +318,7 @@ public class DcmAgent {
         return ret.toString();
     }
 
-    @Nonnull
-    private static String throwable2StackString(@Nonnull Throwable e) {
+    private static String throwable2StackString(Throwable e) {
         final StringWriter w = new StringWriter();
         e.printStackTrace(new PrintWriter(w, true));
         return w.toString();
