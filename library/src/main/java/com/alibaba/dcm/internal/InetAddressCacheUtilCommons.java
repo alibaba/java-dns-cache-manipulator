@@ -223,6 +223,5 @@ public final class InetAddressCacheUtilCommons {
         }
     }
 
-    private InetAddressCacheUtilCommons() {
-    }
+    private InetAddressCacheUtilCommons() {}
 }

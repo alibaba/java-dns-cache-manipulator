@@ -45,6 +45,5 @@ final class IpParserUtil {
     }
 
 
-    private IpParserUtil() {
-    }
+    private IpParserUtil() {}
 }

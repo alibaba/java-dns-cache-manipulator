@@ -32,6 +32,5 @@ final class TimeUtil {
         return System.nanoTime() + millSeconds * NS_PER_MS;
     }
 
-    private TimeUtil() {
-    }
+    private TimeUtil() {}
 }
