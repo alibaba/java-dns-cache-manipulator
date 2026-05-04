@@ -77,7 +77,7 @@ final class IPAddressUtil {
          * interpreted as a 16-bit quantity and placed in the right
          * most two bytes of the network address. This makes the
          * three part address format convenient for specifying
-         * Class B net- work addresses as 128.net.host.
+         * Class B net-work addresses as 128.net.host.
          *
          * When four parts are specified, each is interpreted as a
          * byte of data and assigned, from left to right, to the
