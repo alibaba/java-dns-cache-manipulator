@@ -21,7 +21,7 @@ final class TimeUtil {
     private static final long NS_PER_MS = 1_000_000;
 
     /**
-     * @see <a href="https://newbedev.com/how-can-i-convert-the-result-of-system-nanotime-to-a-date-in-java">
+     * @see <a href="https://stackoverflow.com/questions/32443254/how-can-i-convert-the-result-of-system-nanotime-to-a-date-in-java">
      * How can I convert the result of System.nanoTime to a date in Java?</a>
      */
     public static long convertNanoTimeToTimeMillis(long nanoTime) {

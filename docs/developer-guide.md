@@ -65,9 +65,9 @@ The LTS `JDK` versions(8/11/17) and recent versions are tested , other `JDK` ver
 ## 📚 Related Resources
 
 - The source code of the class `InetAddress`:
-    - `JDK 8` [`InetAddress`](https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748)
-    - `JDK 9` [`InetAddress`](https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783)
-    - `JDK 11` [`InetAddress`](https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787)
+    - `JDK 8` [`InetAddress`](https://github.com/openjdk/jdk8u/blob/master/jdk/src/share/classes/java/net/InetAddress.java)
+    - `JDK 9` [`InetAddress`](https://github.com/openjdk/jdk9/blob/master/jdk/src/java.base/share/classes/java/net/InetAddress.java)
+    - `JDK 11` [`InetAddress`](https://github.com/openjdk/jdk11u/blob/master/src/java.base/share/classes/java/net/InetAddress.java)
 - [`JVM Networking Properties` - `java docs`](http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html)
 - [Domain Name System - wikipedia](http://en.wikipedia.org/wiki/Domain_Name_System)
 - `Java DNS` FAQ
@@ -75,5 +75,4 @@ The LTS `JDK` versions(8/11/17) and recent versions are tested , other `JDK` ver
     - [Disable `DNS caching`](http://www.rgagnon.com/javadetails/java-0445.html)
     - [FileOutput Node - Java DNS caching pitfall - quick clarification and tips](https://www.ibm.com/developerworks/community/blogs/aimsupport/entry/fileoutput_node_dns_caching_pitfall?lang=en)
 - The [`javahost`](https://github.com/tanhaichao/javahost) project of [`@tanhaichao`](https://github.com/tanhaichao) (Thanks for your work!)
-    - [the documentation](http://leopard.io/modules/javahost) of the project.
     - The solution of how to set up Java DNS Cache comes from this project. When I first encountered the host binding problem in the continuous integration project, I also used the project to solve it 👍
