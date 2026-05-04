@@ -3,6 +3,7 @@ package com.alibaba.dcm.internal;
 import org.jetbrains.annotations.ApiStatus;
 import sun.net.InetAddressCachePolicy;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
@@ -107,6 +108,7 @@ public final class InetAddressCacheUtilCommons {
         return InetAddressCachePolicy.getNegative();
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private static void setCachePolicy0(boolean isNegative, int seconds)
             throws NoSuchFieldException, IllegalAccessException {
         if (seconds < 0) {
@@ -118,10 +120,14 @@ public final class InetAddressCacheUtilCommons {
         synchronized (InetAddressCachePolicy.class) { // static synchronized method!
             if (isNegative) {
                 negativeCachePolicyFiledOfInetAddressCachePolicy.setInt(null, seconds);
-                negativeSetOfInetAddressCachePolicy.setBoolean(null, true);
+                if (negativeSetOfInetAddressCachePolicy != null) {
+                    negativeSetOfInetAddressCachePolicy.setBoolean(null, true);
+                }
             } else {
                 cachePolicyFiledOfInetAddressCachePolicy.setInt(null, seconds);
-                setFiledOfInetAddressCachePolicy.setBoolean(null, true);
+                if (setFiledOfInetAddressCachePolicy != null) {
+                    setFiledOfInetAddressCachePolicy.setBoolean(null, true);
+                }
             }
         }
     }
@@ -129,21 +135,23 @@ public final class InetAddressCacheUtilCommons {
     /**
      * {@link InetAddressCachePolicy.cachePolicy}
      */
-    private static volatile Field cachePolicyFiledOfInetAddressCachePolicy = null;
+    private static volatile Field cachePolicyFiledOfInetAddressCachePolicy;
     /**
      * {@link InetAddressCachePolicy.negativeCachePolicy}
      */
-    private static volatile Field negativeCachePolicyFiledOfInetAddressCachePolicy = null;
+    private static volatile Field negativeCachePolicyFiledOfInetAddressCachePolicy;
     /**
      * {@link InetAddressCachePolicy.propertySet}
      * or {@link InetAddressCachePolicy.set}
      */
-    private static volatile Field setFiledOfInetAddressCachePolicy = null;
+    @Nullable
+    private static volatile Field setFiledOfInetAddressCachePolicy;
     /**
      * {@link InetAddressCachePolicy.propertyNegativeSet}
      * or {@link InetAddressCachePolicy.negativeSet}
      */
-    private static volatile Field negativeSetOfInetAddressCachePolicy = null;
+    @Nullable
+    private static volatile Field negativeSetOfInetAddressCachePolicy;
 
     @SuppressWarnings("JavaReflectionMemberAccess")
     private static void initFieldsOfInetAddressCachePolicy() throws NoSuchFieldException {
@@ -164,18 +172,30 @@ public final class InetAddressCacheUtilCommons {
 
             try {
                 f = clazz.getDeclaredField("propertySet");
+                f.setAccessible(true);
             } catch (NoSuchFieldException e) {
-                f = clazz.getDeclaredField("set");
+                try {
+                    f = clazz.getDeclaredField("set");
+                    f.setAccessible(true);
+                } catch (NoSuchFieldException ex) {
+                    // Java 25 does not have 'set' field, leave it as null
+                    f = null;
+                }
             }
-            f.setAccessible(true);
             setFiledOfInetAddressCachePolicy = f;
 
             try {
                 f = clazz.getDeclaredField("propertyNegativeSet");
+                f.setAccessible(true);
             } catch (NoSuchFieldException e) {
-                f = clazz.getDeclaredField("negativeSet");
+                try {
+                    f = clazz.getDeclaredField("negativeSet");
+                    f.setAccessible(true);
+                } catch (NoSuchFieldException ex) {
+                    // Java 25 does not have 'negativeSet' field, leave it as null
+                    f = null;
+                }
             }
-            f.setAccessible(true);
             negativeSetOfInetAddressCachePolicy = f;
         }
     }
