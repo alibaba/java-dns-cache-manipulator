@@ -5,18 +5,31 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 tab_width = 4
+indent_size = 4
+ij_continuation_indent_size = 8
 indent_style = space
 trim_trailing_whitespace = true
 
+
+ij_markdown_wrap_text_if_long = false
+
+ij_any_line_comment_add_space = true
+ij_any_line_comment_add_space_on_reformat = true
+# ij_any_line_comment_at_first_column = true
+
+ij_any_keep_simple_blocks_in_one_line = true
+ij_any_keep_simple_methods_in_one_line = true
+ij_any_keep_simple_classes_in_one_line = true
+ij_any_keep_simple_lambdas_in_one_line = true
+
+ij_java_binary_operation_sign_on_next_line = true
+
 [*.xml]
-indent_size = 4
 indent_style = tab
 
-[*.{sh,ps1}]
-indent_size = 4
-
-[*.yml]
+[*.{yml,yaml,json}]
 indent_size = 2
+ij_continuation_indent_size = 4
 
 [*.{md,mkd,markdown}]
 trim_trailing_whitespace = false

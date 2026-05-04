@@ -286,6 +286,5 @@ public final class InetAddressCacheUtilForOld {
         }
     }
 
-    private InetAddressCacheUtilForOld() {
-    }
+    private InetAddressCacheUtilForOld() {}
 }

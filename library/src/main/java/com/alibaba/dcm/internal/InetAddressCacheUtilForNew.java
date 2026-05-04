@@ -311,6 +311,5 @@ public final class InetAddressCacheUtilForNew {
         getCacheOfInetAddress().clear();
     }
 
-    private InetAddressCacheUtilForNew() {
-    }
+    private InetAddressCacheUtilForNew() {}
 }

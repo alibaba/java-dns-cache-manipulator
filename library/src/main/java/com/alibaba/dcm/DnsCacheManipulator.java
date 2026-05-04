@@ -149,17 +149,17 @@ public final class DnsCacheManipulator {
      * @see DnsCacheManipulator#setDnsCache(java.util.Properties)
      */
     public static void loadDnsCacheConfigFromFileSystem(String propertiesFileName) {
-      try {
-        InputStream inputStream = new FileInputStream(propertiesFileName);
-        Properties properties = new Properties();
-        properties.load(inputStream);
-        inputStream.close();
-        setDnsCache(properties);
-      } catch (Exception e) {
-        final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
-            propertiesFileName, e);
-        throw new DnsCacheManipulatorException(message, e);
-      }
+        try {
+            InputStream inputStream = new FileInputStream(propertiesFileName);
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            inputStream.close();
+            setDnsCache(properties);
+        } catch (Exception e) {
+            final String message = String.format("Fail to loadDnsCacheConfig from %s, cause: %s",
+                    propertiesFileName, e);
+            throw new DnsCacheManipulatorException(message, e);
+        }
     }
 
     /**
@@ -376,6 +376,5 @@ public final class DnsCacheManipulator {
         }
     }
 
-    private DnsCacheManipulator() {
-    }
+    private DnsCacheManipulator() {}
 }
