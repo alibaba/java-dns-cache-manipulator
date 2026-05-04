@@ -7,7 +7,7 @@ Java Dns Cache Manipulator(DCM) Library
 <a href="https://codecov.io/gh/alibaba/java-dns-cache-manipulator/branch/main"><img src="https://img.shields.io/codecov/c/github/alibaba/java-dns-cache-manipulator/main?logo=codecov&logoColor=white" alt="Coverage Status"></a>
 <a href="https://openjdk.java.net/"><img src="https://img.shields.io/badge/Java-8+-339933?logo=openjdk&logoColor=white" alt="Java support"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/github/license/alibaba/java-dns-cache-manipulator?color=4D7A97&logo=apache" alt="License"></a>
-<a href="https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?color=2d545e&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
+<a href="https://central.sonatype.com/artifact/com.alibaba/dns-cache-manipulator"><img src="https://img.shields.io/maven-central/v/com.alibaba/dns-cache-manipulator?color=2d545e&logo=apache-maven&logoColor=white" alt="Maven Central"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/releases"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator.svg" alt="GitHub release"></a>
 <a href="https://alibaba.github.io/java-dns-cache-manipulator/apidocs/"><img src="https://img.shields.io/github/release/alibaba/java-dns-cache-manipulator?label=javadoc&color=339933&logo=read-the-docs&logoColor=white" alt="Javadocs"></a>
 <a href="https://github.com/alibaba/java-dns-cache-manipulator/stargazers"><img src="https://img.shields.io/github/stars/alibaba/java-dns-cache-manipulator?style=flat" alt="GitHub Stars"></a>
@@ -237,7 +237,7 @@ content = m2.getResponseBodyAsString();
 </dependency>
 ```
 
-可以在[search.maven.org](https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator)查看最新的版本。
+可以在[central.sonatype.com](https://central.sonatype.com/artifact/com.alibaba/dns-cache-manipulator)查看最新的版本。
 
 👓 经过测试的`JDK`版本
 ==================================
