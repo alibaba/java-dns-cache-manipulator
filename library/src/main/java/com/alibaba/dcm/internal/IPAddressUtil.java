@@ -29,7 +29,7 @@ package com.alibaba.dcm.internal;
 //
 // This source code file is copied from jdk 11 and remove unused members:
 //
-// https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/sun/net/util/IPAddressUtil.java
+// https://github.com/openjdk/jdk11u/blob/master/src/java.base/share/classes/sun/net/util/IPAddressUtil.java
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

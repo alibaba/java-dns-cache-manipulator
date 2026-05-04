@@ -319,9 +319,6 @@ You can view the latest version at [search.maven.org](https://search.maven.org/a
 
 ## 📚 Related Resources
 
-- Article [Source code analysis of java dns parsing cache / `java dns`解析缓存之源码解析](http://rongmayisheng.com/?p=1006) is very complete and have source code analysis, give noteworthy conclusions:
-    - Open the SecurityManager in Java, the DNS cache will not be invalidated.
-    - Otherwise, the accessible DNS resolution will be cached for 30 seconds by default, and the inaccessible DNS resolution will be cached for 10 seconds by default.
 - [Regarding the jvm dns cache (domain name cache time) / 关于`jvm dns cache`(域名缓存时间)](https://nigelzeng.iteye.com/blog/1704052), the conclusion of "what strategy is used to return IP for multiple A records" is given:
     - During the validity period of the cache, the obtained IP is always the first A records in the cache, and there is no such strategy as round-robin.
     - After the cache is invalidated, perform DNS resolution again. Because the order of the A records returned by the domain name resolution will change (visible in the dig google.com test), the order of the data in the cache has also changed, and the obtained IP will also change.
@@ -441,6 +438,6 @@ java -javaagent:<path to jar>="load my-cache.properties" --add-opens java.base/j
 ## 📚 Related information
 
 * [Java Agent Specification](https://docs.oracle.com/javase/8/docs/api/java/lang/instrument/package-summary.html)
-* [New Features of Java SE 6: New Features of Instrumentation](http://www.ibm.com/developerworks/cn/java/j-lo-jse61/)
-* [Creation, dynamic loading and instrumentation with javaagents](http://dhruba.name/2010/02/07/creation-dynamic-loading-and-instrumentation-with-javaagents/)
+* [New Features of Java SE 6: New Features of Instrumentation](https://web.archive.org/web/20191022233816/https://www.ibm.com/developerworks/cn/java/j-lo-jse61/)
+* [Creation, dynamic loading and instrumentation with javaagents](https://web.archive.org/web/20170331052446/http://dhruba.name/2010/02/07/creation-dynamic-loading-and-instrumentation-with-javaagents)
 * [Analysis of JavaAgent loading mechanism](http://nijiaben.iteye.com/blog/1847212)

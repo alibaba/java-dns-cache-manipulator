@@ -127,5 +127,5 @@ $ dcm -p 12345 setNegativePolicy 0
 =================================
 
 * [Java Agent规范](https://docs.oracle.com/javase/8/docs/api/java/lang/instrument/package-summary.html)
-* [Creation, dynamic loading and instrumentation with javaagents](http://dhruba.name/2010/02/07/creation-dynamic-loading-and-instrumentation-with-javaagents/)
+* [Creation, dynamic loading and instrumentation with javaagents](https://web.archive.org/web/20170331052446/http://dhruba.name/2010/02/07/creation-dynamic-loading-and-instrumentation-with-javaagents)
 * [JavaAgent加载机制分析](http://nijiaben.iteye.com/blog/1847212)

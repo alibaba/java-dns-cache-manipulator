@@ -92,9 +92,9 @@ public final class InetAddressCacheUtilForNew {
             //
             // - for jdk 9-jdk12, constructor signature is CachedAddresses(String host, InetAddress[] inetAddresses, long expiryTime)
             // code in jdk 9:
-            //   https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783
+            //   https://github.com/openjdk/jdk9/blob/master/jdk/src/java.base/share/classes/java/net/InetAddress.java#L783
             // code in jdk 11:
-            //   https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787
+            //   https://github.com/openjdk/jdk11u/blob/master/src/java.base/share/classes/java/net/InetAddress.java#L788
             // code in jdk 21:
             //   https://github.com/openjdk/jdk/blob/jdk-21-ga/src/java.base/share/classes/java/net/InetAddress.java#L979
             final Constructor<?> constructor = clazz.getDeclaredConstructors()[0];

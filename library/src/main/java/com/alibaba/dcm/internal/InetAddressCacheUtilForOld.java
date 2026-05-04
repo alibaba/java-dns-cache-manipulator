@@ -82,7 +82,7 @@ public final class InetAddressCacheUtilForOld {
             // InetAddress.CacheEntry has only one constructor:
             //   CacheEntry(InetAddress[] addresses, long expiration)
             // code in jdk 8:
-            //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
+            //   https://github.com/openjdk/jdk8u/blob/master/jdk/src/share/classes/java/net/InetAddress.java#L748
             final Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
             constructor.setAccessible(true);
 
@@ -266,7 +266,7 @@ public final class InetAddressCacheUtilForOld {
 
             // InetAddress.CacheEntry has 2 fields: addresses and expiration
             // code in jdk 8:
-            //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
+            //   https://github.com/openjdk/jdk8u/blob/master/jdk/src/share/classes/java/net/InetAddress.java#L748
 
             Field expirationField = cacheEntryClass.getDeclaredField("expiration");
             expirationField.setAccessible(true);

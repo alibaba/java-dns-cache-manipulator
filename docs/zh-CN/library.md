@@ -297,20 +297,15 @@ private static void cacheAddresses(String hostname,
 =====================================
 
 - [tanhaichao](https://github.com/tanhaichao)的[`javahost`项目](https://github.com/tanhaichao/javahost)，
-    该项目的[使用文档](http://leopard.io/modules/javahost)。  
     本项目如何设置`Java DNS Cache`的解法来自该项目。刚开始在持续集成项目中碰到`host`绑定的问题时，也是使用该项目来解决的 :+1:
 - 类`InetAddress`的源代码：
-    - `JDK 8`的[`InetAddress`](https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748)
-    - `JDK 9`的[`InetAddress`](https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783)
-    - `JDK 11`的[`InetAddress`](https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787)
+    - `JDK 8`的[`InetAddress`](https://github.com/openjdk/jdk8u/blob/master/jdk/src/share/classes/java/net/InetAddress.java)
+    - `JDK 9`的[`InetAddress`](https://github.com/openjdk/jdk9/blob/master/jdk/src/java.base/share/classes/java/net/InetAddress.java)
+    - `JDK 11`的[`InetAddress`](https://github.com/openjdk/jdk11u/blob/master/src/java.base/share/classes/java/net/InetAddress.java)
 - [`JVM Networking Properties` - `java docs`](http://docs.oracle.com/javase/8/docs/technotes/guides/net/properties.html)
-- [`java dns`解析缓存之源码解析](http://rongmayisheng.com/?p=1006)，写得很完整，源码解析。给出值得注意的结论：
-    - 打开`Java`中的`SecurityManager`，`DNS`缓存将不会失效。
-    - 否则，可访问的`DNS`解析缺省缓存30秒，不可访问的`DNS`解析缺省缓存10秒。
 - [关于`jvm dns cache`(域名缓存时间)](https://nigelzeng.iteye.com/blog/1704052)，给出“对于多条A记录是采用什么策略返回`IP`”的结论：
     - 在缓存有效期内，取到的`IP`永远是缓存中全部A记录的第一条，并没有轮循之类的策略。
     - 缓存失效之后重新进行DNS解析，因为每次域名解析返回的A记录顺序会发生变化(`dig www.google.com`测试可见)，所以缓存中的数据顺序也变了，取到的`IP`也变化。
-- [通过`JAVA`反射修改`JDK 1.6`当中`DNS`缓存内容](http://www.tuicool.com/articles/auYzui)，给出了设置`DNS`缓存在性能测试下使用的场景。
 - [java InetAddress 的dns cache问题](http://www.blogjava.net/jjwwhmm/archive/2008/07/09/213685.html)，
 说明`HttpClient`需要重新创建`GetMethod`/`PostMethod`对象以使设置`DNS`生效问题。
 - [Domain Name System - wikipedia](http://en.wikipedia.org/wiki/Domain_Name_System)
