@@ -24,7 +24,7 @@ jobs:
           #   https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md#java
           java-version: |
             8.0.345
-            23
+            26
           distribution: zulu
           cache: maven
 
