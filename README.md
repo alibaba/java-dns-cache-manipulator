@@ -79,12 +79,12 @@ Java Dns Cache Manipulator(`DCM`) contains 2 subprojects:
 
 ## 🔧 Features
 
-- Set/reset a DNS cache entry (won't lookup DNS afterwards)
+- Set/reset a DNS cache entry (won't look up DNS afterward)
     - set a single `DNS record`
     - or batch setting through a `Properties` file
 - View DNS cache entry content (positive dns cache and/or negative dns cache)
-- Remove a DNS cache entry (i.e. lookup DNS again)
-- Clear the DNS Cache (re-Lookup DNS for all domain names)
+- Remove a DNS cache entry (i.e. look up DNS again)
+- Clear the DNS Cache (forcing a re-lookup of DNS for all domain names)
 - Set/View DNS cache time of `JVM` (positive dns cache and negative dns cache)
 
 ## 🎨 Requirement Scenario

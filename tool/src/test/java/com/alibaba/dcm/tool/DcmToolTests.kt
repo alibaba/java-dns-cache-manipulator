@@ -65,8 +65,7 @@ class DcmToolTests : AnnotationSpec() {
         val dcmLibProjectDir: File = listOf("library", "../library", "../../library")
             .asSequence()
             .map { File(it) }
-            .filter { it.exists() }
-            .firstOrNull()
+            .firstOrNull { it.exists() }
             ?: return null
 
         val targetDir = File(dcmLibProjectDir, "target")

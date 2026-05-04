@@ -1,6 +1,8 @@
 <component name="ProjectDictionaryState">
   <dictionary name="dcm_project">
     <words>
+      <w>%njava</w>
+      <w>%njdk</w>
       <w>Denable</w>
       <w>Dexec</w>
       <w>Dkotlin</w>
@@ -17,6 +19,8 @@
       <w>autoscan</w>
       <w>dcm</w>
       <w>doctoc</w>
+      <w>jacoco</w>
+      <w>jdks</w>
       <w>kotest</w>
       <w>linkoffline</w>
       <w>moditect</w>
@@ -25,7 +29,11 @@
       <w>ossrh</w>
       <w>relookup</w>
       <w>sonatype</w>
+      <w>spotbugs</w>
       <w>stackoverflow</w>
+      <w>tanhaichao</w>
+      <w>wikipedia</w>
+      <w>zulu</w>
     </words>
   </dictionary>
 </component>
