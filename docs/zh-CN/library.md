@@ -19,15 +19,14 @@ Java Dns Cache Manipulator(DCM) Library
 <a href="https://gitpod.io/#https://github.com/alibaba/java-dns-cache-manipulator"><img src="https://img.shields.io/badge/Gitpod-ready to code-339933?label=gitpod&logo=gitpod&logoColor=white" alt="gitpod: Ready to Code"></a>
 </p>
 
-:point_right: 用编码的方式设置/查看`JVM`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 6+`，支持`IPv6`。
+👉 用编码的方式设置/查看`JVM`的`DNS`（实际上设置的是`DNS Cache`），支持`JDK 8+`，支持`IPv6`。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-- [:wrench: 功能](#wrench-%E5%8A%9F%E8%83%BD)
-- [:art: 需求场景](#art-%E9%9C%80%E6%B1%82%E5%9C%BA%E6%99%AF)
-- [:busts_in_silhouette: User Guide](#busts_in_silhouette-user-guide)
+- [🔧 功能](#-%E5%8A%9F%E8%83%BD)
+- [🎨 需求场景](#-%E9%9C%80%E6%B1%82%E5%9C%BA%E6%99%AF)
+- [👥 User Guide](#-user-guide)
     - [直接设置](#%E7%9B%B4%E6%8E%A5%E8%AE%BE%E7%BD%AE)
     - [通过`dns-cache.properties`文件批量配置](#%E9%80%9A%E8%BF%87dns-cacheproperties%E6%96%87%E4%BB%B6%E6%89%B9%E9%87%8F%E9%85%8D%E7%BD%AE)
     - [清空`JVM DNS Cache`](#%E6%B8%85%E7%A9%BAjvm-dns-cache)
@@ -36,18 +35,18 @@ Java Dns Cache Manipulator(DCM) Library
     - [设置/查看`JVM`缺省的`DNS`的缓存时间](#%E8%AE%BE%E7%BD%AE%E6%9F%A5%E7%9C%8Bjvm%E7%BC%BA%E7%9C%81%E7%9A%84dns%E7%9A%84%E7%BC%93%E5%AD%98%E6%97%B6%E9%97%B4)
     - [使用注意](#%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F)
     - [更多详细功能](#%E6%9B%B4%E5%A4%9A%E8%AF%A6%E7%BB%86%E5%8A%9F%E8%83%BD)
-- [:electric_plug: Java API Docs](#electric_plug-java-api-docs)
-- [:cookie: 依赖](#cookie-%E4%BE%9D%E8%B5%96)
-- [:eyeglasses: 经过测试的`JDK`](#eyeglasses-%E7%BB%8F%E8%BF%87%E6%B5%8B%E8%AF%95%E7%9A%84jdk)
-- [:mortar_board: Developer Guide](#mortar_board-developer-guide)
+- [🔌 Java API Docs](#-java-api-docs)
+- [🍪 依赖](#-%E4%BE%9D%E8%B5%96)
+- [👓 经过测试的`JDK`版本](#-%E7%BB%8F%E8%BF%87%E6%B5%8B%E8%AF%95%E7%9A%84jdk%E7%89%88%E6%9C%AC)
+- [🎓 Developer Guide](#-developer-guide)
     - [如何设置`JVM`的`DNS Cache`](#%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AEjvm%E7%9A%84dns-cache)
     - [注意设置`JVM`的`DNS Cache`的线程安全问题](#%E6%B3%A8%E6%84%8F%E8%AE%BE%E7%BD%AEjvm%E7%9A%84dns-cache%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98)
     - [需要测试不同版本`JDK`](#%E9%9C%80%E8%A6%81%E6%B5%8B%E8%AF%95%E4%B8%8D%E5%90%8C%E7%89%88%E6%9C%ACjdk)
-- [:books: 相关资料](#books-%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99)
+- [📚 相关资料](#-%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-:wrench: 功能
+🔧 功能
 =====================================
 
 - 设置/重置`DNS`（不会再去`Lookup DNS`）
@@ -58,12 +57,12 @@ Java Dns Cache Manipulator(DCM) Library
 - 查看`DNS Cache`内容
 - 设置/查看`JVM`缺省的`DNS`的缓存时间
 
-:art: 需求场景
+🎨 需求场景
 =====================================
 
 1. 一些库中写死了连接域名，需要通过设置`host`文件绑定才能做测试。结果是：
     - 自动持续集成的机器上一般同学是没有权限去设置`host`文件的，导致项目不能持续集成。  
-        实际上是因为这点，催生这个库的需求。 :persevere::gun:
+        实际上是因为这点，催生这个库的需求。 😣🔫
     - 单元测试需要每个开发都在开发机上做`host`绑定，增加了依赖的配置操作且繁琐重复。
 1. 一些功能需要域名作为输入参数，如使用`HTTP`请求的网关 或是 有域名检查限制的`Web`应用。  
     这种情况下，让需要让一个域名连接到测试机器的`IP`上，或是 使用一个还不存在的域名但又不想或不能去配置`DNS`。
@@ -78,7 +77,7 @@ Java Dns Cache Manipulator(DCM) Library
     - 或通过执行入口调用`Java Dns Cache Manipulator Library`的方法，比如远程调用或是[`jvm-ssh-groovy-shell`](https://github.com/palominolabs/jvm-ssh-groovy-shell)。  
         ***需要*** 应用已经包含了`Java Dns Cache Manipulator Library`依赖（即`Jar`）。
 
-:busts_in_silhouette: User Guide
+👥 User Guide
 =====================================
 
 通过类[`DnsCacheManipulator`](../../library/src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)设置`DNS`。
@@ -220,12 +219,12 @@ content = m2.getResponseBodyAsString();
 
 参见类[`DnsCacheManipulator`](../../library/src/main/java/com/alibaba/dcm/DnsCacheManipulator.java)的文档说明。
 
-:electric_plug: Java API Docs
+🔌 Java API Docs
 =====================================
 
 `Java API`文档地址： <http://alibaba.github.io/java-dns-cache-manipulator/apidocs>
 
-:cookie: 依赖
+🍪 依赖
 =====================================
 
 `Maven`示例：
@@ -240,29 +239,12 @@ content = m2.getResponseBodyAsString();
 
 可以在[search.maven.org](https://search.maven.org/artifact/com.alibaba/dns-cache-manipulator)查看最新的版本。
 
-:eyeglasses: 经过测试的`JDK`
+👓 经过测试的`JDK`版本
 ==================================
 
-JDK               | 系统                   | On        | 备注
----               | ---                    | ---       | ----
-openjdk6 64-Bit   | Linux                  | travis-ci |
-oraclejdk7 64-Bit | Linux                  | travis-ci |
-openjdk7 64-Bit   | Linux                  | travis-ci |
-oraclejdk8 64-Bit | Linux                  | travis-ci |
-applejdk6 64-Bit  | Mac                    | 个人Mac   | jdk6由Apple[提供](https://java.com/zh_CN/download/faq/java_mac.xml)，[下载地址](https://support.apple.com/kb/DL1572?locale=zh_CN)。
-oraclejdk7 64-Bit | Mac                    | 个人Mac   | 从jdk7开始，Mac jdk直接在`Oracle`下载。
-oraclejdk8 64-Bit | Mac                    | 个人Mac   |
-oraclejdk6 64-Bit | windows server 2012 r2 | appveyor  |
-oraclejdk6 32-Bit | windows server 2012 r2 | appveyor  |
-oraclejdk7 64-Bit | windows server 2012 r2 | appveyor  |
-oraclejdk7 32-Bit | windows server 2012 r2 | appveyor  |
-oraclejdk8 64-Bit | windows server 2012 r2 | appveyor  |
-oraclejdk8 32-Bit | windows server 2012 r2 | appveyor  |
+`LTS`版本。
 
-PS：  
-感谢 [travis-ci](https://travis-ci.org/) 和 [appveyor](https://ci.appveyor.com) 免费提供了持续集成环境。
-
-:mortar_board: Developer Guide
+🎓 Developer Guide
 =====================================
 
 如何设置`JVM`的`DNS Cache`
@@ -311,15 +293,13 @@ private static void cacheAddresses(String hostname,
 
 目前测试包含`JDK`版本参见【经过测试的`JDK`】一节。
 
-:books: 相关资料
+📚 相关资料
 =====================================
 
 - [tanhaichao](https://github.com/tanhaichao)的[`javahost`项目](https://github.com/tanhaichao/javahost)，
     该项目的[使用文档](http://leopard.io/modules/javahost)。  
     本项目如何设置`Java DNS Cache`的解法来自该项目。刚开始在持续集成项目中碰到`host`绑定的问题时，也是使用该项目来解决的 :+1:
 - 类`InetAddress`的源代码：
-    - `JDK 6`的[`InetAddress`](https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739)
-    - `JDK 7`的[`InetAddress`](https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742)
     - `JDK 8`的[`InetAddress`](https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748)
     - `JDK 9`的[`InetAddress`](https://hg.openjdk.java.net/jdk9/jdk9/jdk/file/65464a307408/src/java.base/share/classes/java/net/InetAddress.java#l783)
     - `JDK 11`的[`InetAddress`](https://hg.openjdk.java.net/jdk/jdk11/file/1ddf9a99e4ad/src/java.base/share/classes/java/net/InetAddress.java#l787)

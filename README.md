@@ -325,7 +325,6 @@ You can view the latest version at [search.maven.org](https://search.maven.org/a
 - [Regarding the jvm dns cache (domain name cache time) / 关于`jvm dns cache`(域名缓存时间)](https://nigelzeng.iteye.com/blog/1704052), the conclusion of "what strategy is used to return IP for multiple A records" is given:
     - During the validity period of the cache, the obtained IP is always the first A records in the cache, and there is no such strategy as round-robin.
     - After the cache is invalidated, perform DNS resolution again. Because the order of the A records returned by the domain name resolution will change (visible in the dig google.com test), the order of the data in the cache has also changed, and the obtained IP will also change.
-- [Modify the content of DNS cache in JDK 1.6 through JAVA reflection / 通过`JAVA`反射修改`JDK 1.6`当中`DNS`缓存内容](https://tuicool.com/articles/auYzui), give the scene of setting DNS cache in performance test.
 - [The dns cache problem of java InetAddress / java InetAddress 的 dns cache 问题](http://blogjava.net/jjwwhmm/archive/2008/07/09/213685.html) indicates that `HttpClient` needs to recreate the `GetMethod`/`PostMethod` object to make the DNS setting take effect.
 
 # Java Dns Cache Manipulator Tool
@@ -441,7 +440,7 @@ java -javaagent:<path to jar>="load my-cache.properties" --add-opens java.base/j
 
 ## 📚 Related information
 
-* [Java Agent Specification](http://docs.oracle.com/javase/7/docs/api/java/lang/instrument/package-summary.html)
+* [Java Agent Specification](https://docs.oracle.com/javase/8/docs/api/java/lang/instrument/package-summary.html)
 * [New Features of Java SE 6: New Features of Instrumentation](http://www.ibm.com/developerworks/cn/java/j-lo-jse61/)
 * [Creation, dynamic loading and instrumentation with javaagents](http://dhruba.name/2010/02/07/creation-dynamic-loading-and-instrumentation-with-javaagents/)
 * [Analysis of JavaAgent loading mechanism](http://nijiaben.iteye.com/blog/1847212)

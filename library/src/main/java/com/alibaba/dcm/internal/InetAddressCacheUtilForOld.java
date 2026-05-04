@@ -21,7 +21,7 @@ import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.getIpFromInet
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
 
 /**
- * Util class to manipulate dns cache for old {@code JDK 8-}.
+ * Util class to manipulate dns cache for old {@code JDK 8}.
  * <p>
  * dns cache is {@link InetAddress.Cache#cache} in {@link InetAddress#addressCache}.
  * <p>
@@ -80,13 +80,7 @@ public final class InetAddressCacheUtilForOld {
             final Class<?> clazz = Class.forName(className);
 
             // InetAddress.CacheEntry has only one constructor:
-            // - for jdk 6, constructor signature is CacheEntry(Object address, long expiration)
-            // - for jdk 7/8+, constructor signature is CacheEntry(InetAddress[] addresses, long expiration)
-            //
-            // code in jdk 6:
-            //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
-            // code in jdk 7:
-            //   https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742
+            //   CacheEntry(InetAddress[] addresses, long expiration)
             // code in jdk 8:
             //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
             final Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
@@ -270,14 +264,7 @@ public final class InetAddressCacheUtilForOld {
             if (expirationFieldOfInetAddress$CacheEntry != null && addressesFieldOfInetAddress$CacheEntry != null)
                 return;
 
-            // InetAddress.CacheEntry has 2 filed:
-            // - for jdk 6, address and expiration
-            // - for jdk 7+, addresses(*renamed*!) and expiration
-            //
-            // code in jdk 6:
-            //   https://hg.openjdk.java.net/jdk6/jdk6/jdk/file/8deef18bb749/src/share/classes/java/net/InetAddress.java#l739
-            // code in jdk 7:
-            //   https://hg.openjdk.java.net/jdk7u/jdk7u/jdk/file/4dd5e486620d/src/share/classes/java/net/InetAddress.java#l742
+            // InetAddress.CacheEntry has 2 fields: addresses and expiration
             // code in jdk 8:
             //   https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/45e4e636b757/src/share/classes/java/net/InetAddress.java#l748
 
