@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.getIpFromInetAddress;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
+import static com.alibaba.dcm.internal.ReflectionUtils.getFallbackClassForName;
+import static com.alibaba.dcm.internal.ReflectionUtils.getDeclaredFieldOrThrow;
 import static com.alibaba.dcm.internal.TimeUtil.convertNanoTimeToTimeMillis;
 import static com.alibaba.dcm.internal.TimeUtil.getNanoTimeAfterMs;
 
@@ -78,15 +80,10 @@ public final class InetAddressCacheUtilForNew {
             // double check
             if (constructorOfInetAddress$CachedAddresses != null) return constructorOfInetAddress$CachedAddresses;
 
-            Class<?> clazz;
-
-            try {
-                clazz = Class.forName(inetAddress$CachedAddresses_ClassName);
-            } catch (ClassNotFoundException e) {
-                // jdk 21 support
-                // due to https://github.com/openjdk/jdk/commit/8b127262a3dff9c4420945e902f6a688f8d05e2e
-                clazz = Class.forName(inetAddress$CachedLookup_ClassName);
-            }
+            Class<?> clazz = getFallbackClassForName(
+                    inetAddress$CachedAddresses_ClassName,
+                    // jdk 21 support due to https://github.com/openjdk/jdk/commit/8b127262a3dff9c4420945e902f6a688f8d05e2e
+                    inetAddress$CachedLookup_ClassName);
 
             // InetAddress.CacheEntry has only one constructor:
             //
@@ -99,9 +96,7 @@ public final class InetAddressCacheUtilForNew {
             //   https://github.com/openjdk/jdk/blob/jdk-21-ga/src/java.base/share/classes/java/net/InetAddress.java#L979
             final Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
             constructor.setAccessible(true);
-
-            constructorOfInetAddress$CachedAddresses = constructor;
-            return constructor;
+            return constructorOfInetAddress$CachedAddresses = constructor;
         }
     }
 
@@ -133,9 +128,8 @@ public final class InetAddressCacheUtilForNew {
         if (hostFieldOfInetAddress$CacheAddress == null) {
             synchronized (InetAddressCacheUtilForNew.class) {
                 if (hostFieldOfInetAddress$CacheAddress == null) { // double check
-                    final Field f = cachedAddresses.getClass().getDeclaredField("host");
-                    f.setAccessible(true);
-                    hostFieldOfInetAddress$CacheAddress = f;
+                    hostFieldOfInetAddress$CacheAddress = getDeclaredFieldOrThrow(
+                            cachedAddresses.getClass(), "host");
                 }
             }
         }
@@ -181,25 +175,15 @@ public final class InetAddressCacheUtilForNew {
         if (ADDRESS_CACHE_AND_EXPIRY_SET != null) return ADDRESS_CACHE_AND_EXPIRY_SET;
 
         synchronized (InetAddressCacheUtilForNew.class) {
+            // double check
             if (ADDRESS_CACHE_AND_EXPIRY_SET != null) return ADDRESS_CACHE_AND_EXPIRY_SET;
 
-            final Field cacheField = InetAddress.class.getDeclaredField("cache");
-            cacheField.setAccessible(true);
-
-            final Field expirySetField = InetAddress.class.getDeclaredField("expirySet");
-            expirySetField.setAccessible(true);
-
-            ADDRESS_CACHE_AND_EXPIRY_SET = new Object[]{
-                    cacheField.get(InetAddress.class),
-                    expirySetField.get(InetAddress.class)
+            return ADDRESS_CACHE_AND_EXPIRY_SET = new Object[]{
+                    getDeclaredFieldOrThrow(InetAddress.class, "cache").get(InetAddress.class),
+                    getDeclaredFieldOrThrow(InetAddress.class, "expirySet").get(InetAddress.class)
             };
-
-            return ADDRESS_CACHE_AND_EXPIRY_SET;
         }
     }
-
-    //////////////////////////////////////////////////////////////////////////////
-
 
     @Nullable
     public static DnsCacheEntry getInetAddressCache(String host)
@@ -282,27 +266,19 @@ public final class InetAddressCacheUtilForNew {
         if (inetAddressesFieldOfInetAddress$CacheAddress != null) return;
 
         synchronized (InetAddressCacheUtilForNew.class) {
+            // double check
             if (inetAddressesFieldOfInetAddress$CacheAddress != null) return;
 
             ///////////////////////////////////////////////
             // Fields of InetAddress$CachedAddresses
             ///////////////////////////////////////////////
-            Class<?> cachedAddresses_Class;
+            Class<?> cachedAddresses_Class = getFallbackClassForName(
+                    inetAddress$CachedAddresses_ClassName, inetAddress$CachedLookup_ClassName);
 
-            try {
-                cachedAddresses_Class = Class.forName(inetAddress$CachedAddresses_ClassName);
-            } catch (ClassNotFoundException e) {
-                // jdk 21 support
-                cachedAddresses_Class = Class.forName(inetAddress$CachedLookup_ClassName);
-            }
-
-            final Field inetAddressesFiled = cachedAddresses_Class.getDeclaredField("inetAddresses");
-            inetAddressesFiled.setAccessible(true);
-            inetAddressesFieldOfInetAddress$CacheAddress = inetAddressesFiled;
-
-            final Field expiryTimeFiled = cachedAddresses_Class.getDeclaredField("expiryTime");
-            expiryTimeFiled.setAccessible(true);
-            expiryTimeFieldOfInetAddress$CacheAddress = expiryTimeFiled;
+            inetAddressesFieldOfInetAddress$CacheAddress = getDeclaredFieldOrThrow(
+                    cachedAddresses_Class, "inetAddresses");
+            expiryTimeFieldOfInetAddress$CacheAddress = getDeclaredFieldOrThrow(
+                    cachedAddresses_Class, "expiryTime");
         }
     }
 

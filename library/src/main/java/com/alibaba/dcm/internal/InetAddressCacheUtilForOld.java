@@ -19,6 +19,7 @@ import java.util.Map;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.NEVER_EXPIRATION;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.getIpFromInetAddress;
 import static com.alibaba.dcm.internal.InetAddressCacheUtilCommons.toInetAddressArray;
+import static com.alibaba.dcm.internal.ReflectionUtils.getDeclaredFieldOrThrow;
 
 /**
  * Util class to manipulate dns cache for old {@code JDK 8}.
@@ -85,9 +86,7 @@ public final class InetAddressCacheUtilForOld {
             //   https://github.com/openjdk/jdk8u/blob/master/jdk/src/share/classes/java/net/InetAddress.java#L748
             final Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
             constructor.setAccessible(true);
-
-            constructorOfInetAddress$CacheEntry = constructor;
-            return constructor;
+            return constructorOfInetAddress$CacheEntry = constructor;
         }
     }
 
@@ -131,10 +130,8 @@ public final class InetAddressCacheUtilForOld {
         if (cacheMapFieldOfInetAddress$Cache == null) {
             synchronized (InetAddressCacheUtilForOld.class) {
                 if (cacheMapFieldOfInetAddress$Cache == null) { // double check
-                    final Class<?> clazz = Class.forName("java.net.InetAddress$Cache");
-                    final Field f = clazz.getDeclaredField("cache");
-                    f.setAccessible(true);
-                    cacheMapFieldOfInetAddress$Cache = f;
+                    cacheMapFieldOfInetAddress$Cache = getDeclaredFieldOrThrow(
+                            Class.forName("java.net.InetAddress$Cache"), "cache");
                 }
             }
         }
@@ -163,7 +160,6 @@ public final class InetAddressCacheUtilForOld {
     /**
      * @return {@link InetAddress#addressCache} and {@link InetAddress#negativeCache}
      */
-    @SuppressWarnings("JavaReflectionMemberAccess")
     private static Object[] getAddressCacheAndNegativeCacheOfInetAddress0()
             throws NoSuchFieldException, IllegalAccessException {
         if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
@@ -171,18 +167,10 @@ public final class InetAddressCacheUtilForOld {
         synchronized (InetAddressCacheUtilForOld.class) {
             // double check
             if (ADDRESS_CACHE_AND_NEGATIVE_CACHE != null) return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
-
-            final Field cacheField = InetAddress.class.getDeclaredField("addressCache");
-            cacheField.setAccessible(true);
-
-            final Field negativeCacheField = InetAddress.class.getDeclaredField("negativeCache");
-            negativeCacheField.setAccessible(true);
-
-            ADDRESS_CACHE_AND_NEGATIVE_CACHE = new Object[]{
-                    cacheField.get(InetAddress.class),
-                    negativeCacheField.get(InetAddress.class)
+            return ADDRESS_CACHE_AND_NEGATIVE_CACHE = new Object[]{
+                    getDeclaredFieldOrThrow(InetAddress.class, "addressCache").get(InetAddress.class),
+                    getDeclaredFieldOrThrow(InetAddress.class, "negativeCache").get(InetAddress.class)
             };
-            return ADDRESS_CACHE_AND_NEGATIVE_CACHE;
         }
     }
 
@@ -268,13 +256,8 @@ public final class InetAddressCacheUtilForOld {
             // code in jdk 8:
             //   https://github.com/openjdk/jdk8u/blob/master/jdk/src/share/classes/java/net/InetAddress.java#L748
 
-            Field expirationField = cacheEntryClass.getDeclaredField("expiration");
-            expirationField.setAccessible(true);
-            expirationFieldOfInetAddress$CacheEntry = expirationField;
-
-            Field addressesField = cacheEntryClass.getDeclaredField("addresses");
-            addressesField.setAccessible(true);
-            addressesFieldOfInetAddress$CacheEntry = addressesField;
+            expirationFieldOfInetAddress$CacheEntry = getDeclaredFieldOrThrow(cacheEntryClass, "expiration");
+            addressesFieldOfInetAddress$CacheEntry = getDeclaredFieldOrThrow(cacheEntryClass, "addresses");
         }
     }
 
