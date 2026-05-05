@@ -8,6 +8,8 @@ import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static com.alibaba.dcm.internal.ReflectionUtils.*;
+
 /**
  * Util class to manipulate dns cache.
  *
@@ -140,62 +142,36 @@ public final class InetAddressCacheUtilCommons {
      */
     private static volatile Field negativeCachePolicyFiledOfInetAddressCachePolicy;
     /**
-     * {@link InetAddressCachePolicy.propertySet}
-     * or {@link InetAddressCachePolicy.set}
+     * {@link InetAddressCachePolicy.propertySet},
+     * {@link InetAddressCachePolicy.set}, or absent (e.g. JDK 25+).
      */
     @Nullable
     private static volatile Field setFiledOfInetAddressCachePolicy;
     /**
-     * {@link InetAddressCachePolicy.propertyNegativeSet}
-     * or {@link InetAddressCachePolicy.negativeSet}
+     * {@link InetAddressCachePolicy.propertyNegativeSet},
+     * {@link InetAddressCachePolicy.negativeSet}, or absent (e.g. JDK 25+).
      */
     @Nullable
     private static volatile Field negativeSetOfInetAddressCachePolicy;
 
-    @SuppressWarnings("JavaReflectionMemberAccess")
     private static void initFieldsOfInetAddressCachePolicy() throws NoSuchFieldException {
-        if (negativeSetOfInetAddressCachePolicy != null) return;
+        if (cachePolicyFiledOfInetAddressCachePolicy != null) return;
 
         final Class<?> clazz = InetAddressCachePolicy.class;
         synchronized (InetAddressCacheUtilCommons.class) {
             // double check
-            if (negativeSetOfInetAddressCachePolicy != null) return;
+            if (cachePolicyFiledOfInetAddressCachePolicy != null) return;
 
-            Field f = clazz.getDeclaredField("cachePolicy");
-            f.setAccessible(true);
-            cachePolicyFiledOfInetAddressCachePolicy = f;
+            cachePolicyFiledOfInetAddressCachePolicy = getDeclaredFieldOrThrow(clazz, "cachePolicy");
 
-            f = clazz.getDeclaredField("negativeCachePolicy");
-            f.setAccessible(true);
-            negativeCachePolicyFiledOfInetAddressCachePolicy = f;
+            negativeCachePolicyFiledOfInetAddressCachePolicy = getDeclaredFieldOrThrow(clazz, "negativeCachePolicy");
 
-            try {
-                f = clazz.getDeclaredField("propertySet");
-                f.setAccessible(true);
-            } catch (NoSuchFieldException e) {
-                try {
-                    f = clazz.getDeclaredField("set");
-                    f.setAccessible(true);
-                } catch (NoSuchFieldException ex) {
-                    // Java 25 does not have 'set' field, leave it as null
-                    f = null;
-                }
-            }
-            setFiledOfInetAddressCachePolicy = f;
+            // JDK 25 removed these flags; propertySet / Set read the volatile int fields directly.
+            setFiledOfInetAddressCachePolicy = getFallbackDeclaredFieldOrNull(clazz, "propertySet", "set");
 
-            try {
-                f = clazz.getDeclaredField("propertyNegativeSet");
-                f.setAccessible(true);
-            } catch (NoSuchFieldException e) {
-                try {
-                    f = clazz.getDeclaredField("negativeSet");
-                    f.setAccessible(true);
-                } catch (NoSuchFieldException ex) {
-                    // Java 25 does not have 'negativeSet' field, leave it as null
-                    f = null;
-                }
-            }
-            negativeSetOfInetAddressCachePolicy = f;
+            // JDK 25 removed these flags; get()/getNegative() read the volatile int fields directly.
+            negativeSetOfInetAddressCachePolicy = getFallbackDeclaredFieldOrNull(
+                    clazz, "propertyNegativeSet", "negativeSet");
         }
     }
 
@@ -211,15 +187,7 @@ public final class InetAddressCacheUtilCommons {
         synchronized (InetAddressCacheUtilCommons.class) {
             // double check
             if (isNew != null) return isNew;
-
-            try {
-                InetAddress.class.getDeclaredField("expirySet");
-                isNew = true;
-            } catch (NoSuchFieldException e) {
-                isNew = false;
-            }
-
-            return isNew;
+            return isNew = hasDeclaredField(InetAddress.class, "expirySet");
         }
     }
 
