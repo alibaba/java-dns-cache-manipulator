@@ -4,6 +4,7 @@ import com.alibaba.dcm.agent.DcmAgent;
 import com.sun.tools.attach.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.cli.*;
+import org.apache.commons.cli.help.HelpFormatter;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -57,7 +58,7 @@ public class DcmTool {
         doDcmActionViaAgent(action, arguments, pid);
     }
 
-    private static CommandLine parseCommandLine(String[] args) throws ParseException {
+    private static CommandLine parseCommandLine(String[] args) throws ParseException, IOException {
         final Options options = new Options();
         options.addOption("p", "pid", true, "java process id to attach");
         options.addOption("h", "help", false, "show help");
@@ -66,8 +67,9 @@ public class DcmTool {
         CommandLine cmd = parser.parse(options, args);
 
         if (cmd.hasOption('h')) {
-            HelpFormatter hf = new HelpFormatter();
-            hf.printHelp("Options", options);
+            HelpFormatter hf = HelpFormatter.builder().setShowSince(false).get();
+            hf.printHelp("dcm", "setting/viewing dns of running JVM process",
+                    options, "Report issues at https://github.com/alibaba/java-dns-cache-manipulator/issues", true);
             exit(0);
         }
 

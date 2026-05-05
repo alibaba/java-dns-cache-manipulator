@@ -1,10 +1,11 @@
 #!/bin/bash
 # this script is based on mvn
 
-readonly PROG=`basename $0`
-readonly BASE="$(cd $(dirname "$0")/..; pwd)"
+PROG="$(basename $0)"
+BASE="$(cd $(dirname "$0")/..; pwd)"
 
 CLASSPATH="$(echo "$BASE"/dependencies/*.jar | tr ' ' :)"
+readonly PROG BASE CLASSPATH
 
 # OS specific support.  $var _must_ be set to either true or false.
 cygwin=false;
@@ -122,27 +123,26 @@ find_tools_jar() {
     echo "$JAVA_HOME/Classes/classes.jar"
   elif [ -f "$JAVA_HOME/../Classes/classes.jar" ]; then
     echo "$JAVA_HOME/../Classes/classes.jar"
-  else
-     echo "tools.jar/classes.jar NOT found!" 1>&2
-     exit 8
   fi
 }
 
-CLASSPATH="$(find_tools_jar)":"$CLASSPATH"
+TOOLS_JAR=$(find_tools_jar)
+CLASSPATH="$TOOLS_JAR:$CLASSPATH"
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then
   [ -n "$JAVA_HOME" ] &&
-    JAVA_HOME=`cygpath --path --windows "$JAVA_HOME"`
+    JAVA_HOME=$(cygpath --path --windows "$JAVA_HOME")
   [ -n "$CLASSPATH" ] &&
-    CLASSPATH=`cygpath --path --windows "$CLASSPATH"`
+    CLASSPATH=$(cygpath --path --windows "$CLASSPATH")
 fi
 
 # traverses directory structure from process work directory to filesystem root
 # first directory with .mvn subdirectory is considered project base directory
 find_maven_basedir() {
-  local basedir=$(pwd)
-  local wdir=$(pwd)
+  local basedir wdir
+  basedir=$(pwd)
+  wdir=$(pwd)
   while [ "$wdir" != '/' ] ; do
     wdir=$(cd "$wdir/.."; pwd)
     if [ -d "$wdir"/.mvn ] ; then
@@ -170,4 +170,4 @@ cleanupWhenExit() {
 trap "cleanupWhenExit" EXIT
 
 
-"$JAVACMD" -Xmx128m $DCM_OPTS -classpath $CLASSPATH com.alibaba.dcm.tool.DcmTool "$@"
+"$JAVACMD" -Xmx128m $DCM_OPTS -classpath "$CLASSPATH" com.alibaba.dcm.tool.DcmTool "$@"
