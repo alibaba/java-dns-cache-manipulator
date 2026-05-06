@@ -158,7 +158,7 @@ public class DcmAgent {
     }
 
     private static boolean doAction(final String action, final List<String> arguments, @Nullable final PrintWriter filePrinter) {
-        final String argumentString = join(arguments);
+        final String argumentString = String.join(" ", arguments);
 
         if (!action2Method.containsKey(action)) {
             logger.info(format(("%s: Unknown action %s, ignore! action: %<s %s!%n"), DcmAgent.class.getName(), action, argumentString));
@@ -277,8 +277,10 @@ public class DcmAgent {
     }
 
     private static void printDnsCacheEntry(DnsCacheEntry entry, PrintWriter writer) {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        writer.printf("    %s %s %s%n", entry.getHost(), join(Arrays.asList(entry.getIps()), ","), dateFormat.format(entry.getExpiration()));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String ips = String.join(",", entry.getIps());
+        String expiration = dateFormat.format(entry.getExpiration());
+        writer.printf("    %s %s %s%n", entry.getHost(), ips, expiration);
     }
 
     /// util methods ///
@@ -291,21 +293,6 @@ public class DcmAgent {
             var = System.getProperty(name);
         }
         return var;
-    }
-
-    private static String join(List<String> list) {
-        return join(list, " ");
-    }
-
-    private static String join(List<String> list, String separator) {
-        StringBuilder ret = new StringBuilder();
-        for (String argument : list) {
-            if (ret.length() > 0) {
-                ret.append(separator);
-            }
-            ret.append(argument);
-        }
-        return ret.toString();
     }
 
     private static String throwable2StackString(Throwable e) {
