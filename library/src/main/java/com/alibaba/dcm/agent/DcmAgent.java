@@ -256,7 +256,7 @@ public class DcmAgent {
         if (result == null) {
             writer.println((Object) null);
         } else if (result instanceof DnsCacheEntry) {
-            printDnsCacheEntry((DnsCacheEntry) result, writer);
+            printDnsCacheEntry((DnsCacheEntry) result, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"), writer);
         } else if (result instanceof DnsCache) {
             DnsCache dnsCache = (DnsCache) result;
 
@@ -271,13 +271,13 @@ public class DcmAgent {
 
     private static void printDnsCacheEntryList(String msg, List<DnsCacheEntry> dnsCacheEntries, PrintWriter writer) {
         writer.println(msg);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         for (DnsCacheEntry entry : dnsCacheEntries) {
-            printDnsCacheEntry(entry, writer);
+            printDnsCacheEntry(entry, dateFormat, writer);
         }
     }
 
-    private static void printDnsCacheEntry(DnsCacheEntry entry, PrintWriter writer) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static void printDnsCacheEntry(DnsCacheEntry entry, SimpleDateFormat dateFormat, PrintWriter writer) {
         String ips = String.join(",", entry.getIps());
         String expiration = dateFormat.format(entry.getExpiration());
         writer.printf("    %s %s %s%n", entry.getHost(), ips, expiration);
@@ -291,6 +291,9 @@ public class DcmAgent {
         String var = System.getenv(name);
         if (var == null || var.trim().isEmpty()) {
             var = System.getProperty(name);
+        }
+        if (var == null || var.trim().isEmpty()) {
+            return null;
         }
         return var;
     }

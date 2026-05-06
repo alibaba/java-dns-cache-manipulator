@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * DNS cache entry(DNS record).
  *
@@ -22,6 +24,31 @@ public final class DnsCacheEntry implements Serializable {
     private final String host;
     private final String[] ips;
     private final long expiration;
+
+    /**
+     * Construct a {@link DnsCacheEntry}.
+     *
+     * @deprecated use {@link #DnsCacheEntry(String, String[], long)} instead
+     */
+    @Deprecated
+    public DnsCacheEntry(String host, String[] ips, Date expiration) {
+        this(host, ips, expiration.getTime());
+    }
+
+    /**
+     * Construct a {@link DnsCacheEntry}.
+     *
+     * @since 1.6.0
+     */
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
+    public DnsCacheEntry(String host, String[] ips, long expiration) {
+        if (requireNonNull(host, "host is null").trim().isEmpty()) {
+            throw new IllegalArgumentException("host is blank");
+        }
+        this.host = host;
+        this.ips = ips;
+        this.expiration = expiration;
+    }
 
     /**
      * get host name/domain name of DNS cache entry(DNS record).
@@ -53,34 +80,6 @@ public final class DnsCacheEntry implements Serializable {
         return new Date(expiration);
     }
 
-    /**
-     * Construct a {@link DnsCacheEntry}.
-     *
-     * @deprecated use {@link #DnsCacheEntry(String, String[], long)} instead
-     */
-    @Deprecated
-    @SuppressFBWarnings("EI_EXPOSE_REP2")
-    public DnsCacheEntry(String host, String[] ips, Date expiration) {
-        this.host = host;
-        this.ips = ips;
-        this.expiration = expiration.getTime();
-    }
-
-    /**
-     * Construct a {@link DnsCacheEntry}.
-     *
-     * @since 1.6.0
-     */
-    @SuppressFBWarnings("EI_EXPOSE_REP2")
-    public DnsCacheEntry(String host, String[] ips, long expiration) {
-        this.host = host;
-        this.ips = ips;
-        this.expiration = expiration;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -89,9 +88,6 @@ public final class DnsCacheEntry implements Serializable {
                 ", expiration=" + dateFormat.format(expiration) + '}';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,13 +100,9 @@ public final class DnsCacheEntry implements Serializable {
         return Arrays.equals(ips, that.ips);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    @SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
     public int hashCode() {
-        int result = host != null ? host.hashCode() : 0;
+        int result = host.hashCode();
         result = 31 * result + Arrays.hashCode(ips);
         result = 31 * result + Long.hashCode(expiration);
         return result;

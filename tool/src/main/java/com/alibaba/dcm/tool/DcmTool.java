@@ -145,7 +145,7 @@ public class DcmTool {
 
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     private static String selectProcess() {
-        System.out.println("Which java process to attache:");
+        System.out.println("Which java process to attach:");
         final List<VirtualMachineDescriptor> list = VirtualMachine.list();
 
         // remove current process
