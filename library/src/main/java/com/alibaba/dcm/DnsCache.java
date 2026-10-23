@@ -1,7 +1,5 @@
 package com.alibaba.dcm;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import javax.annotation.concurrent.Immutable;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,10 +22,9 @@ public final class DnsCache implements Serializable {
     /**
      * Construct a {@link DnsCache}.
      */
-    @SuppressFBWarnings("EI_EXPOSE_REP2")
     public DnsCache(List<DnsCacheEntry> cache, List<DnsCacheEntry> negativeCache) {
-        this.cache = cache;
-        this.negativeCache = negativeCache;
+        this.cache = new ArrayList<>(cache);
+        this.negativeCache = new ArrayList<>(negativeCache);
     }
 
     /**

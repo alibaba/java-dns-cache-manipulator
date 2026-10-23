@@ -6,6 +6,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 import java.text.SimpleDateFormat
+import java.util.Date
 
 /**
  * @author Jerry Lee (oldratlee at gmail dot com)
@@ -55,6 +56,20 @@ class DnsCacheEntryTests : AnnotationSpec() {
         val entryIps = DnsCacheEntry("a.com", arrayOf("1.1.1.1", "2.2.2.2"), expiration)
         entryIps.ip shouldBe "1.1.1.1"
         entryIps.ips.shouldContainExactly("1.1.1.1", "2.2.2.2")
+    }
+
+    @Test
+    fun test_constructorCopiesInputIps() {
+        val ips = arrayOf("192.0.2.1")
+        val entry = DnsCacheEntry("example.invalid", ips, 1L)
+        ips[0] = "192.0.2.2"
+        entry.ips.shouldContainExactly("192.0.2.1")
+
+        val legacyIps = arrayOf("192.0.2.3")
+        @Suppress("DEPRECATION")
+        val legacyEntry = DnsCacheEntry("legacy.invalid", legacyIps, Date(1L))
+        legacyIps[0] = "192.0.2.4"
+        legacyEntry.ips.shouldContainExactly("192.0.2.3")
     }
 
     @Test

@@ -29,6 +29,21 @@ class DnsCacheTests : AnnotationSpec() {
     }
 
     @Test
+    fun test_constructorCopiesInputLists() {
+        val positiveEntry = DnsCacheEntry("positive.invalid", arrayOf("192.0.2.1"), 1L)
+        val negativeEntry = DnsCacheEntry("negative.invalid", emptyArray(), 1L)
+        val positiveInput = mutableListOf(positiveEntry)
+        val negativeInput = mutableListOf(negativeEntry)
+        val dnsCache = DnsCache(positiveInput, negativeInput)
+
+        positiveInput.clear()
+        negativeInput.clear()
+
+        dnsCache.getCache() shouldBe listOf(positiveEntry)
+        dnsCache.getNegativeCache() shouldBe listOf(negativeEntry)
+    }
+
+    @Test
     fun test_toString() {
         val expiration = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
